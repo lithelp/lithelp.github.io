@@ -25,7 +25,7 @@ Built and tested locally: 2026-10-04
 | Sitemap created | **Yes**: `sitemap.xml` (40 URLs) |
 | robots.txt created | **Yes** |
 | Mobile display | **Pass**: every page checked at 320, 360 and 414 px wide, no sideways scrolling; no JavaScript errors |
-| GitHub Pages working | **Not yet**: needs the `lithelp` GitHub organisation (only you can create it). Then upload and re-test `/Name.php` on the live site |
+| GitHub Pages working | **Yes**: live at https://lithelp.github.io/ since 2026-10-04. Old `/Name.php` addresses return a permanent 301 redirect to `/Name.php/`; all 172 internal URLs load (HTTP 200) on the live site |
 
 ## Problems found (already present on Yola, not caused by the migration)
 
