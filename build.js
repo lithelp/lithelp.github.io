@@ -417,16 +417,25 @@ ${aside}
 // ---------- Home ----------
 {
   const page = bySlug.index;
-  const body = `<section class="hero"><div class="wrap">
-  <span class="eyebrow">G.C.E. O/L English Literature</span>
-  <h1>O/L Literature Help</h1>
-  <p>Your trusted online resource for G.C.E. O/L English Literature learning and teaching. This website provides students and teachers with easy access to the syllabus, poetry, drama, prose, novels, past papers and other useful learning materials. Our aim is to make literature clearer, more enjoyable and easier to study through well-organized and practical resources.</p>
-  <div class="cta"><a class="btn btn-light" href="${urlOf('OL-LITERATURE-HELP')}">Start with poetry</a><a class="btn btn-ghost" href="${urlOf('papers')}">Past papers &amp; resources</a></div>
-  <p class="notice">For the latest resources, study guides, and updates, please visit our new official website at <a href="https://rcfenglish.com" target="_blank" rel="noopener">rcfenglish.com</a>.</p>
-</div></section>
+  const arrow = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  const plane = '<svg viewBox="0 0 64 48" aria-hidden="true"><path d="M2 22 62 2 44 46 30 30Z" fill="rgba(255,255,255,.85)"/><path d="M30 30 62 2 24 26Z" fill="rgba(255,255,255,.55)"/><path d="M24 26v14l6-10Z" fill="rgba(255,255,255,.7)"/></svg>';
+  const body = `<section class="hero hero-v2">
+<div class="hero-bg" aria-hidden="true">${Array.from({ length: 18 }, (_, i) => `<span class="dot d${i + 1}"></span>`).join('')}<span class="plane p1">${plane}</span><span class="plane p2">${plane}</span><span class="plane p3">${plane}</span></div>
+<div class="wrap hero-grid">
+  <div class="hero-copy">
+    <h1>O/L Literature Help</h1>
+    <p class="tagline">Welcome to the world of words.</p>
+    <span class="hero-rule"></span>
+    <p class="hero-text">Your complete guide to G.C.E. O/L English Literature. Explore poetry, drama, prose, novels, past papers and resources — all in one place to help you learn, understand and succeed.</p>
+    <div class="cta"><a class="btn btn-primary" href="${urlOf('OL-LITERATURE-HELP')}">Start with Poetry ${arrow}</a><a class="btn btn-ghost" href="${urlOf('papers')}">Past Papers &amp; Resources ${arrow}</a></div>
+  </div>
+  <div class="hero-art"><img src="/assets/img/hero-student.jpg" alt="A student studying English Literature on a laptop" width="566" height="435" fetchpriority="high"></div>
+</div>
+</section>
 <section class="section"><div class="wrap">
+  <p class="site-notice">For the latest resources, study guides, and updates, please visit our new official website at <a href="https://rcfenglish.com" target="_blank" rel="noopener">rcfenglish.com</a>.</p>
   <h2 class="title">Explore the sections</h2>
-  <p class="lede">Explore the sections above and begin your journey towards a better understanding and appreciation of English Literature.</p>
+  <p class="lede">Your trusted online resource for G.C.E. O/L English Literature learning and teaching. Explore the sections below and begin your journey towards a better understanding and appreciation of English Literature.</p>
   ${sectionCards(['My-Poems', 'OL-LITERATURE-HELP', 'drama', 'OL-Prose', 'novels', 'papers', 'RCF-Publications', 'rcf-lit-class'])}
 </div></section>
 <section class="section" style="padding-top:0"><div class="wrap">
@@ -498,4 +507,4 @@ for (const f of fs.readdirSync(path.join(ROOT, 'src', 'assets'))) fs.copyFileSyn
 console.log(`Built ${built.length} pages, ${gone.length + 1} redirects, sitemap with ${sitemapUrls.length} URLs -> ${SITE_URL}`);
 
 // Files that must sit at the site root unchanged (e.g. Google Search Console verification).
-for (const f of fs.readdirSync(path.join(ROOT, 'src', 'root'))) fs.copyFileSync(path.join(ROOT, 'src', 'root', f), path.join(OUT, f));
+fs.cpSync(path.join(ROOT, 'src', 'root'), OUT, { recursive: true });
