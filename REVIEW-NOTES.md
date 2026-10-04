@@ -35,3 +35,11 @@ Rules followed in every guide:
 - **The original page's biography is of a different Raymond Wilson**: an American history professor at Fort Hays State University. The poet is the English writer of poems for young readers. The guide's "About the poet" section is kept general.
 - The poem's unusual quotation marks on the original page (‚ ‘ ´) are shown as normal quotation marks in the guide.
 - The original page mentions a similar poem, "Colonel Frazerkerly". The guide uses the usual title, "Colonel Fazackerley" (by Charles Causley).
+
+## The Eagle
+- The original page says the poem is in iambic pentameter. It has four beats per line (iambic tetrameter), so the guide uses the correct term.
+- Model answer for the 2016 extract (i) written by LitHelp (the scheme page for Section A (i) and (ii) is not in the scanned PDF).
+
+## Farewell to Barn and Stack and Tree
+- The guide leaves out the personal details about Housman's private life that appear on the original page.
+- Model answer for the 2016 extract (ii) written by LitHelp (scheme page not available).

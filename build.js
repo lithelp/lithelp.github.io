@@ -264,14 +264,14 @@ const hasRevised = slug => fs.existsSync(path.join(revisedDir, slug + '.html'));
 // Study path used on every guide: each section id belongs to one step.
 const STEPS = [
   ['Learn', 'Know the writer and the world of the text', ['poet', 'author', 'background', 'setting']],
-  ['Understand', 'Follow the story and the meaning', ['synopsis', 'plot', 'structure', 'analysis', 'characters', 'themes', 'techniques', 'tone']],
+  ['Understand', 'Follow the story and the meaning', ['synopsis', 'plot', 'structure', 'analysis', 'translation', 'characters', 'themes', 'techniques', 'tone']],
   ['Practise', 'Try exam-style short questions', ['context-questions', 'short-questions', 'passage-questions']],
   ['Answer', 'Plan and write full essays', ['essay-questions']],
   ['Revise', 'Check yourself before the exam', ['revision', 'downloads']],
 ];
 const SECTION_ICON = {
   poet: 'user', author: 'user', background: 'globe', setting: 'pin', synopsis: 'list', plot: 'list', structure: 'layers',
-  analysis: 'search', characters: 'users2', themes: 'bulb', techniques: 'palette', tone: 'wave',
+  analysis: 'search', translation: 'globe', characters: 'users2', themes: 'bulb', techniques: 'palette', tone: 'wave',
   'context-questions': 'quote', 'short-questions': 'quote', 'passage-questions': 'quote', 'essay-questions': 'pen', revision: 'refresh', downloads: 'download',
 };
 const GICONS = {
