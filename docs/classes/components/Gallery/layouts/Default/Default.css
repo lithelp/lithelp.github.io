@@ -1,0 +1,177 @@
+/* all layouts */
+
+    div.yola_gallery_widget{text-align:center;}
+
+    div.yola_gallery_widget p.gallery_description{margin:0 !important;padding:0 0 25px 0 !important;}
+    div.yola_gallery_widget h2.gallery_description{margin:0 !important;padding:0 0 20px 0 !important;}
+
+    div.yola_gallery_widget a{border:none !important;}
+    div.yola_gallery_widget a img{border:none !important;}
+    div.yola_gallery_widget img{
+        -moz-border-radius:0 !important;
+        -webkit-border-radius:0 !important;
+        -khtml-border-radius:0 !important;
+        -o-border-radius:0 !important;
+        border-radius:0 !important;
+    }
+
+/* polaroid layout */
+
+    div.yola_gallery_widget div.polaroid span.item{
+        display:inline-block;
+        width:124px;
+        height:128px;
+        margin:0 10px 20px 10px;
+        background:url('../../resources/polaroid.png') top left no-repeat;
+        text-align:left;
+    }
+
+    div.yola_gallery_widget div.polaroid span.item a.backing{
+        background:#bbb;
+        background:#bbb -webkit-gradient(linear, center top, center bottom, from(#aaa), to(#eee));
+        background:#bbb -moz-linear-gradient(center top, #aaa 0%, #eee 100%);
+        display:inline-block;
+        width:100px;
+        height:100px;
+        margin:12px 0 0 12px;
+        position:relative;
+        position:static\9; /* ie hack */
+        text-decoration:none;
+    }
+
+    div.yola_gallery_widget div.polaroid span.portrait a.backing{
+        background:#bbb;
+        background:#bbb -webkit-gradient(linear, center top, center bottom, from(#aaa), to(#eee));
+        background:#bbb -moz-linear-gradient(center top, #aaa 0%, #eee 100%);
+    }
+
+    div.yola_gallery_widget div.polaroid span.landscape a.backing{
+        background:#bbb;
+        background:#bbb -webkit-gradient(linear, center left, center right, from(#aaa), to(#eee));
+        background:#bbb -moz-linear-gradient(center left, #aaa 0%, #eee 100%);
+    }
+
+    div.yola_gallery_widget div.polaroid span.item a img{
+        border:none;
+    }
+
+    div.yola_gallery_widget div.polaroid span.item span.image{
+        display:inline-block;
+        width:100px;
+        height:100px;
+        background-position:center center;
+        background-repeat:no-repeat;
+        background-color:transparent;
+        -moz-box-shadow:0 0 5px rgba(0, 0, 0, 0.35) inset;
+        -webkit-box-shadow:0 0 5px rgba(0, 0, 0, 0.35) inset;
+        box-shadow:0 0 5px rgba(0, 0, 0, 0.35) inset;
+    }
+
+    div.yola_gallery_widget div.polaroid span.item span.over-shadow{
+        -moz-box-shadow:0 0 5px rgba(0, 0, 0, 0.35) inset;
+        -webkit-box-shadow:0 0 5px rgba(0, 0, 0, 0.35) inset;
+        box-shadow:0 0 5px rgba(0, 0, 0, 0.35) inset;
+        display:inline-block;
+        width:100px;
+        height:100px;
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:1;
+        display:none\9; /* ie hack */
+    }
+
+/* round-frame css */
+
+    div.yola_gallery_widget div.round-frame a{
+        display:inline-block;
+        width:100px;
+        height:100px;
+        margin:0 0 20px 20px;
+        text-decoration:none;
+        -moz-border-radius:10px;
+        -webkit-border-radius:10px;
+        -khtml-border-radius:10px;
+        -o-border-radius:10px;
+        border-radius:10px;
+        position:relative;
+        position:static\9; /* ie hack */
+        font-size:0;
+        -moz-box-shadow:0 0 5px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(255, 255, 255, 0.5);
+        -webkit-box-shadow:0 0 5px rgba(0, 0, 0, 0.55) inset, 0 1px 0 rgba(255, 255, 255, 0.5);
+        box-shadow:0 0 5px rgba(0, 0, 0, 0.55) inset, 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    div.yola_gallery_widget div.round-frame a span.shadow{
+        display:inline-block;
+        width:100px;
+        height:100px;
+        position:absolute;
+        top:0;
+        left:0;
+        display:none\9; /* ie hack */
+    }
+
+    div.yola_gallery_widget div.round-frame a img{
+        float:left;
+    }
+
+/* round-corners */
+
+    div.yola_gallery_widget div.round-corners span.item{
+        display:inline-block;
+        width:130px;
+        height:130px;
+        margin:0 7px 15px 7px;
+        background:url('../../resources/round-frame.png') top left no-repeat;
+        text-align:left;
+    }
+
+    div.yola_gallery_widget div.round-corners span.item a.backing{
+        background:#bbb;
+        background:#bbb -webkit-gradient(linear, center top, center bottom, from(#aaa), to(#eee));
+        background:#bbb -moz-linear-gradient(center top, #aaa 0%, #eee 100%);
+        display:inline-block;
+        width:100px;
+        height:100px;
+        margin:15px 0 0 15px;
+        position:relative;
+        text-decoration:none;
+    }
+
+    div.yola_gallery_widget div.round-corners span.portrait a.backing{
+        background:#bbb;
+        background:#bbb -webkit-gradient(linear, center top, center bottom, from(#aaa), to(#eee));
+        background:#bbb -moz-linear-gradient(center top, #aaa 0%, #eee 100%);
+    }
+
+    div.yola_gallery_widget div.round-corners span.landscape a.backing{
+        background:#bbb;
+        background:#bbb -webkit-gradient(linear, center left, center right, from(#aaa), to(#eee));
+        background:#bbb -moz-linear-gradient(center left, #aaa 0%, #eee 100%);
+    }
+
+    div.yola_gallery_widget div.round-corners span.item a img{
+        border:none;
+    }
+
+    div.yola_gallery_widget div.round-corners span.item span.image{
+        display:inline-block;
+        width:100px;
+        height:100px;
+        background-position:center center;
+        background-repeat:no-repeat;
+        background-color:transparent;
+    }
+
+    div.yola_gallery_widget div.round-corners span.item span.round-corners-shadow{
+        background:url('../../resources/round-frame-shadow.png') top left no-repeat;
+        _behavior: url('../../resources/iepngfix.htc');
+        display:inline-block;
+        width:100px;
+        height:100px;
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:1;
+    }

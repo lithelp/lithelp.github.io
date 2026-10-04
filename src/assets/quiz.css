@@ -1,0 +1,22 @@
+/* RCF interactive quiz — adapted from the original Yola quiz styles. */
+.rcf-quiz { max-width: 760px; margin: 1.6rem auto; padding: 1.4rem; border: 1px solid var(--line); border-radius: 16px; background: var(--card); box-shadow: var(--shadow); font-family: var(--ui); color: var(--ink); line-height: 1.45; font-size: 1rem; }
+.rcf-quiz h2 { margin: 0; color: var(--brand); font-size: 1.5rem; font-family: var(--read); }
+.rcf-quiz .by { margin: .2rem 0 1rem; color: var(--muted); }
+.rcf-quiz fieldset { border: 0; border-top: 1px solid var(--line); margin: 0; padding: 1rem 0; }
+.rcf-quiz legend { font-weight: 700; padding: 0 0 .55rem; width: 100%; }
+.rcf-quiz label { display: block; margin: .45rem 0; padding: .65rem .75rem; border: 1px solid var(--line); border-radius: 9px; cursor: pointer; background: var(--card); }
+.rcf-quiz label:hover { background: var(--brand-soft); }
+.rcf-quiz input { margin-right: .5rem; }
+.rcf-quiz .feedback { display: none; margin: .5rem 0 0; padding: .55rem .7rem; border-radius: 8px; }
+.rcf-quiz .feedback.good { display: block; background: #e8f6ed; color: #176b3a; }
+.rcf-quiz .feedback.bad { display: block; background: #fff0f0; color: #a12b2b; }
+.rcf-quiz button { border: 0; border-radius: 9px; padding: .7rem 1.05rem; margin: .4rem .45rem 0 0; background: var(--brand); color: #fff; font-weight: 700; font-size: .95rem; cursor: pointer; }
+.rcf-quiz button.reset { background: #64798a; }
+.rcf-quiz .result { margin-top: .9rem; padding: .8rem; border-radius: 9px; background: var(--brand-soft); font-weight: 700; }
+.rcf-quiz label.correct { border-color: #2a9657; background: #eaf8ef; }
+.rcf-quiz label.wrong { border-color: #c84b4b; background: #fff0f0; }
+@media (prefers-color-scheme: dark) {
+  .rcf-quiz .feedback.good, .rcf-quiz label.correct { background: #12321f; color: #8fe0ad; }
+  .rcf-quiz .feedback.bad, .rcf-quiz label.wrong { background: #3a1717; color: #ffaaaa; }
+}
+@media (max-width: 520px) { .rcf-quiz { padding: 1rem; border-radius: 12px; } .rcf-quiz h2 { font-size: 1.3rem; } }

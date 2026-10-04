@@ -1,0 +1,64 @@
+{
+  "_note": "Site map captured from lithelp.yolasite.com on 2026-10-04. 'title' is the exact original <title>; 'label' is the exact original menu text. Order = original menu order.",
+  "footer": "literaturehelp, Kandy, Central 20000, Sri Lanka | 0714395240",
+  "logo": "resources/imageedit_1_8950105283.png",
+  "logoAlt": "O/L Literature Help",
+  "nav": [
+    {"slug": "index", "label": "Home", "title": "Literature Help"},
+    {"slug": "My-Poems", "label": "Syllabus", "title": "My Poems"},
+    {"slug": "OL-LITERATURE-HELP", "label": "Poetry", "title": "Notes", "children": [
+      {"slug": "Elements-of-Poetry---You-must-read-this", "label": "Elements of Poetry - You must read this", "title": "Elements of Poetry - You must read this"},
+      {"slug": "To-the-Nile-by-Keats", "label": "To the Nile by Keats", "title": "Notes"},
+      {"slug": "A-Bird-came-down-the-Walk", "label": "A Bird came down the Walk", "title": "Notes"},
+      {"slug": "Farewell-to-Barn-Stack-and-Tree", "label": "Farewell to Barn Stack and Tree", "title": "Farewell to Barn Stack and Tree"},
+      {"slug": "To-the-Evening-Star", "label": "To the Evening Star", "title": "To the Evening Star"},
+      {"slug": "The-Eagle-by-Tennyson", "label": "The Eagle by Tennyson", "title": "Literature Help"},
+      {"slug": "War-is-Kind", "label": "War is Kind", "title": "Literature Help"},
+      {"slug": "I-know-why-the-Caged-Bird-Sings", "label": "I know why the Caged Bird Sings", "title": "I know why the Caged Bird Sings"},
+      {"slug": "poem-by-wislawa", "label": "Poem by Wislawa", "title": "The Terrorist He's watching"},
+      {"slug": "Breakfast-by-Jaques-Prevert", "label": "Breakfast by Jaques Prevert", "title": "Breakfast by Jaques Prevert"},
+      {"slug": "Once-upon-a-Time-by-Gabriel-Okara", "label": "Once upon a Time by Gabriel Okara", "title": "Once upon a Time by Gabriel Okara"},
+      {"slug": "Richard-Cory", "label": "Richard Cory", "title": "Richard Cory"},
+      {"slug": "Big-Match-1983", "label": "Big Match 1983", "title": "Big Match 1983"},
+      {"slug": "The-Earthen-Goblet", "label": "The Earthen Goblet", "title": "The Earthen Goblet"},
+      {"slug": "poem-about-camel", "label": "Poem about Camel", "title": "camel's Hump"},
+      {"slug": "Father-and-Son-by-Cat-Stevens", "label": "Father and Son by Cat Stevens", "title": "Father and Son by Cat Stevens"},
+      {"slug": "the-poem-fear", "label": "The Poem Fear", "title": "Fear"},
+      {"slug": "poem-about-clowns-wife", "label": "Poem about Clowns Wife", "title": "The Clown's Wife"},
+      {"slug": "Upside-Down", "label": "Upside Down", "title": "Upside Down"},
+      {"slug": "The-Huntsman", "label": "The Huntsman", "title": "The Huntsman"},
+      {"slug": "They-said-the-House", "label": "They said the House", "title": "They said the House"}
+    ]},
+    {"slug": "drama", "label": "Drama", "title": "OL Drama", "children": [
+      {"slug": "The-Bear-by-Anton-Chekov", "label": "The Bear by Anton Chekov", "title": "OL Drama"},
+      {"slug": "The-Twilight-of-a-Crane", "label": "The Twilight of a Crane", "title": "The Twilight of a Crane"}
+    ]},
+    {"slug": "OL-Prose", "label": "Prose", "title": "OL Prose", "children": [
+      {"slug": "The-Lahor-Attack", "label": "The Lahor Attack", "title": "OL Prose"},
+      {"slug": "The-Nightingale-and-The-Rose-by-Oscar-Wilde", "label": "The Nightingale and The Rose by Oscar Wilde", "title": "The Nightingale and the Rose by Oscar Wilde"},
+      {"slug": "The-Lumber-Room-by-Saki", "label": "The Lumber Room by Saki", "title": "Prose"},
+      {"slug": "The-Wave", "label": "The Wave", "title": "The Wave"}
+    ]},
+    {"slug": "novels", "label": "Novels", "title": "OL Novels", "children": [
+      {"slug": "Prince-and-the-Pauper", "label": "Prince and the Pauper", "title": "OL Novels"},
+      {"slug": "Vendor-of-Sweets", "label": "Vendor of Sweets", "title": "OL Novels"},
+      {"slug": "Bringing-Tony-Home", "label": "Bringing Tony Home", "title": "Bringing Tony Home"}
+    ]},
+    {"slug": "papers", "label": "Resources", "title": "Literature Help"},
+    {"slug": "RCF-Publications", "label": "RCF Publications", "title": "Literature Help"},
+    {"slug": "rcf-lit-class", "label": "rcf-lit-class", "title": "Literature Help"}
+  ],
+  "hidden": [
+    {"slug": "home-backup", "title": "Literature Help", "note": "Not in menu; listed in Yola sitemap.xml"}
+  ],
+  "emptyOnYola": ["OL-LITERATURE-HELP", "drama", "OL-Prose", "novels"],
+  "goneFromYola": {
+    "_note": "Found in the Internet Archive (2016); Yola now returns 404. Suggested redirect targets.",
+    "contact": "rcf-lit-class",
+    "FUN-ZONE": "index",
+    "Model-Papers": "papers",
+    "queries": "rcf-lit-class",
+    "OL-Drama": "drama",
+    "OL-Novels": "novels"
+  }
+}

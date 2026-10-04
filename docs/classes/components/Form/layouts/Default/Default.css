@@ -1,0 +1,202 @@
+/* ------------------------------------------------------------------------------------------------------- */
+/*
+        regular css
+*/
+/* ------------------------------------------------------------------------------------------------------- */
+
+
+div.sys_yola_form {
+    padding: 0.3rem;
+}
+
+.yola-form-field {
+    margin-bottom: 0.5rem;
+}
+
+div.sys_yola_form form {
+    margin: 0;
+    padding: 0.3rem 0.63rem;
+}
+
+div.sys_yola_form input,
+div.sys_yola_form textarea,
+div.sys_yola_form select {
+  background-color: #f9f9f9;
+  border: 1px solid #d1d5da;
+  border-radius: 3px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+div.sys_yola_form .submit,
+div.sys_yola_form input.text,
+div.sys_yola_form input.email,
+div.sys_yola_form input.tel,
+div.sys_yola_form input.url,
+div.sys_yola_form textarea {
+  color: #000;
+}
+
+.sys_yola_form .text,
+.sys_yola_form .email,
+.sys_yola_form .tel,
+.sys_yola_form .url {
+    padding: 0.63rem 0.4rem;
+    width: 100%;
+}
+
+div.sys_yola_form input.radio {
+    display: none;
+}
+
+div.sys_yola_form input.checkbox {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    opacity: 0;
+}
+
+div.sys_yola_form .submit {
+    padding: 0.6rem 1.2rem;
+}
+
+div.sys_yola_form select {
+    background-image:
+      linear-gradient(45deg, transparent 50%, gray 50%),
+      linear-gradient(135deg, gray 50%, transparent 50%),
+      linear-gradient(to right, #ccc, #ccc);
+    background-position:
+      calc(100% - 20px) calc(1em + 4px),
+      calc(100% - 15px) calc(1em + 4px),
+      calc(100% - 2.5em) 0.5em;
+    background-repeat: no-repeat;
+    background-size:
+      5px 5px,
+      5px 5px,
+      0 0;
+    font-family: inherit;
+    margin-top: 0.1rem;
+    padding: 0.73rem 0.4rem;
+    width: 100%;
+}
+
+div.sys_yola_form textarea {
+    height: 100px;
+    padding: 0.1rem 0.4rem;
+    resize: none;
+    width: 100%;
+}
+
+div.sys_yola_form h2 {
+    margin: 0;
+    padding: 0.94rem 0;
+}
+
+div.sys_yola_form .label {
+    margin: 0;
+    padding: 0.5rem 0 0.25rem 0;
+}
+
+.form-paragraph {
+    margin: 1rem 0 0 0;
+    padding: 0.1rem 0;
+}
+
+div.yola-form-message{
+    padding: 0.1rem;
+}
+
+.radio[type='radio'] + label,
+.checkbox[type='checkbox'] + label {
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  position: relative;
+}
+
+.radio[type="radio"] + label .radio_styles,
+.checkbox[type="checkbox"] + label .checkbox_styles {
+  background-color: #f9f9f9;
+  border: 1px solid #d1d5da;
+  border-radius: 3px;
+  display:inline-block;
+  height: 0.98rem;
+  margin: -2px 0.5rem 0 0;
+  position: relative;
+  vertical-align: middle;
+  width: 0.98rem;
+}
+
+.radio[type="radio"] + label .radio_styles {
+  border-radius: 50%;
+}
+
+.radio[type='radio']:checked + label .radio_styles:before,
+.checkbox[type='checkbox']:checked + label .checkbox_styles:before {
+  background: #3b99fc;
+  content: '';
+  height: 0.6rem;
+  left: 0.2rem;
+  position: absolute;
+  top: 0.2rem;
+  width: 0.6rem;
+}
+
+.radio[type='radio']:checked + label .radio_styles:before {
+  border-radius: 50%;
+}
+
+.checkbox[type='checkbox'] + label:last-of-type,
+.radio[type='radio'] + label:last-of-type {
+    margin-bottom: 0;
+}
+
+/* ------------------------------------------------------------------------------------------------------- */
+/*
+        mobile css
+*/
+/* ------------------------------------------------------------------------------------------------------- */
+
+
+div.sys_yola_form_mobile{
+    padding: 0;
+}
+
+div.sys_yola_form_mobile form{
+    margin: 0;
+    padding: 0;
+}
+
+div.sys_yola_form_mobile textarea,
+div.sys_yola_form_mobile input.text{
+    padding: 3px;
+    width: 90%;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  .sys_yola_form input.text,
+  .sys_yola_form input.email,
+  .sys_yola_form input.tel,
+  .sys_yola_form input.url,
+  .sys_yola_form textarea,
+  .sys_yola_form select {
+    font-size: 16px;
+  }
+}
+
+.sys_wrap .h-captcha-wrap {
+  pointer-events: none;
+}
+
+.h-captcha-wrap {
+  height: 74px;
+  margin: 1.6rem 0;
+  position: relative;
+  transform-origin: left top;
+  width: 304px;
+}
+
+.h-captcha {
+  position: relative;
+}
