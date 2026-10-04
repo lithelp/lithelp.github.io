@@ -43,3 +43,6 @@ Rules followed in every guide:
 ## Farewell to Barn and Stack and Tree
 - The guide leaves out the personal details about Housman's private life that appear on the original page.
 - Model answer for the 2016 extract (ii) written by LitHelp (scheme page not available).
+
+## Big Match 1983 (original page)
+- The Yola text had no stanza breaks. The page now shows six stanzas starting at: "Glimpsing the headlines…", "Powerless this time…", "The game's in other hands…", "In a tall house…", "Out of the palmyrah fences…", "The joys of childhood…". Please check these against your copy of the poem. They can be changed in content/stanzas.json without touching the archive.

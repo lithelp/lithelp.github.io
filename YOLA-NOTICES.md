@@ -43,7 +43,7 @@ This page has moved to our new website: https://lithelp.github.io/A-Bird-came-do
 ### 6. Yola page: Farewell-to-Barn-Stack-and-Tree.php (Poetry › Farewell to Barn Stack and Tree)
 
 ```
-This page has moved to our new website: https://lithelp.github.io/Farewell-to-Barn-Stack-and-Tree.php (in a clearer, mobile-friendly layout).
+This page has moved to our new website: https://lithelp.github.io/Farewell-to-Barn-Stack-and-Tree.php (with a new O/L study guide: line-by-line analysis, exam questions and model answers).
 ```
 
 ### 7. Yola page: To-the-Evening-Star.php (Poetry › To the Evening Star)
@@ -55,7 +55,7 @@ This page has moved to our new website: https://lithelp.github.io/To-the-Evening
 ### 8. Yola page: The-Eagle-by-Tennyson.php (Poetry › The Eagle by Tennyson)
 
 ```
-This page has moved to our new website: https://lithelp.github.io/The-Eagle-by-Tennyson.php (in a clearer, mobile-friendly layout).
+This page has moved to our new website: https://lithelp.github.io/The-Eagle-by-Tennyson.php (with a new O/L study guide: line-by-line analysis, exam questions and model answers).
 ```
 
 ### 9. Yola page: War-is-Kind.php (Poetry › War is Kind)
@@ -70,7 +70,7 @@ This page has moved to our new website: https://lithelp.github.io/War-is-Kind.ph
 This page has moved to our new website: https://lithelp.github.io/I-know-why-the-Caged-Bird-Sings.php (in a clearer, mobile-friendly layout).
 ```
 
-### 11. Yola page: poem-by-wislawa.php (Poetry › Poem by Wislawa)
+### 11. Yola page: poem-by-wislawa.php (Poetry › Terrorist, He's Watching)
 
 ```
 This page has moved to our new website: https://lithelp.github.io/poem-by-wislawa.php (in a clearer, mobile-friendly layout).
@@ -85,7 +85,7 @@ This page has moved to our new website: https://lithelp.github.io/Breakfast-by-J
 ### 13. Yola page: Once-upon-a-Time-by-Gabriel-Okara.php (Poetry › Once upon a Time by Gabriel Okara)
 
 ```
-This page has moved to our new website: https://lithelp.github.io/Once-upon-a-Time-by-Gabriel-Okara.php (in a clearer, mobile-friendly layout).
+This page has moved to our new website: https://lithelp.github.io/Once-upon-a-Time-by-Gabriel-Okara.php (with a new O/L study guide: line-by-line analysis, exam questions and model answers).
 ```
 
 ### 14. Yola page: Richard-Cory.php (Poetry › Richard Cory)
@@ -106,7 +106,7 @@ This page has moved to our new website: https://lithelp.github.io/Big-Match-1983
 This page has moved to our new website: https://lithelp.github.io/The-Earthen-Goblet.php (in a clearer, mobile-friendly layout).
 ```
 
-### 17. Yola page: poem-about-camel.php (Poetry › Poem about Camel)
+### 17. Yola page: poem-about-camel.php (Poetry › The Camel's Hump)
 
 ```
 This page has moved to our new website: https://lithelp.github.io/poem-about-camel.php (in a clearer, mobile-friendly layout).
@@ -118,13 +118,13 @@ This page has moved to our new website: https://lithelp.github.io/poem-about-cam
 This page has moved to our new website: https://lithelp.github.io/Father-and-Son-by-Cat-Stevens.php (in a clearer, mobile-friendly layout).
 ```
 
-### 19. Yola page: the-poem-fear.php (Poetry › The Poem Fear)
+### 19. Yola page: the-poem-fear.php (Poetry › Fear)
 
 ```
 This page has moved to our new website: https://lithelp.github.io/the-poem-fear.php (with a new O/L study guide: line-by-line analysis, exam questions and model answers).
 ```
 
-### 20. Yola page: poem-about-clowns-wife.php (Poetry › Poem about Clowns Wife)
+### 20. Yola page: poem-about-clowns-wife.php (Poetry › The Clown's Wife)
 
 ```
 This page has moved to our new website: https://lithelp.github.io/poem-about-clowns-wife.php (in a clearer, mobile-friendly layout).
@@ -133,7 +133,7 @@ This page has moved to our new website: https://lithelp.github.io/poem-about-clo
 ### 21. Yola page: Upside-Down.php (Poetry › Upside Down)
 
 ```
-This page has moved to our new website: https://lithelp.github.io/Upside-Down.php (in a clearer, mobile-friendly layout).
+This page has moved to our new website: https://lithelp.github.io/Upside-Down.php (with a new O/L study guide: line-by-line analysis, exam questions and model answers).
 ```
 
 ### 22. Yola page: The-Huntsman.php (Poetry › The Huntsman)
@@ -142,10 +142,10 @@ This page has moved to our new website: https://lithelp.github.io/Upside-Down.ph
 This page has moved to our new website: https://lithelp.github.io/The-Huntsman.php (with a new O/L study guide: line-by-line analysis, exam questions and model answers).
 ```
 
-### 23. Yola page: They-said-the-House.php (Poetry › They said the House)
+### 23. Yola page: They-said-the-House.php (Poetry › Two's Company)
 
 ```
-This page has moved to our new website: https://lithelp.github.io/They-said-the-House.php (in a clearer, mobile-friendly layout).
+This page has moved to our new website: https://lithelp.github.io/They-said-the-House.php (with a new O/L study guide: line-by-line analysis, exam questions and model answers).
 ```
 
 ### 24. Yola page: drama.php (Drama)
@@ -175,7 +175,7 @@ This page has moved to our new website: https://lithelp.github.io/OL-Prose.php (
 ### 28. Yola page: The-Lahor-Attack.php (Prose › The Lahor Attack)
 
 ```
-This page has moved to our new website: https://lithelp.github.io/The-Lahor-Attack.php (in a clearer, mobile-friendly layout).
+This page has moved to our new website: https://lithelp.github.io/The-Lahor-Attack.php (with a new O/L study guide: line-by-line analysis, exam questions and model answers).
 ```
 
 ### 29. Yola page: The-Nightingale-and-The-Rose-by-Oscar-Wilde.php (Prose › The Nightingale and The Rose by Oscar Wilde)
@@ -217,7 +217,7 @@ This page has moved to our new website: https://lithelp.github.io/Vendor-of-Swee
 ### 35. Yola page: Bringing-Tony-Home.php (Novels › Bringing Tony Home)
 
 ```
-This page has moved to our new website: https://lithelp.github.io/Bringing-Tony-Home.php (in a clearer, mobile-friendly layout).
+This page has moved to our new website: https://lithelp.github.io/Bringing-Tony-Home.php (with a new O/L study guide: line-by-line analysis, exam questions and model answers).
 ```
 
 ### 36. Yola page: papers.php (Resources)
