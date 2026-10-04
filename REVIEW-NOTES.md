@@ -23,3 +23,15 @@ Rules followed in every guide:
 - The extract quotes the player's name as "Paranvithana", as on the original page (the usual spelling is Paranavitana).
 - Background kept general: "Several players were injured, and Pakistani security personnel were among those killed."
 - The soldier is described as "on duty at a checkpoint", following the 2016 marking scheme.
+
+## Upside Down
+- The poem text on the original page ends at stanza 7. The guide quotes the closing couplet ("You must behave as others do / If they're to have respect for you") from the original page's analysis. Please confirm it is part of the prescribed text.
+- Kushner's teaching career is given only as "schoolteacher, 1959–1969" (the original page's wording about the subject was unclear).
+
+## Once upon a Time
+- Okara's birth date and place come from the original page. No death date is given.
+
+## Two's Company (page: They-said-the-House)
+- **The original page's biography is of a different Raymond Wilson**: an American history professor at Fort Hays State University. The poet is the English writer of poems for young readers. The guide's "About the poet" section is kept general.
+- The poem's unusual quotation marks on the original page (‚ ‘ ´) are shown as normal quotation marks in the guide.
+- The original page mentions a similar poem, "Colonel Frazerkerly". The guide uses the usual title, "Colonel Fazackerley" (by Charles Causley).
