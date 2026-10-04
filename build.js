@@ -21,12 +21,16 @@ const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const pagesData = JSON.parse(read('content/pages.json'));
 const quizzes = JSON.parse(read('content/quizzes.json'));
 const ADS = JSON.parse(read('content/site.json')).adsense;
+const { illustration } = require('./src/illustrations');
+const STANZAS = JSON.parse(read('content/stanzas.json'));
 
 // Ad space. Renders nothing until AdSense is enabled in content/site.json, so pages carry no empty boxes.
 // With a slot ID it places a responsive unit here; without one, Auto ads (head script) decide placement.
 function adHtml(where) {
-  if (!ADS.enabled || !ADS.slot) return '';
-  return `<div class="ad-slot${where ? ' ad-' + where : ''}" aria-label="Advertisement"><ins class="adsbygoogle" style="display:block" data-ad-client="${ADS.client}" data-ad-slot="${ADS.slot}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>`;
+  const cls = 'ad-slot' + (where ? ' ad-' + where : '');
+  if (!ADS.enabled) return `<div class="${cls} ad-off" data-ad="${where || 'content'}" aria-hidden="true"></div>`;
+  if (!ADS.slot) return `<div class="${cls}" data-ad="${where || 'content'}"></div>`;
+  return `<div class="${cls}" aria-label="Advertisement"><ins class="adsbygoogle" style="display:block" data-ad-client="${ADS.client}" data-ad-slot="${ADS.slot}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>`;
 }
 
 // ---------- Site map ----------
@@ -331,10 +335,24 @@ function guideExtras(h) {
 
 // Places ad spaces into an original page: one after roughly the first third, one at the end.
 function addAdsToOriginal(h) {
-  if (!ADS.enabled) return h;
   const breaks = [...h.matchAll(/<\/p>\n/g)].map(m => m.index + m[0].length);
   if (breaks.length > 8) { const at = breaks[Math.floor(breaks.length / 3)]; h = h.slice(0, at) + adHtml() + h.slice(at); }
   return h + adHtml();
+}
+
+function formatPoemLines(h, slug) {
+  const breaks = (STANZAS[slug] || []).map(t => t.replace(/[\u2018\u2019']/g, "'").toLowerCase());
+  return h.replace(/(?:<p(?: lang="si")?>(?:(?!<\/p>)[^\n]){1,90}<\/p>\n?){3,}/g, run => {
+    const lines = run.match(/<p(?: lang="si")?>[\s\S]*?<\/p>/g);
+    if (lines.some(l => /<(table|img|div|h\d|ul|ol)/.test(l))) return run;
+    let out = '<div class="poem-lines">';
+    lines.forEach((l, i) => {
+      const t = textOf(l).replace(/[\u2018\u2019']/g, "'").toLowerCase();
+      if (i > 0 && breaks.some(b => t.startsWith(b.slice(0, 30)))) out += '</div><div class="poem-lines">';
+      out += l;
+    });
+    return out + '</div>\n';
+  });
 }
 
 function renderArticle(page, src, mode) {
@@ -348,6 +366,7 @@ function renderArticle(page, src, mode) {
   const hasQuiz = src.includes('[[QUIZ]]');
   const hasSinhala = /[඀-෿]/.test(src);
   let inner = transform(src, page);
+  if (mode !== 'guide' && page.parent && page.parent.slug === 'OL-LITERATURE-HELP') inner = formatPoemLines(inner, page.slug);
   inner = mode === 'guide' ? guideExtras(inner) : addAdsToOriginal(inner);
   const para = (inner.match(/<p(?: lang="si")?>([\s\S]*?)<\/p>/g) || []).map(textOf).find(t => t.length > 60 && !/[඀-෿]/.test(t));
   return { h1, inner, hasQuiz, hasSinhala, description: metaDesc || (para ? clip(para, 158) : '') };
@@ -366,7 +385,7 @@ for (const page of all) {
     art = {
       h1: labelOf(page), description, hasQuiz: false, hasSinhala: false,
       inner: `<p style="font-family:var(--ui);color:var(--muted);margin-top:0">${esc(description)}</p><div class="list-cards">` +
-        page.children.map((c, i) => `<a href="${urlOf(c.slug)}"><span class="num">${i + 1}</span>${esc(c.label)}${hasRevised(c.slug) ? '<span class="badge">Study guide</span>' : ''}</a>`).join('') + `</div>`,
+        page.children.map((c, i) => { const il = illustration(c.slug, c.label); return `<a href="${urlOf(c.slug)}"${il ? ' class="with-art"' : ''}>${il ? `<span class="thumb">${il}</span>` : `<span class="num">${i + 1}</span>`}<span class="lc-label">${esc(c.label)}</span>${hasRevised(c.slug) ? '<span class="badge">Study guide</span>' : ''}</a>`; }).join('') + `</div>${adHtml()}`,
     };
   } else {
     const original = fs.readFileSync(path.join(ROOT, 'content', 'original', page.slug + '.html'), 'utf8').trim();
@@ -404,7 +423,9 @@ ${o.inner}
 
   const kicker = page.parent ? labelOf(page.parent) + (revised ? ' · O/L study guide' : '') : '';
   const originalLink = revised ? `<p class="archive-note">Looking for the earlier LitHelp notes on this text? <a href="${urlOf(page.slug)}original/">Read the original notes</a>.</p>` : '';
-  const body = `<div class="page-head${revised ? " guide-head" : ""}"><div class="wrap">${crumbsHtml(crumbs)}${kicker ? `<span class="kicker">${esc(kicker)}</span>` : ''}<h1>${art.h1}</h1></div></div>
+  const art2 = illustration(page.slug, labelOf(page));
+  const body = `<div class="page-head${revised ? " guide-head" : ""}${art2 ? ' has-art' : ''}"><div class="wrap"><div class="head-text">${crumbsHtml(crumbs)}${kicker ? `<span class="kicker">${esc(kicker)}</span>` : ''}<h1>${art.h1}</h1></div>${art2 ? `<div class="head-art">${art2}</div>` : ''}</div></div>
+${adHtml('top')}
 <div class="wrap layout${aside ? ' has-aside' : ''}">
 <div><article class="prose${revised ? ' guide' : ''}">
 ${art.inner}
@@ -443,6 +464,7 @@ ${aside}
   <p class="lede">Your trusted online resource for G.C.E. O/L English Literature learning and teaching. Explore the sections below and begin your journey towards a better understanding and appreciation of English Literature.</p>
   ${sectionCards(['My-Poems', 'OL-LITERATURE-HELP', 'drama', 'OL-Prose', 'novels', 'papers', 'RCF-Publications', 'rcf-lit-class'])}
 </div></section>
+<div class="wrap">${adHtml('home')}</div>
 <section class="section" style="padding-top:0"><div class="wrap">
   <h2 class="title">How to study with LitHelp</h2>
   <p class="lede">Every O/L study guide follows the same five steps, so you always know what to do next.</p>

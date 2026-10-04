@@ -473,3 +473,25 @@ a:hover { color: var(--brand-deep); }
   .about-cols { grid-template-columns: 1fr; }
 }
 .nav > ul > li > a, .nav > ul > li > button { white-space: nowrap; padding-left: .6rem; padding-right: .6rem; }
+
+/* ---------- Ad containers: present on every page, hidden until AdSense is enabled ---------- */
+.ad-slot.ad-off { display: none; }
+.ad-slot.ad-top { margin: 1rem auto 0; max-width: 1160px; padding: 0 16px; }
+
+/* ---------- Poem lines (original pages): tight spacing, clear stanza gaps ---------- */
+.poem-lines { margin: 0 0 1.2rem; padding: .2rem 0 .2rem 1rem; border-left: 3px solid var(--brand-soft); }
+.poem-lines p { margin: 0; line-height: 1.6; }
+
+/* ---------- Illustrations ---------- */
+.illus { display: block; width: 100%; height: auto; border-radius: 16px; }
+.page-head.has-art .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 260px); gap: 1.5rem; align-items: center; }
+.head-art { filter: drop-shadow(0 10px 24px rgba(10, 30, 70, .22)); }
+.guide-head .head-art .illus { border: 3px solid rgba(255,255,255,.65); }
+@media (max-width: 640px) {
+  .page-head.has-art .wrap { grid-template-columns: minmax(0, 1fr) 96px; gap: .8rem; }
+  .head-art .illus { border-radius: 12px; }
+}
+.list-cards a.with-art { padding: .6rem .8rem .6rem .6rem; }
+.list-cards .thumb { flex-shrink: 0; width: 72px; }
+.list-cards .thumb .illus { border-radius: 10px; }
+.list-cards .lc-label { flex: 1; }
