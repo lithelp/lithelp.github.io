@@ -31,7 +31,13 @@
     }
   });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') document.querySelectorAll('.nav li.open').forEach(function (o) { o.classList.remove('open'); });
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.nav li.open').forEach(function (o) {
+      o.classList.remove('open');
+      var b = o.querySelector('button');
+      b.setAttribute('aria-expanded', 'false');
+      if (o.contains(document.activeElement)) b.focus();
+    });
   });
 
   // Gallery lightbox for scanned pages.
