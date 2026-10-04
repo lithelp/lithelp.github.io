@@ -360,3 +360,6 @@ fs.mkdirSync(path.join(OUT, 'assets'), { recursive: true });
 for (const f of fs.readdirSync(path.join(ROOT, 'src', 'assets'))) fs.copyFileSync(path.join(ROOT, 'src', 'assets', f), path.join(OUT, 'assets', f));
 
 console.log(`Built ${built.length} pages, ${gone.length + 1} redirects, sitemap with ${sitemapUrls.length} URLs -> ${SITE_URL}`);
+
+// Files that must sit at the site root unchanged (e.g. Google Search Console verification).
+for (const f of fs.readdirSync(path.join(ROOT, 'src', 'root'))) fs.copyFileSync(path.join(ROOT, 'src', 'root', f), path.join(OUT, f));
