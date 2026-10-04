@@ -261,13 +261,66 @@ const built = [];
 const revisedDir = path.join(ROOT, 'content', 'revised');
 const hasRevised = slug => fs.existsSync(path.join(revisedDir, slug + '.html'));
 
-// Guide-only markup: [[AD]] ad spaces and [[TOC]] section chips.
+// Study path used on every guide: each section id belongs to one step.
+const STEPS = [
+  ['Learn', 'Know the writer and the world of the text', ['poet', 'author', 'background', 'setting']],
+  ['Understand', 'Follow the story and the meaning', ['synopsis', 'plot', 'structure', 'analysis', 'characters', 'themes', 'techniques', 'tone']],
+  ['Practise', 'Try exam-style short questions', ['context-questions', 'short-questions', 'passage-questions']],
+  ['Answer', 'Plan and write full essays', ['essay-questions']],
+  ['Revise', 'Check yourself before the exam', ['revision', 'downloads']],
+];
+const SECTION_ICON = {
+  poet: 'user', author: 'user', background: 'globe', setting: 'pin', synopsis: 'list', plot: 'list', structure: 'layers',
+  analysis: 'search', characters: 'users2', themes: 'bulb', techniques: 'palette', tone: 'wave',
+  'context-questions': 'quote', 'short-questions': 'quote', 'passage-questions': 'quote', 'essay-questions': 'pen', revision: 'refresh', downloads: 'download',
+};
+const GICONS = {
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  pin: '<path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/>',
+  list: '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/>',
+  layers: '<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+  users2: '<circle cx="8" cy="9" r="3"/><circle cx="17" cy="9" r="3"/><path d="M2.5 19a5.5 5.5 0 0 1 11 0M12 19a5 5 0 0 1 9.5-2"/>',
+  bulb: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3Z"/>',
+  palette: '<path d="M12 3a9 9 0 0 0 0 18c1.2 0 1.6-1 1.1-2-.6-1.2.2-2.5 1.6-2.5H17a4 4 0 0 0 4-4C21 7 17 3 12 3Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7" r="1"/>',
+  wave: '<path d="M2 12c2.5-4 4.5-4 7 0s4.5 4 7 0 4.5-4 6 0"/>',
+  quote: '<path d="M7 7h4v4c0 3-1.5 5-4 6M15 7h4v4c0 3-1.5 5-4 6"/>',
+  pen: '<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/>',
+  refresh: '<path d="M20 11a8 8 0 0 0-14.9-3M4 13a8 8 0 0 0 14.9 3"/><path d="M5 3v5h5M19 21v-5h-5"/>',
+  download: '<path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/>',
+};
+const gicon = n => `<svg class="h-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GICONS[n]}</svg>`;
+
+// Guide-only markup: [[AD]] ad spaces, [[TOC]] study path, heading icons, fact cards, responsive tables.
 function guideExtras(h) {
   h = h.replace(/<p>\[\[AD\]\]<\/p>|\[\[AD\]\]/g, () => adHtml());
+  const sections = [...h.matchAll(/<h2 id="([\w-]+)">([\s\S]*?)<\/h2>/g)].map(m => ({ id: m[1], name: textOf(m[2]) }));
   if (h.includes('[[TOC]]')) {
-    const items = [...h.matchAll(/<h2 id="([\w-]+)">([\s\S]*?)<\/h2>/g)].map(m => `<a href="#${m[1]}">${textOf(m[2])}</a>`);
-    h = h.replace(/<p>\[\[TOC\]\]<\/p>|\[\[TOC\]\]/, `<nav class="toc" aria-label="On this page">${items.join('')}</nav>`);
+    const path = STEPS.map(([step, hint, ids], i) => {
+      const links = sections.filter(s => ids.includes(s.id));
+      if (!links.length) return '';
+      return `<li><a class="step" href="#${links[0].id}"><span class="step-n">${i + 1}</span><span><b>${step}</b><small>${hint}</small></span></a>` +
+        `<span class="step-links">${links.map(s => `<a href="#${s.id}">${esc(s.name)}</a>`).join('')}</span></li>`;
+    }).join('');
+    h = h.replace(/<p>\[\[TOC\]\]<\/p>|\[\[TOC\]\]/, `<nav class="study-path" aria-label="Study path"><ol>${path}</ol></nav>`);
   }
+  h = h.replace(/<h2 id="([\w-]+)">/g, (m, id) => {
+    const step = STEPS.findIndex(s => s[2].includes(id));
+    return `<h2 id="${id}"${step >= 0 ? ` data-step="${STEPS[step][0]}"` : ''}>${SECTION_ICON[id] ? gicon(SECTION_ICON[id]) : ''}`;
+  });
+  // Quick-facts list -> cards.
+  h = h.replace(/<dl class="facts">([\s\S]*?)<\/dl>/, (m, inner) =>
+    `<dl class="facts">${inner.replace(/<dt>([\s\S]*?)<\/dt>\s*<dd>([\s\S]*?)<\/dd>/g, '<div class="fact"><dt>$1</dt><dd>$2</dd></div>')}</dl>`);
+  // Technique tables: label each cell so they turn into cards on phones.
+  h = h.replace(/<table class="terms">([\s\S]*?)<\/table>/g, (m, inner) => {
+    const heads = [...(inner.match(/<thead>([\s\S]*?)<\/thead>/) || ['', ''])[1].matchAll(/<th>([\s\S]*?)<\/th>/g)].map(x => textOf(x[1]));
+    const body = inner.replace(/<tr>([\s\S]*?)<\/tr>/g, (r, cells) => {
+      let i = 0;
+      return '<tr>' + cells.replace(/<td>/g, () => `<td data-label="${esc(heads[i++] || '')}">`) + '</tr>';
+    });
+    return `<table class="terms">${body}</table>`;
+  });
   return h;
 }
 
@@ -346,7 +399,7 @@ ${o.inner}
 
   const kicker = page.parent ? labelOf(page.parent) + (revised ? ' · O/L study guide' : '') : '';
   const originalLink = revised ? `<p class="archive-note">Looking for the earlier LitHelp notes on this text? <a href="${urlOf(page.slug)}original/">Read the original notes</a>.</p>` : '';
-  const body = `<div class="page-head"><div class="wrap">${crumbsHtml(crumbs)}${kicker ? `<span class="kicker">${esc(kicker)}</span>` : ''}<h1>${art.h1}</h1></div></div>
+  const body = `<div class="page-head${revised ? " guide-head" : ""}"><div class="wrap">${crumbsHtml(crumbs)}${kicker ? `<span class="kicker">${esc(kicker)}</span>` : ''}<h1>${art.h1}</h1></div></div>
 <div class="wrap layout${aside ? ' has-aside' : ''}">
 <div><article class="prose${revised ? ' guide' : ''}">
 ${art.inner}
@@ -376,6 +429,26 @@ ${aside}
   <p class="lede">Explore the sections above and begin your journey towards a better understanding and appreciation of English Literature.</p>
   ${sectionCards(['My-Poems', 'OL-LITERATURE-HELP', 'drama', 'OL-Prose', 'novels', 'papers', 'RCF-Publications', 'rcf-lit-class'])}
 </div></section>
+<section class="section" style="padding-top:0"><div class="wrap">
+  <h2 class="title">How to study with LitHelp</h2>
+  <p class="lede">Every O/L study guide follows the same five steps, so you always know what to do next.</p>
+  <ol class="path-banner">
+    <li><span class="n">1</span><b>Learn</b><span>Read about the writer, the background and the setting.</span></li>
+    <li><span class="n">2</span><b>Understand</b><span>Follow the story, then work through the line-by-line analysis, themes and techniques.</span></li>
+    <li><span class="n">3</span><b>Practise</b><span>Try the exam-style context questions before opening the model answers.</span></li>
+    <li><span class="n">4</span><b>Answer</b><span>Plan and write essays the way examiners mark them: content, organisation, language.</span></li>
+    <li><span class="n">5</span><b>Revise</b><span>Use the quick-revision cards and common mistakes before the exam.</span></li>
+  </ol>
+</div></section>
+${(() => {
+  const guides = all.filter(p => p.parent && hasRevised(p.slug));
+  if (!guides.length) return '';
+  return `<section class="section" style="padding-top:0"><div class="wrap">
+  <h2 class="title">New O/L study guides</h2>
+  <p class="lede">Full study guides with line-by-line analysis, exam-style questions and model answers.</p>
+  <div class="cards">${guides.map(g => `<a class="card" href="${urlOf(g.slug)}"><span class="ico">${icon(SECTION_INFO[g.parent.slug][2])}</span><h3>${esc(g.label)}</h3><p>${esc(labelOf(g.parent))} · study guide</p><span class="count">Open guide →</span></a>`).join('')}</div>
+</div></section>`;
+})()}
 <section class="section" style="padding-top:0"><div class="wrap">
   <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))">
     <div class="panel"><h2 class="title" style="font-size:1.4rem">What is new!</h2><ol style="margin:.4rem 0 1rem;padding-left:1.2rem"><li>O/L Literature Questions Bank</li><li>Poetry Interactive Quizzes</li><li>Presentations</li></ol><a class="btn btn-brand" href="${urlOf('papers')}">Visit the Papers section</a></div>

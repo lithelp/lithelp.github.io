@@ -68,3 +68,29 @@
     });
   }
 })();
+
+// Reading progress bar and back-to-top button on article pages.
+(function () {
+  var article = document.querySelector('article.prose');
+  if (!article) return;
+  var bar = document.createElement('div');
+  bar.className = 'read-progress';
+  bar.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(bar);
+  var top = document.createElement('a');
+  top.className = 'to-top';
+  top.href = '#main';
+  top.setAttribute('aria-label', 'Back to top');
+  top.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+  document.body.appendChild(top);
+  function update() {
+    var r = article.getBoundingClientRect();
+    var total = r.height - window.innerHeight;
+    var done = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+    bar.style.transform = 'scaleX(' + done + ')';
+    top.classList.toggle('show', window.scrollY > 900);
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
