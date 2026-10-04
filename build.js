@@ -20,6 +20,14 @@ const ASSET_V = Date.now().toString(36);
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const pagesData = JSON.parse(read('content/pages.json'));
 const quizzes = JSON.parse(read('content/quizzes.json'));
+const ADS = JSON.parse(read('content/site.json')).adsense;
+
+// Ad space. Renders nothing until AdSense is enabled in content/site.json, so pages carry no empty boxes.
+// With a slot ID it places a responsive unit here; without one, Auto ads (head script) decide placement.
+function adHtml(where) {
+  if (!ADS.enabled || !ADS.slot) return '';
+  return `<div class="ad-slot${where ? ' ad-' + where : ''}" aria-label="Advertisement"><ins class="adsbygoogle" style="display:block" data-ad-client="${ADS.client}" data-ad-slot="${ADS.slot}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>`;
+}
 
 // ---------- Site map ----------
 const all = [];
@@ -187,7 +195,7 @@ ${description ? `<meta property="og:description" content="${esc(description)}">\
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?${fonts}&display=swap">
 <link rel="stylesheet" href="/assets/site.css?v=${ASSET_V}">
 ${hasQuiz ? `<link rel="stylesheet" href="/assets/quiz.css?v=${ASSET_V}">\n` : ''}${ld}
-</head>
+${ADS.enabled ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADS.client}" crossorigin="anonymous"></script>\n` : ''}</head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
@@ -248,29 +256,80 @@ function sectionCards(slugs) {
 
 const built = [];
 
+// Revised O/L study guides live in content/revised/<slug>.html. When one exists it becomes the
+// main page at the old address, and the verbatim original moves to /<slug>.php/original/.
+const revisedDir = path.join(ROOT, 'content', 'revised');
+const hasRevised = slug => fs.existsSync(path.join(revisedDir, slug + '.html'));
+
+// Guide-only markup: [[AD]] ad spaces and [[TOC]] section chips.
+function guideExtras(h) {
+  h = h.replace(/<p>\[\[AD\]\]<\/p>|\[\[AD\]\]/g, () => adHtml());
+  if (h.includes('[[TOC]]')) {
+    const items = [...h.matchAll(/<h2 id="([\w-]+)">([\s\S]*?)<\/h2>/g)].map(m => `<a href="#${m[1]}">${textOf(m[2])}</a>`);
+    h = h.replace(/<p>\[\[TOC\]\]<\/p>|\[\[TOC\]\]/, `<nav class="toc" aria-label="On this page">${items.join('')}</nav>`);
+  }
+  return h;
+}
+
+// Places ad spaces into an original page: one after roughly the first third, one at the end.
+function addAdsToOriginal(h) {
+  if (!ADS.enabled) return h;
+  const breaks = [...h.matchAll(/<\/p>\n/g)].map(m => m.index + m[0].length);
+  if (breaks.length > 8) { const at = breaks[Math.floor(breaks.length / 3)]; h = h.slice(0, at) + adHtml() + h.slice(at); }
+  return h + adHtml();
+}
+
+function renderArticle(page, src, mode) {
+  // A guide may set its search description with <!-- description: ... --> on the first line.
+  let metaDesc = '';
+  src = src.replace(/^<!--\s*description:\s*([\s\S]*?)-->\s*/, (m, d) => { metaDesc = d.trim(); return ''; });
+  let h1;
+  const first = src.match(/^<(h[1-6])(?: [^>]*)?>([\s\S]*?)<\/\1>/);
+  if (first && textOf(first[2])) { h1 = textOf(first[2]); src = src.slice(first[0].length).trim(); }
+  else h1 = labelOf(page);
+  const hasQuiz = src.includes('[[QUIZ]]');
+  const hasSinhala = /[඀-෿]/.test(src);
+  let inner = transform(src, page);
+  inner = mode === 'guide' ? guideExtras(inner) : addAdsToOriginal(inner);
+  const para = (inner.match(/<p(?: lang="si")?>([\s\S]*?)<\/p>/g) || []).map(textOf).find(t => t.length > 60 && !/[඀-෿]/.test(t));
+  return { h1, inner, hasQuiz, hasSinhala, description: metaDesc || (para ? clip(para, 158) : '') };
+}
+
 for (const page of all) {
   if (page.slug === 'index') continue;
-  const srcFile = path.join(ROOT, 'content', 'original', page.slug + '.html');
   const isEmptySection = pagesData.emptyOnYola.includes(page.slug);
+  const revised = !isEmptySection && hasRevised(page.slug);
   const crumbs = crumbsFor(page);
-  let h1, inner, description = '', hasQuiz = false, hasSinhala = false;
+  let art;
 
   if (isEmptySection) {
     // These section pages are blank on Yola; here they list the texts in the section.
-    h1 = labelOf(page);
-    description = SECTION_INFO[page.slug][1];
-    inner = `<p style="font-family:var(--ui);color:var(--muted);margin-top:0">${esc(description)}</p><div class="list-cards">` +
-      page.children.map((c, i) => `<a href="${urlOf(c.slug)}"><span class="num">${i + 1}</span>${esc(c.label)}</a>`).join('') + `</div>`;
+    const description = SECTION_INFO[page.slug][1];
+    art = {
+      h1: labelOf(page), description, hasQuiz: false, hasSinhala: false,
+      inner: `<p style="font-family:var(--ui);color:var(--muted);margin-top:0">${esc(description)}</p><div class="list-cards">` +
+        page.children.map((c, i) => `<a href="${urlOf(c.slug)}"><span class="num">${i + 1}</span>${esc(c.label)}${hasRevised(c.slug) ? '<span class="badge">Study guide</span>' : ''}</a>`).join('') + `</div>`,
+    };
   } else {
-    let src = fs.readFileSync(srcFile, 'utf8').trim();
-    const first = src.match(/^<(h[1-6])>([\s\S]*?)<\/\1>/);
-    if (first && textOf(first[2])) { h1 = textOf(first[2]); src = src.slice(first[0].length).trim(); }
-    else h1 = labelOf(page);
-    hasQuiz = src.includes('[[QUIZ]]');
-    hasSinhala = /[඀-෿]/.test(src);
-    inner = transform(src, page);
-    const para = (inner.match(/<p(?: lang="si")?>([\s\S]*?)<\/p>/g) || []).map(textOf).find(t => t.length > 60 && !/[඀-෿]/.test(t));
-    description = para ? clip(para, 158) : '';
+    const original = fs.readFileSync(path.join(ROOT, 'content', 'original', page.slug + '.html'), 'utf8').trim();
+    art = revised ? renderArticle(page, fs.readFileSync(path.join(revisedDir, page.slug + '.html'), 'utf8').trim(), 'guide')
+      : renderArticle(page, original, 'original');
+
+    if (revised) {
+      // Archive copy of the original notes, unchanged, at /<slug>.php/original/
+      const o = renderArticle(page, original, 'original');
+      const oCrumbs = crumbs.concat([{ name: 'Original notes', url: urlOf(page.slug) + 'original/' }]);
+      const oBody = `<div class="page-head"><div class="wrap">${crumbsHtml(oCrumbs)}<span class="kicker">Original notes · archive</span><h1>${o.h1}</h1></div></div>
+<div class="wrap layout"><div><p class="archive-note">These are the original LitHelp notes for this text, kept unchanged. For the updated O/L study guide with explanations, exam questions and model answers, see <a href="${urlOf(page.slug)}">${esc(labelOf(page))}: study guide</a>.</p><article class="prose">
+${o.inner}
+</article></div></div>`;
+      const file = path.join(OUT, page.slug + '.php', 'original', 'index.html');
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.writeFileSync(file, layout({
+        page, title: page.title + ' (original notes)', description: o.description, canonical: SITE_URL + urlOf(page.slug) + 'original/',
+        body: oBody, hasQuiz: o.hasQuiz, hasSinhala: o.hasSinhala, breadcrumbs: oCrumbs,
+      }).replace('<head>', '<head>\n<meta name="robots" content="noindex, follow">'));
+    }
   }
 
   const siblings = page.parent ? page.parent.children : null;
@@ -282,20 +341,22 @@ for (const page of all) {
       (prev ? `<a class="prev" href="${urlOf(prev.slug)}"><small>← Previous</small>${esc(prev.label)}</a>` : '') +
       (next ? `<a class="next" href="${urlOf(next.slug)}"><small>Next →</small>${esc(next.label)}</a>` : '') + `</nav>`;
     aside = `<aside class="aside" aria-label="${esc(labelOf(page.parent))}"><h2>${esc(labelOf(page.parent))}</h2><ul>` +
-      siblings.map(s => `<li><a href="${urlOf(s.slug)}"${s.slug === page.slug ? ' aria-current="page"' : ''}>${esc(s.label)}</a></li>`).join('') + `</ul></aside>`;
+      siblings.map(s => `<li><a href="${urlOf(s.slug)}"${s.slug === page.slug ? ' aria-current="page"' : ''}>${esc(s.label)}</a></li>`).join('') + `</ul>${adHtml('aside')}</aside>`;
   }
 
-  const kicker = page.parent ? labelOf(page.parent) : (SECTION_INFO[page.slug] ? '' : '');
-  const body = `<div class="page-head"><div class="wrap">${crumbsHtml(crumbs)}${kicker ? `<span class="kicker">${esc(kicker)}</span>` : ''}<h1>${h1}</h1></div></div>
+  const kicker = page.parent ? labelOf(page.parent) + (revised ? ' · O/L study guide' : '') : '';
+  const originalLink = revised ? `<p class="archive-note">Looking for the earlier LitHelp notes on this text? <a href="${urlOf(page.slug)}original/">Read the original notes</a>.</p>` : '';
+  const body = `<div class="page-head"><div class="wrap">${crumbsHtml(crumbs)}${kicker ? `<span class="kicker">${esc(kicker)}</span>` : ''}<h1>${art.h1}</h1></div></div>
 <div class="wrap layout${aside ? ' has-aside' : ''}">
-<div><article class="prose">
-${inner}
-</article>${pager}</div>
+<div><article class="prose${revised ? ' guide' : ''}">
+${art.inner}
+</article>${originalLink}${pager}</div>
 ${aside}
 </div>`;
 
   writePage(page.slug, layout({
-    page, title: page.title, description, canonical: SITE_URL + urlOf(page.slug), body, hasQuiz, hasSinhala, breadcrumbs: crumbs,
+    page, title: page.title, description: art.description, canonical: SITE_URL + urlOf(page.slug), body,
+    hasQuiz: art.hasQuiz, hasSinhala: art.hasSinhala, breadcrumbs: crumbs,
   }));
   built.push(page.slug);
 }
@@ -356,6 +417,8 @@ ${sitemapUrls.map(s => `  <url><loc>${SITE_URL}${urlOf(s)}</loc><lastmod>${TODAY
 `);
 fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 fs.writeFileSync(path.join(OUT, '.nojekyll'), '');
+if (ADS.enabled) fs.writeFileSync(path.join(OUT, 'ads.txt'), 'google.com, ' + ADS.client.replace('ca-', '') + ', DIRECT, f08c47fec0942fa0\n');
+else if (fs.existsSync(path.join(OUT, 'ads.txt'))) fs.unlinkSync(path.join(OUT, 'ads.txt'));
 fs.mkdirSync(path.join(OUT, 'assets'), { recursive: true });
 for (const f of fs.readdirSync(path.join(ROOT, 'src', 'assets'))) fs.copyFileSync(path.join(ROOT, 'src', 'assets', f), path.join(OUT, 'assets', f));
 

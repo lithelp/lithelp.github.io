@@ -1,0 +1,8 @@
+{
+  "_note": "AdSense: set enabled to true once AdSense has approved lithelp.github.io. 'client' is the publisher ID already used on the Yola site. Fill 'slot' with an ad-unit ID from AdSense for fixed-size units, or leave it empty to let Auto ads place ads in the reserved spaces.",
+  "adsense": {
+    "enabled": false,
+    "client": "ca-pub-5600707937611761",
+    "slot": ""
+  }
+}
