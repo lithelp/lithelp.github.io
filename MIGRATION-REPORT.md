@@ -24,6 +24,7 @@ Built and tested locally: 2026-10-04
 | Canonical URLs, breadcrumbs, Open Graph | Added |
 | Sitemap created | **Yes**: `sitemap.xml` (40 URLs) |
 | robots.txt created | **Yes** |
+| Google Search Console | **Verified** (HTML file `google68aadc523ebcd67f.html`, kept by the build); sitemap submitted 2026-10-04 |
 | Mobile display | **Pass**: every page checked at 320, 360 and 414 px wide, no sideways scrolling; no JavaScript errors |
 | GitHub Pages working | **Yes**: live at https://lithelp.github.io/ since 2026-10-04. Old `/Name.php` addresses return a permanent 301 redirect to `/Name.php/`; all 172 internal URLs load (HTTP 200) on the live site |
 
