@@ -1,6 +1,6 @@
 {
   "_note": "Site map captured from lithelp.yolasite.com on 2026-10-04. 'title' is the exact original <title>; 'label' is the exact original menu text. Order = original menu order.",
-  "footer": "literaturehelp, Kandy, Central 20000, Sri Lanka | 0714395240",
+  "footer": "literaturehelp, Kandy, Central 20000, Sri Lanka | 070 439 5240",
   "logo": "resources/imageedit_1_8950105283.png",
   "logoAlt": "O/L Literature Help",
   "nav": [
@@ -27,7 +27,7 @@
       {"slug": "poem-about-clowns-wife", "label": "Poem about Clowns Wife", "title": "The Clown's Wife"},
       {"slug": "Upside-Down", "label": "Upside Down", "title": "Upside Down"},
       {"slug": "The-Huntsman", "label": "The Huntsman", "title": "The Huntsman"},
-      {"slug": "They-said-the-House", "label": "They said the House", "title": "They said the House"}
+      {"slug": "They-said-the-House", "label": "Two's Company", "title": "Two's Company"}
     ]},
     {"slug": "drama", "label": "Drama", "title": "OL Drama", "children": [
       {"slug": "The-Bear-by-Anton-Chekov", "label": "The Bear by Anton Chekov", "title": "OL Drama"},

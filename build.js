@@ -62,6 +62,8 @@ const ICONS = {
   library: '<path d="M4 4h4v16H4zM10 4h4v16h-4z"/><path d="m16 5 3.5-1 2.5 15.5-3.5 1z"/>',
   file: '<path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
   bag: '<path d="M5 8h14l-1 13H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+  cap: '<path d="m2 9 10-5 10 5-10 5L2 9Z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/><path d="M22 9v6"/>',
+  chat: '<path d="M4 5h16v11H9l-5 4V5Z"/><path d="M8 10h8M8 13h5"/>',
   users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/>',
 };
 const icon = n => `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]}</svg>`;
@@ -156,6 +158,8 @@ function transform(html, page) {
 
 // ---------- Layout ----------
 function navHtml(current) {
+  const isAbout = current === 'about';
+  if (isAbout) current = { slug: 'about' };
   const cur = current && (current.parent ? current.parent.slug : current.slug);
   const items = pagesData.nav.map(top => {
     const active = top.slug === cur;
@@ -167,6 +171,7 @@ function navHtml(current) {
       .concat(top.children.map(c => `<li><a href="${urlOf(c.slug)}"${current && current.slug === c.slug ? ' aria-current="page"' : ''}>${esc(c.label)}</a></li>`));
     return `<li class="has-sub${mega}${active ? ' active' : ''}"><button type="button" aria-expanded="false">${esc(labelOf(top))}${caret}</button><ul class="sub">${subs.join('')}</ul></li>`;
   });
+  items.push(`<li${isAbout ? ' class="active"' : ''}><a href="/about/"${isAbout ? ' aria-current="page"' : ''}>About</a></li>`);
   return `<nav class="nav" id="site-nav" aria-label="Main"><ul>${items.join('')}</ul></nav>`;
 }
 
@@ -212,7 +217,7 @@ ${body}
   <div class="wrap">
     <div><h2>O/L Literature Help</h2><p style="margin:0 0 .6rem">G.C.E. O/L English Literature notes, translations, quizzes and past papers by RCF Creations.</p><p style="margin:0">${esc(pagesData.footer)}</p></div>
     <div><h2>Study</h2><ul>${['My-Poems', 'OL-LITERATURE-HELP', 'drama', 'OL-Prose', 'novels'].map(s => `<li><a href="${urlOf(s)}">${esc(labelOf(bySlug[s]))}</a></li>`).join('')}</ul></div>
-    <div><h2>More</h2><ul>${['papers', 'RCF-Publications', 'rcf-lit-class'].map(s => `<li><a href="${urlOf(s)}">${esc(labelOf(bySlug[s]))}</a></li>`).join('')}<li><a href="https://rcfenglish.com" target="_blank" rel="noopener">rcfenglish.com</a></li></ul></div>
+    <div><h2>More</h2><ul>${['papers', 'RCF-Publications', 'rcf-lit-class'].map(s => `<li><a href="${urlOf(s)}">${esc(labelOf(bySlug[s]))}</a></li>`).join('')}<li><a href="/about/">About the author</a></li><li><a href="https://rcfenglish.com" target="_blank" rel="noopener">rcfenglish.com</a></li></ul></div>
   </div>
   <div class="fine">Copyright O/L Literature Help · RCF Creations <span class="heart">♥</span></div>
 </footer>
@@ -473,6 +478,18 @@ ${(() => {
   built.push('index');
 }
 
+// ---------- About ----------
+{
+  const body = fs.readFileSync(path.join(ROOT, 'content', 'about.html'), 'utf8').replace(/\[\[ICON:(\w+)\]\]/g, (m, n) => icon(n));
+  const file = path.join(OUT, 'about', 'index.html');
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, layout({
+    page: 'about', title: 'About Rohana Fernando | ' + SITE_NAME,
+    description: 'About Rohana Fernando, creator of O/L Literature Help: English graduate of the University of Peradeniya, MA in Linguistics (Kelaniya), TESOL, and several decades of teaching English and Literature.',
+    canonical: SITE_URL + '/about/', body, breadcrumbs: [{ name: 'Home', url: '/' }, { name: 'About', url: '/about/' }],
+  }));
+}
+
 // ---------- Redirects for old addresses ----------
 fs.mkdirSync(path.join(OUT, 'index.php'), { recursive: true });
 fs.writeFileSync(path.join(OUT, 'index.php', 'index.html'), redirectPage('/', SITE_NAME));
@@ -495,6 +512,7 @@ const sitemapUrls = ['index'].concat(all.filter(p => p.slug !== 'index').map(p =
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${sitemapUrls.map(s => `  <url><loc>${SITE_URL}${urlOf(s)}</loc><lastmod>${TODAY}</lastmod></url>`).join('\n')}
+  <url><loc>${SITE_URL}/about/</loc><lastmod>${TODAY}</lastmod></url>
 </urlset>
 `);
 fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
