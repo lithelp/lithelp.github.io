@@ -46,3 +46,9 @@ Rules followed in every guide:
 
 ## Big Match 1983 (original page)
 - The Yola text had no stanza breaks. The page now shows six stanzas starting at: "Glimpsing the headlines…", "Powerless this time…", "The game's in other hands…", "In a tall house…", "Out of the palmyrah fences…", "The joys of childhood…". Please check these against your copy of the poem. They can be changed in content/stanzas.json without touching the archive.
+
+## Vendor of Sweets
+- Sources: the original page, the 2016 paper and marking scheme (Section B (c) and Q14), and the 31 scanned study-note pages on the original page. Quotations from the novel are taken from those scans, where the study guide quotes the novel. Please check them against your copy of the novel, especially "Do we engage people to breathe for us?" and the "free cash" passage used as a practice extract.
+- The exact chapter order of three late events is not clear from the scans, so the plot gives them without exact order: Jagan sealing off his part of the house, the price cut, and meeting Chinna Dorai.
+- The original page's notes say Mali was jailed for drunk driving; the scanned study notes say he was arrested for having a bottle of wine. The guide uses the scans' version ("a bottle of alcohol (wine)"), which also matches the 2016 marking scheme's wording about alcohol. Please confirm.
+- The page's search-engine title is still the original "OL Novels" (as with the other guides, original titles have been kept). A clearer title such as "The Vendor of Sweets by R.K. Narayan – O/L Study Guide" would help searchers; say if you'd like titles improved across all guides.
