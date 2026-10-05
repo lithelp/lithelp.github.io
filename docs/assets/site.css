@@ -497,8 +497,8 @@ a:hover { color: var(--brand-deep); }
 
 /* Home: "Scroll down" prompt at the bottom of the banner */
 .hero-v2 { position: relative; }
-.scroll-down { position: absolute; left: 50%; bottom: 1rem; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: .15rem; color: #fff; text-decoration: none; font: 700 .9rem var(--ui); letter-spacing: .03em; padding: .45rem 1.1rem .35rem; border-radius: 999px; background: rgba(10,42,94,.82); border: 1px solid rgba(255,255,255,.35); box-shadow: 0 6px 18px rgba(5,20,50,.3); }
-.scroll-down:hover, .scroll-down:focus-visible { color: #fff; background: #0a2a5e; }
+.scroll-down { position: absolute; left: 50%; bottom: 1rem; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: .15rem; color: #fff; text-decoration: none; font: 700 .9rem var(--ui); letter-spacing: .03em; padding: .45rem 1.1rem .35rem; border-radius: 999px; background: transparent; border: 1px solid rgba(255,255,255,.4); text-shadow: 0 1px 3px rgba(5,20,50,.35); }
+.scroll-down:hover, .scroll-down:focus-visible { color: #fff; background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.7); }
 .scroll-down svg { animation: scroll-bob 1.8s ease-in-out infinite; }
 @keyframes scroll-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 #explore { scroll-margin-top: 72px; }

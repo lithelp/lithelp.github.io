@@ -472,7 +472,7 @@ for (const page of all) {
       const o = renderArticle(page, original, 'original');
       const oCrumbs = crumbs.concat([{ name: 'Original notes', url: urlOf(page.slug) + 'original/' }]);
       const oBody = `<div class="page-head"><div class="wrap">${crumbsHtml(oCrumbs)}<span class="kicker">Original notes · archive</span><h1>${o.h1}</h1></div></div>
-<div class="wrap layout"><div><p class="archive-note">These are the original LitHelp notes for this text, kept unchanged. For the updated O/L study guide with explanations, exam questions and model answers, see <a href="${urlOf(page.slug)}">${esc(labelOf(page))}: study guide</a>.</p><article class="prose">
+<div class="wrap layout"><div><p class="archive-note">These are the original LitHelp notes for this text, kept unchanged. For the updated RCF Study Guide with explanations, exam questions and model answers, see <a href="${urlOf(page.slug)}">${esc(labelOf(page))}: study guide</a>.</p><article class="prose">
 ${o.inner}
 </article></div></div>`;
       const file = path.join(OUT, page.slug + '.php', 'original', 'index.html');
@@ -496,7 +496,7 @@ ${o.inner}
       siblings.map(s => `<li><a href="${urlOf(s.slug)}"${s.slug === page.slug ? ' aria-current="page"' : ''}>${esc(s.label)}</a></li>`).join('') + `</ul>${adHtml('aside')}</aside>`;
   }
 
-  const kicker = page.parent ? labelOf(page.parent) + (revised ? ' · O/L study guide' : '') : '';
+  const kicker = page.parent ? labelOf(page.parent) + (revised ? ' · RCF Study Guide' : '') : '';
   const originalLink = revised ? `<p class="archive-note">Looking for the earlier LitHelp notes on this text? <a href="${urlOf(page.slug)}original/">Read the original notes</a>.</p>` : '';
   const art2 = illustration(page.slug, labelOf(page));
   const body = `<div class="page-head${revised ? " guide-head" : ""}${art2 ? ' has-art' : ''}"><div class="wrap"><div class="head-text">${crumbsHtml(crumbs)}${kicker ? `<span class="kicker">${esc(kicker)}</span>` : ''}<h1>${art.h1}</h1></div>${art2 ? `<div class="head-art">${art2}</div>` : ''}</div></div>
@@ -543,7 +543,7 @@ ${aside}
 <div class="wrap">${adHtml('home')}</div>
 <section class="section" style="padding-top:0"><div class="wrap">
   <h2 class="title">How to study with LitHelp</h2>
-  <p class="lede">Every O/L study guide follows the same five steps, so you always know what to do next.</p>
+  <p class="lede">Every RCF Study Guide follows the same five steps, so you always know what to do next.</p>
   <ol class="path-banner">
     <li><span class="n">1</span><b>Learn</b><span>Read about the writer, the background and the setting.</span></li>
     <li><span class="n">2</span><b>Understand</b><span>Follow the story, then work through the line-by-line analysis, themes and techniques.</span></li>
@@ -556,9 +556,9 @@ ${(() => {
   const guides = all.filter(p => p.parent && hasRevised(p.slug));
   if (!guides.length) return '';
   return `<section class="section" style="padding-top:0"><div class="wrap">
-  <h2 class="title">New O/L study guides</h2>
-  <p class="lede">Full study guides with line-by-line analysis, exam-style questions and model answers.</p>
-  <div class="cards">${guides.map(g => `<a class="card" href="${urlOf(g.slug)}"><span class="ico">${icon(SECTION_INFO[g.parent.slug][2])}</span><h3>${esc(g.label)}</h3><p>${esc(labelOf(g.parent))} · study guide</p><span class="count">Open guide →</span></a>`).join('')}</div>
+  <h2 class="title">RCF Study Guides</h2>
+  <p class="lede">New O/L guides with line-by-line analysis, exam-style questions and model answers.</p>
+  <div class="cards">${guides.map(g => `<a class="card" href="${urlOf(g.slug)}"><span class="ico">${icon(SECTION_INFO[g.parent.slug][2])}</span><h3>${esc(g.label)}</h3><p>${esc(labelOf(g.parent))} · RCF Study Guide</p><span class="count">Open guide →</span></a>`).join('')}</div>
 </div></section>`;
 })()}
 <section class="section" style="padding-top:0"><div class="wrap">
