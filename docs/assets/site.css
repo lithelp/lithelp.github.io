@@ -502,7 +502,7 @@ a:hover { color: var(--brand-deep); }
 .scroll-down svg { animation: scroll-bob 1.8s ease-in-out infinite; }
 @keyframes scroll-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 #explore { scroll-margin-top: 72px; }
-@media (max-width: 760px) { .scroll-down { display: none; } }
+@media (max-width: 760px) { .hero-v2 { padding-bottom: 4.2rem; } .scroll-down { bottom: .8rem; font-size: .8rem; padding: .35rem .9rem .25rem; } }
 @media (prefers-reduced-motion: reduce) { .scroll-down svg { animation: none; } }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
