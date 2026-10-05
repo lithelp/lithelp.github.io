@@ -508,3 +508,22 @@ a:hover { color: var(--brand-deep); }
 @media (prefers-reduced-motion: reduce) { .scroll-down svg { animation: none; } }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Installable app: phone bar, iOS help, menu item */
+.install-bar { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 60; display: flex; align-items: center; gap: .7rem; padding: .7rem .75rem; background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 10px 30px rgba(10, 30, 70, .25); font-family: var(--ui); animation: install-in .35s ease-out; }
+.install-bar img { border-radius: 10px; flex-shrink: 0; }
+.install-bar span { flex: 1; min-width: 0; line-height: 1.25; }
+.install-bar b { display: block; font-size: .92rem; }
+.install-bar small { display: block; color: var(--muted); font-size: .78rem; }
+.install-bar .install-go { flex-shrink: 0; background: var(--brand); color: #fff; border: 0; border-radius: 10px; padding: .6rem .9rem; font: 700 .9rem var(--ui); cursor: pointer; }
+.install-bar .install-x { flex-shrink: 0; background: none; border: 0; color: var(--muted); font-size: 1.5rem; line-height: 1; padding: .2rem .35rem; cursor: pointer; }
+@keyframes install-in { from { transform: translateY(120%); } to { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .install-bar { animation: none; } }
+.install-help { border: 0; border-radius: 16px; padding: 1.4rem; max-width: min(420px, 92vw); font-family: var(--ui); color: var(--ink); background: var(--card); }
+.install-help::backdrop { background: rgba(5, 15, 35, .6); }
+.install-help h2 { margin: 0 0 .7rem; font-size: 1.2rem; }
+.install-help ol { padding-left: 1.2rem; margin: 0 0 1rem; line-height: 1.6; }
+.install-help svg { vertical-align: -3px; color: var(--brand); }
+.nav .nav-install button { color: var(--brand); }
+@media (min-width: 1081px) { .nav .nav-install { display: none; } }
+.has-install-bar .to-top { bottom: 96px; }

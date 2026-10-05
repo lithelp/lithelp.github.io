@@ -100,3 +100,92 @@
   window.addEventListener('resize', update);
   update();
 })();
+
+// Installable app: offline support, plus "Install app" / "Add to Home Screen" prompts.
+(function () {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); });
+  }
+  var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (standalone) return;
+  var ua = navigator.userAgent;
+  var isIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var deferred = null;
+  var KEY = 'lithelp-install-dismissed';
+  function dismissedRecently() {
+    try { var t = +localStorage.getItem(KEY); return t && Date.now() - t < 30 * 864e5; } catch (e) { return false; }
+  }
+  function remember() { try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {} }
+
+  var iosDialog;
+  function showIOSHelp() {
+    if (!iosDialog) {
+      iosDialog = document.createElement('dialog');
+      iosDialog.className = 'install-help';
+      iosDialog.innerHTML = '<h2>Add LitHelp to your Home Screen</h2><ol>' +
+        '<li>Tap the <b>Share</b> button <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Share icon"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v8h14v-8"/></svg> at the bottom (or top) of Safari.</li>' +
+        '<li>Scroll down and tap <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>. LitHelp now opens from your Home Screen like an app.</li></ol>' +
+        '<button type="button" class="btn btn-brand">Got it</button>';
+      document.body.appendChild(iosDialog);
+      iosDialog.querySelector('button').addEventListener('click', function () { iosDialog.close(); });
+      iosDialog.addEventListener('click', function (e) { if (e.target === iosDialog) iosDialog.close(); });
+    }
+    if (iosDialog.showModal) iosDialog.showModal(); else alert('In Safari, tap Share, then "Add to Home Screen".');
+  }
+  function install() {
+    if (deferred) {
+      deferred.prompt();
+      deferred.userChoice.then(function (c) { if (c.outcome === 'accepted') hideAll(); deferred = null; });
+    } else if (isIOS) {
+      showIOSHelp();
+    }
+  }
+
+  var bar;
+  function showBar() {
+    if (bar || dismissedRecently() || window.innerWidth > 760) return;
+    bar = document.createElement('div');
+    bar.className = 'install-bar';
+    bar.setAttribute('role', 'region');
+    bar.setAttribute('aria-label', 'Install the app');
+    bar.innerHTML = '<img src="/assets/icons/icon-192.png" alt="" width="40" height="40"><span><b>Add LitHelp to your home screen</b><small>Open your notes in one tap, even offline.</small></span>' +
+      '<button type="button" class="install-go">' + (deferred ? 'Install' : 'How?') + '</button><button type="button" class="install-x" aria-label="Not now">&times;</button>';
+    document.body.appendChild(bar);
+    document.body.classList.add('has-install-bar');
+    bar.querySelector('.install-go').addEventListener('click', install);
+    bar.querySelector('.install-x').addEventListener('click', function () { remember(); bar.remove(); bar = null; document.body.classList.remove('has-install-bar'); });
+  }
+  var linksReady = false;
+  function showLinks() {
+    if (linksReady) return;
+    linksReady = true;
+    document.querySelectorAll('.install-link').forEach(function (a) {
+      a.hidden = false;
+      a.addEventListener('click', function (e) { e.preventDefault(); install(); });
+    });
+    var nav = document.querySelector('#site-nav > ul');
+    if (nav) {
+      var li = document.createElement('li');
+      li.className = 'nav-install';
+      li.innerHTML = '<button type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>Install app</button>';
+      li.querySelector('button').addEventListener('click', install);
+      nav.appendChild(li);
+    }
+  }
+  function hideAll() {
+    document.querySelectorAll('.install-link').forEach(function (a) { a.hidden = true; });
+    var li = document.querySelector('.nav-install'); if (li) li.remove();
+    if (bar) { bar.remove(); bar = null; }
+    document.body.classList.remove('has-install-bar');
+  }
+  function ready() {
+    showLinks();
+    var shown = false;
+    function later() { if (!shown && window.scrollY > 400) { shown = true; showBar(); window.removeEventListener('scroll', later); } }
+    window.addEventListener('scroll', later, { passive: true });
+    setTimeout(function () { if (!shown) { shown = true; showBar(); } }, 12000);
+  }
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; ready(); });
+  window.addEventListener('appinstalled', hideAll);
+  if (isIOS && /safari/i.test(ua) && !/crios|fxios|edgios/i.test(ua)) ready();
+})();

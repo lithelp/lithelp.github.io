@@ -1,0 +1,26 @@
+{
+  "id": "/",
+  "name": "O/L Literature Help",
+  "short_name": "LitHelp",
+  "description": "G.C.E. O/L English Literature study guides, poem analyses, Sinhala translations, quizzes and past papers.",
+  "lang": "en",
+  "start_url": "/?source=app",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0a2a5e",
+  "theme_color": "#1f5fa8",
+  "categories": ["education", "books"],
+  "icons": [
+    { "src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Poetry", "short_name": "Poetry", "description": "Notes and guides for the prescribed poems", "url": "/OL-LITERATURE-HELP.php/?source=shortcut", "icons": [{ "src": "/assets/icons/shortcut-96.png", "sizes": "96x96", "type": "image/png" }] },
+    { "name": "Drama", "short_name": "Drama", "description": "The Bear and Twilight of a Crane", "url": "/drama.php/?source=shortcut", "icons": [{ "src": "/assets/icons/shortcut-96.png", "sizes": "96x96", "type": "image/png" }] },
+    { "name": "Prose", "short_name": "Prose", "description": "The prescribed short stories and extracts", "url": "/OL-Prose.php/?source=shortcut", "icons": [{ "src": "/assets/icons/shortcut-96.png", "sizes": "96x96", "type": "image/png" }] },
+    { "name": "Novels", "short_name": "Novels", "description": "The prescribed novels", "url": "/novels.php/?source=shortcut", "icons": [{ "src": "/assets/icons/shortcut-96.png", "sizes": "96x96", "type": "image/png" }] },
+    { "name": "Past Papers & Resources", "short_name": "Past papers", "description": "Past papers, term tests and model papers", "url": "/papers.php/?source=shortcut", "icons": [{ "src": "/assets/icons/shortcut-96.png", "sizes": "96x96", "type": "image/png" }] }
+  ]
+}
