@@ -1,0 +1,2 @@
+# Who may sell advertising on lithelp.github.io. See https://iabtechlab.com/ads-txt/
+google.com, pub-5600707937611761, DIRECT, f08c47fec0942fa0
