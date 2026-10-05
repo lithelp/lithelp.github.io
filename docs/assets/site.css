@@ -431,10 +431,10 @@ a:hover { color: var(--brand-deep); }
 .btn svg { transition: transform .15s; } .btn:hover svg { transform: translateX(3px); }
 .hero-art { align-self: end; justify-self: end; width: 100%; max-width: 620px; }
 .hero-art img { display: block; width: 100%; height: auto;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 28%, #000 82%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 100%);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to right, transparent 0%, #000 28%, #000 82%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 100%);
-  mask-composite: intersect;
+  /* Soft oval fade on every side so the photo's own background dissolves into the banner gradient. */
+  -webkit-mask-image: radial-gradient(closest-side at 52% 55%, #000 58%, rgba(0,0,0,.85) 70%, transparent 100%);
+  mask-image: radial-gradient(closest-side at 52% 55%, #000 58%, rgba(0,0,0,.85) 70%, transparent 100%);
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
   animation: floatArt 7s ease-in-out infinite alternate; }
 @keyframes floatArt { from { transform: translateY(0); } to { transform: translateY(-6px); } }
 .site-notice { font-family: var(--ui); font-size: .92rem; background: var(--brand-soft); color: var(--brand-deep); border-radius: 12px; padding: .7rem 1rem; margin: 0 0 1.8rem; }
@@ -442,7 +442,6 @@ a:hover { color: var(--brand-deep); }
   .hero-grid { grid-template-columns: 1fr; gap: 0; }
   .hero-copy { padding-bottom: 1.2rem; }
   .hero-art { justify-self: center; max-width: 520px; }
-  .hero-art img { -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 18%); mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 18%); -webkit-mask-composite: source-in; mask-composite: intersect; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-v2, .hero-bg .dot, .hero-bg .plane, .hero-art img, .hero-bg::before, .hero-bg::after { animation: none !important; }
