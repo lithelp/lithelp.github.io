@@ -491,10 +491,13 @@ a:hover { color: var(--brand-deep); }
   .page-head.has-art .wrap { grid-template-columns: minmax(0, 1fr) 96px; gap: .8rem; }
   .head-art .illus { border-radius: 12px; }
 }
-.list-cards a.with-art { padding: .6rem .8rem .6rem .6rem; }
-.list-cards .thumb { flex-shrink: 0; width: 72px; }
+.list-cards a.with-art { display: grid; grid-template-columns: 72px minmax(0, 1fr); grid-template-rows: auto; column-gap: .8rem; row-gap: .3rem; align-items: center; align-content: center; padding: .6rem .8rem .6rem .6rem; }
+.list-cards .thumb { flex-shrink: 0; width: 72px; grid-row: 1 / span 2; align-self: center; }
 .list-cards .thumb .illus { border-radius: 10px; }
-.list-cards .lc-label { flex: 1; }
+.list-cards .lc-label { flex: 1; min-width: 0; line-height: 1.3; }
+/* The study-guide badge sits under the title so it never squeezes the title. */
+.list-cards a.with-art .badge { grid-column: 2; justify-self: start; margin-left: 0; }
+.list-cards a.with-art:not(:has(.badge)) .thumb { grid-row: 1; }
 
 /* Home: "Scroll down" prompt at the bottom of the banner */
 .hero-v2 { position: relative; }
