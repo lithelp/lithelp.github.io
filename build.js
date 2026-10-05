@@ -227,7 +227,7 @@ ${body}
   <div class="wrap">
     <div><h2>O/L Literature Help</h2><p style="margin:0 0 .6rem">G.C.E. O/L English Literature notes, translations, quizzes and past papers by RCF Creations.</p><p style="margin:0">${esc(pagesData.footer)}</p></div>
     <div><h2>Study</h2><ul>${['My-Poems', 'OL-LITERATURE-HELP', 'drama', 'OL-Prose', 'novels'].map(s => `<li><a href="${urlOf(s)}">${esc(labelOf(bySlug[s]))}</a></li>`).join('')}</ul></div>
-    <div><h2>More</h2><ul>${['papers', 'RCF-Publications', 'rcf-lit-class'].map(s => `<li><a href="${urlOf(s)}">${esc(labelOf(bySlug[s]))}</a></li>`).join('')}<li><a href="/about/">About the author</a></li><li><a href="https://rcfenglish.com" target="_blank" rel="noopener">rcfenglish.com</a></li><li><a href="#install" class="install-link" hidden>Install the LitHelp app</a></li></ul></div>
+    <div><h2>More</h2><ul>${['papers', 'RCF-Publications', 'rcf-lit-class'].map(s => `<li><a href="${urlOf(s)}">${esc(labelOf(bySlug[s]))}</a></li>`).join('')}<li><a href="/about/">About the author</a></li><li><a href="https://rcfenglish.com" target="_blank" rel="noopener">rcfenglish.com</a></li><li><a href="#install" class="install-link" hidden>Add a LitHelp shortcut to your home screen</a></li></ul></div>
   </div>
   <div class="fine">Copyright O/L Literature Help · RCF Creations <span class="heart">♥</span></div>
 </footer>

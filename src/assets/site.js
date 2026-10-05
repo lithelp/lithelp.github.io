@@ -101,7 +101,7 @@
   update();
 })();
 
-// Installable app: offline support, plus "Install app" / "Add to Home Screen" prompts.
+// Installable app: offline support, plus "Add shortcut" (home-screen) prompts.
 (function () {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); });
@@ -147,9 +147,9 @@
     bar = document.createElement('div');
     bar.className = 'install-bar';
     bar.setAttribute('role', 'region');
-    bar.setAttribute('aria-label', 'Install the app');
-    bar.innerHTML = '<img src="/assets/icons/icon-192.png" alt="" width="40" height="40"><span><b>Add LitHelp to your home screen</b><small>Open your notes in one tap, even offline.</small></span>' +
-      '<button type="button" class="install-go">' + (deferred ? 'Install' : 'How?') + '</button><button type="button" class="install-x" aria-label="Not now">&times;</button>';
+    bar.setAttribute('aria-label', 'Add a home-screen shortcut');
+    bar.innerHTML = '<img src="/assets/icons/icon-192.png" alt="" width="40" height="40"><span><b>LitHelp in one tap</b><small>Put it on your home screen. Works offline.</small></span>' +
+      '<button type="button" class="install-go">Add shortcut</button><button type="button" class="install-x" aria-label="Not now">&times;</button>';
     document.body.appendChild(bar);
     document.body.classList.add('has-install-bar');
     bar.querySelector('.install-go').addEventListener('click', install);
@@ -167,7 +167,7 @@
     if (nav) {
       var li = document.createElement('li');
       li.className = 'nav-install';
-      li.innerHTML = '<button type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>Install app</button>';
+      li.innerHTML = '<button type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg>Add shortcut</button>';
       li.querySelector('button').addEventListener('click', install);
       nav.appendChild(li);
     }
