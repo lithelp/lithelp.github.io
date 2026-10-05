@@ -483,6 +483,7 @@ a:hover { color: var(--brand-deep); }
 
 /* ---------- Illustrations ---------- */
 .illus { display: block; width: 100%; height: auto; border-radius: 16px; }
+.illus.photo { aspect-ratio: 3 / 2; object-fit: cover; object-position: 50% 40%; background: var(--brand-soft); }
 .page-head.has-art .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 260px); gap: 1.5rem; align-items: center; }
 .head-art { filter: drop-shadow(0 10px 24px rgba(10, 30, 70, .22)); }
 .guide-head .head-art .illus { border: 3px solid rgba(255,255,255,.65); }

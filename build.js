@@ -460,7 +460,7 @@ for (const page of all) {
     art = {
       h1: labelOf(page), description, hasQuiz: false, hasSinhala: false,
       inner: `<p style="font-family:var(--ui);color:var(--muted);margin-top:0">${esc(description)}</p><div class="list-cards">` +
-        page.children.map((c, i) => { const il = illustration(c.slug, c.label); return `<a href="${urlOf(c.slug)}"${il ? ' class="with-art"' : ''}>${il ? `<span class="thumb">${il}</span>` : `<span class="num">${i + 1}</span>`}<span class="lc-label">${esc(c.label)}</span>${hasRevised(c.slug) ? '<span class="badge">Study guide</span>' : ''}</a>`; }).join('') + `</div>${adHtml()}`,
+        page.children.map((c, i) => { const il = illustration(c.slug, c.label); return `<a href="${urlOf(c.slug)}"${il ? ' class="with-art"' : ''}>${il ? `<span class="thumb">${il}</span>` : `<span class="num">${i + 1}</span>`}<span class="lc-label">${esc(c.label)}</span>${hasRevised(c.slug) ? '<span class="badge">RCF Study Guide</span>' : ''}</a>`; }).join('') + `</div>${adHtml()}`,
     };
   } else {
     const original = fs.readFileSync(path.join(ROOT, 'content', 'original', page.slug + '.html'), 'utf8').trim();

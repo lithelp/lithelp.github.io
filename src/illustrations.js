@@ -147,12 +147,23 @@ const ART = {
     '<path d="M0 130h240v30H0Z" fill="#1e1b4b"/>',
 };
 
-// Returns the SVG markup for a slug, or '' if there is no illustration.
+// Picture thumbnails supplied by the author (src/root/assets/img/texts/<slug>.jpg) take the place of the drawings.
+const fs = require('fs');
+const path = require('path');
+const PHOTO_DIR = path.join(__dirname, 'root', 'assets', 'img', 'texts');
+const photoFile = slug => slug.toLowerCase() + '.jpg';
+const hasPhoto = slug => fs.existsSync(path.join(PHOTO_DIR, photoFile(slug)));
+
+// Returns the picture (or SVG) markup for a slug, or '' if there is no illustration.
 function illustration(slug, label) {
+  if (hasPhoto(slug)) {
+    const alt = String(label).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    return `<img class="illus photo" src="/assets/img/texts/${photoFile(slug)}" alt="Illustration for ${alt}" width="240" height="160" loading="lazy" decoding="async">`;
+  }
   const art = ART[slug];
   if (!art) return '';
   const id = 'g-' + slug.replace(/[^a-z0-9]/gi, '').slice(0, 24);
   return `<svg class="illus" viewBox="0 0 240 160" role="img" aria-label="Illustration for ${label}">${art.replace(/url\(#g\)/g, `url(#${id})`).replace(/id="g"/g, `id="${id}"`)}</svg>`;
 }
 
-module.exports = { illustration, hasIllustration: slug => !!ART[slug] };
+module.exports = { illustration, hasIllustration: slug => hasPhoto(slug) || !!ART[slug] };
