@@ -52,3 +52,15 @@ Rules followed in every guide:
 - The exact chapter order of three late events is not clear from the scans, so the plot gives them without exact order: Jagan sealing off his part of the house, the price cut, and meeting Chinna Dorai.
 - The original page's notes say Mali was jailed for drunk driving; the scanned study notes say he was arrested for having a bottle of wine. The guide uses the scans' version ("a bottle of alcohol (wine)"), which also matches the 2016 marking scheme's wording about alcohol. Please confirm.
 - The page's search-engine title is still the original "OL Novels" (as with the other guides, original titles have been kept). A clearer title such as "The Vendor of Sweets by R.K. Narayan – O/L Study Guide" would help searchers; say if you'd like titles improved across all guides.
+
+## Stanza breaks (checked 2026-10-05 against published texts)
+Display only: the archive text is unchanged. Settings are in content/stanzas.json.
+- A Bird Came Down the Walk: 5 stanzas of 4 lines (the 1891 published text; Wikipedia / SparkNotes / NVCC Pressbooks).
+- The Eagle: 2 stanzas of 3 lines (Wikisource).
+- Richard Cory: 4 stanzas of 4 lines (Wikisource).
+- The Huntsman: 5 stanzas of 6 lines (poemotopia.com).
+- I Know Why the Caged Bird Sings: 6 stanzas (5, 4, 4, 5, 4, 5 lines) as the lines appear on the LitHelp page. Published editions set some lines differently; please check against the O/L text book.
+- Fear: 3 stanzas of 8 lines (as quoted in published sources). On the LitHelp page the first stanza shows 7 lines, because Yola joined "I don't want them to turn / my little girl into a swallow" into one line.
+- The Earthen Goblet: 4 stanzas (5, 7, 6, 4 lines). The Yola text had lost all line breaks inside each stanza; they are restored.
+- Not changed, at the author's request: War is Kind, Big Match 1983.
+- Not checked yet, or no reliable published text found online: The Clown's Wife, Upside Down, Two's Company, Once upon a Time, Farewell to Barn and Stack and Tree, To the Nile, To the Evening Star, The Camel's Hump, Father and Son, Breakfast, The Terrorist He's Watching. Published sources for Once upon a Time give 7 stanzas (6, 6, 6, 6, 9, 6, 5 lines), which the LitHelp page already follows.

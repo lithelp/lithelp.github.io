@@ -340,7 +340,9 @@ function addAdsToOriginal(h) {
   return h + adHtml();
 }
 
-function formatPoemLines(h, slug) {
+// Poems the author asked to keep exactly as they were laid out before the 2026-10-04 stanza review.
+const KEEP_OLD_LAYOUT = ['War-is-Kind', 'Big-Match-1983'];
+function formatPoemLinesBefore(h, slug) {
   const breaks = (STANZAS[slug] || []).map(t => t.replace(/[\u2018\u2019']/g, "'").toLowerCase());
   return h.replace(/(?:<p(?: lang="si")?>(?:(?!<\/p>)[^\n]){1,90}<\/p>\n?){3,}/g, run => {
     const lines = run.match(/<p(?: lang="si")?>[\s\S]*?<\/p>/g);
@@ -352,6 +354,53 @@ function formatPoemLines(h, slug) {
       out += l;
     });
     return out + '</div>\n';
+  });
+}
+
+// A stanza entry is either the first words of a stanza, or {"text": ..., "occurrence": n} when those
+// words also start other lines (refrains): the break goes before the nth line that starts with them.
+// An entry {"lines": [...], "after": "..."} restores line breaks that Yola lost inside run-together text.
+const normLine = s => s.replace(/[\u2018\u2019']/g, "'").replace(/\s+/g, ' ').trim().toLowerCase();
+
+function formatPoemLines(h, slug) {
+  // Only poems whose stanzas were checked against published texts use the new rules.
+  if (KEEP_OLD_LAYOUT.includes(slug) || !STANZAS[slug]) return formatPoemLinesBefore(h, slug);
+  const cfg = STANZAS[slug] || [];
+  const lineFix = cfg.find(e => e && e.lines);
+  if (lineFix) {
+    const at = h.indexOf(lineFix.after);
+    if (at >= 0) {
+      let head = h.slice(0, at), tail = h.slice(at);
+      const re = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      for (const l of lineFix.lines) tail = tail.replace(new RegExp('\\s*' + re(l)), '<br>' + l);
+      for (const s of lineFix.stanzas || []) tail = tail.replace(new RegExp('<br>\\s*' + re(s)), '<br><br>' + s);
+      h = head + tail;
+    }
+  }
+  const breaks = cfg.filter(e => typeof e === 'string' || (e && e.text))
+    .map(e => (typeof e === 'string' ? { key: normLine(e).slice(0, 30), nth: 0 } : { key: normLine(e.text).slice(0, 30), nth: e.occurrence || 1 }));
+  // A poem line is a short paragraph (trailing spaces from Yola don't count). Bold-only lines are
+  // headings ("About the Poet:"), so they end a poem block instead of joining it.
+  const isLine = l => textOf(l).length <= 90 && !/^<p(?: lang="si")?>\s*<(b|strong)>/.test(l) && !/^by\s/i.test(textOf(l));
+  return h.replace(/(?:<p(?: lang="si")?>(?:(?!<\/p>)[^\n]){1,400}<\/p>\n?){3,}/g, run => {
+    const lines = run.match(/<p(?: lang="si")?>[\s\S]*?<\/p>/g);
+    if (lines.some(l => /<(table|img|div|h\d|ul|ol)/.test(l))) return run;
+    const seen = {};
+    let out = '', block = [];
+    const flush = () => { out += block.length >= 3 ? '<div class="poem-lines">' + block.join('') + '</div>\n' : block.join('\n') + (block.length ? '\n' : ''); block = []; };
+    lines.forEach(l => {
+      if (!isLine(l)) { flush(); out += l + '\n'; return; }
+      const t = normLine(textOf(l));
+      const hit = breaks.some(b => {
+        if (!t.startsWith(b.key)) return false;
+        seen[b.key] = (seen[b.key] || 0) + 1;
+        return b.nth === 0 || seen[b.key] === b.nth;
+      });
+      if (hit && block.length) { out += '<div class="poem-lines">' + block.join('') + '</div>\n'; block = []; }
+      block.push(l);
+    });
+    flush();
+    return out;
   });
 }
 
@@ -457,9 +506,10 @@ ${aside}
   </div>
   <div class="hero-art"><img src="/assets/img/hero-student.jpg" alt="A student studying English Literature on a laptop" width="566" height="435" fetchpriority="high"></div>
 </div>
+<a class="scroll-down" href="#explore"><span>Scroll down to explore</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
 </section>
-<section class="section"><div class="wrap">
-  <p class="site-notice">For the latest resources, study guides, and updates, please visit our new official website at <a href="https://rcfenglish.com" target="_blank" rel="noopener">rcfenglish.com</a>.</p>
+<section class="section" id="explore"><div class="wrap">
+  <p class="site-notice">RCF English also has other Literature resources, such as lesson plans and term notes, at <a href="https://rcfenglish.com" target="_blank" rel="noopener">rcfenglish.com</a>.</p>
   <h2 class="title">Explore the sections</h2>
   <p class="lede">Your trusted online resource for G.C.E. O/L English Literature learning and teaching. Explore the sections below and begin your journey towards a better understanding and appreciation of English Literature.</p>
   ${sectionCards(['My-Poems', 'OL-LITERATURE-HELP', 'drama', 'OL-Prose', 'novels', 'papers', 'RCF-Publications', 'rcf-lit-class'])}
