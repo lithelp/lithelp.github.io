@@ -227,7 +227,7 @@ ${body}
   <div class="wrap">
     <div><h2>O/L Literature Help</h2><p style="margin:0 0 .6rem">G.C.E. O/L English Literature notes, translations, quizzes and past papers by RCF Creations.</p><p style="margin:0">${esc(pagesData.footer)}</p></div>
     <div><h2>Study</h2><ul>${['My-Poems', 'OL-LITERATURE-HELP', 'drama', 'OL-Prose', 'novels'].map(s => `<li><a href="${urlOf(s)}">${esc(labelOf(bySlug[s]))}</a></li>`).join('')}</ul></div>
-    <div><h2>More</h2><ul>${['papers', 'RCF-Publications', 'rcf-lit-class'].map(s => `<li><a href="${urlOf(s)}">${esc(labelOf(bySlug[s]))}</a></li>`).join('')}<li><a href="/about/">About the author</a></li><li><a href="https://rcfenglish.com" target="_blank" rel="noopener">rcfenglish.com</a></li><li><a href="#install" class="install-link" hidden>Add a LitHelp shortcut to your home screen</a></li></ul></div>
+    <div><h2>More</h2><ul>${['papers', 'RCF-Publications', 'rcf-lit-class'].map(s => `<li><a href="${urlOf(s)}">${esc(labelOf(bySlug[s]))}</a></li>`).join('')}<li><a href="/practice-papers-2026/">RCF Practice Papers 2026</a></li><li><a href="/about/">About the author</a></li><li><a href="https://rcfenglish.com" target="_blank" rel="noopener">rcfenglish.com</a></li><li><a href="#install" class="install-link" hidden>Add a LitHelp shortcut to your home screen</a></li></ul></div>
   </div>
   <div class="fine">Copyright O/L Literature Help · RCF Creations <span class="heart">♥</span></div>
 </footer>
@@ -588,6 +588,104 @@ ${(() => {
   }));
 }
 
+// ---------- RCF Practice Papers for 2026 (content/practice-papers-2026.js) ----------
+const PRACTICE = require('./content/practice-papers-2026.js');
+const PP_BASE = '/practice-papers-2026/';
+const ppUrl = n => (n ? `${PP_BASE}paper-${n}/` : PP_BASE);
+{
+  const lines = s => esc(s).replace(/\n/g, '<br>');
+  const marks = m => `<span class="marks">${m} mark${m > 1 ? 's' : ''}</span>`;
+  const GROUP_NO = { Poetry: 'I', Prose: 'II', Drama: 'III' };
+  const roman = ['i', 'ii'];
+  const toolbar = `<div class="pp-tools" role="group" aria-label="Answers"><button type="button" class="btn btn-brand" data-pp="open">Show all answers</button><button type="button" class="btn" data-pp="close">Hide all answers</button><button type="button" class="btn" data-pp="print">Print the paper</button></div>`;
+  const markingBox = `<div class="box exam"><span class="box-title">How Paper II essays are marked (15 marks each)</span><p><strong>Content 7</strong> · <strong>Organisation 4</strong> · <strong>Language 4</strong>. Examiners reward relevant points from the text, apt quotations, a clear argument that answers the question, and your own sensible response. The points below are a guide, not a fixed list.</p></div>`;
+
+  function paperBody(p) {
+    const a = [];
+    let groupSeen = {};
+    for (const it of p.a) {
+      const k = groupSeen[it.g] = (groupSeen[it.g] || 0) + 1;
+      if (k === 1) a.push(`<h3 class="pp-group">${GROUP_NO[it.g]} ${it.g}</h3>`);
+      const ref = `${GROUP_NO[it.g]} (${roman[k - 1]})`;
+      a.push(`<div class="q"><span class="q-tag"><span class="pp-ref">${ref}</span> · Practice question</span>
+<blockquote>"${lines(it.x)}"</blockquote>
+<ol type="a">${it.q.map(([t, m]) => `<li>${esc(t)} ${marks(m)}</li>`).join('')}</ol>
+<details><summary>Show answers</summary><div class="answer"><ol type="a">${it.q.map(q => `<li>${esc(q[2])}</li>`).join('')}</ol></div></details></div>`);
+    }
+    const b = p.b.map((it, i) => {
+      const qs = it.q.map(([t, m]) => `<li>${esc(t)} ${marks(m)}</li>`).join('');
+      return `<div class="q"><span class="q-tag">${['I', 'II', 'III'][i]} · ${esc(it.title)}</span>
+<p>${it.lead ? esc(it.lead) : `Read the following extract from <em>${esc(it.title)}</em> by ${esc(it.author)} and answer all the questions given below it.`}</p>
+<blockquote>"${lines(it.x)}"</blockquote>
+<ul class="pp-sub">${qs}</ul>
+<details><summary>Show answers</summary><div class="answer"><ul class="pp-sub">${it.q.map(q => `<li><strong>${esc(q[0])}</strong><br>${esc(q[2])}</li>`).join('')}</ul></div></details></div>`;
+    }).join('\n');
+    let qn = 0;
+    const p2 = Object.entries(p.p2).map(([sec, qs]) => `<h3 class="pp-group">${sec.toUpperCase()} <small>(Answer one question only)</small></h3>` + qs.map(([q, pts]) => {
+      qn++;
+      return `<div class="q"><p><strong>${qn}. ${esc(q)}</strong> <span class="marks">15 marks</span></p>
+<details><summary>Show answer guide</summary><div class="answer"><ul>${pts.map(pt => `<li>${esc(pt)}</li>`).join('')}</ul></div></details></div>`;
+    }).join('\n')).join('\n');
+
+    return `${toolbar}
+<div class="box exam"><span class="box-title">Paper I · 40 marks</span><p>Answer <strong>all</strong> the questions in Section A. Select <strong>either</strong> I, II <strong>or</strong> III from Section B and answer all the questions given below it.</p></div>
+<h2 id="section-a">Paper I · Section A: Poetry, Prose and Drama <small class="pp-marks">30 marks</small></h2>
+<p>Read the following extracts and answer all the questions given below them.</p>
+${a.join('\n')}
+${adHtml('mid')}
+<h2 id="section-b">Paper I · Section B: Novels <small class="pp-marks">10 marks</small></h2>
+<p>Select <strong>EITHER</strong> I, II <strong>OR</strong> III and answer all the questions given below it.</p>
+${b}
+<h2 id="paper-2">Paper II · Essays <small class="pp-marks">60 marks</small></h2>
+<div class="box exam"><span class="box-title">Paper II · 60 marks</span><p>Answer <strong>four</strong> questions, selecting <strong>one</strong> each from the four sections: Poetry, Drama, Prose and Fiction.</p></div>
+${markingBox}
+${p2}
+<p class="archive-note">These are original LitHelp practice questions written to the format of the G.C.E. (O/L) 2023(2024) and 2024(2025) papers and the Ministry of Education's 2025(2026) model papers. They are not official past-paper questions. For copyrighted set texts, only short lines are quoted and the situation is described in our own words.</p>`;
+  }
+
+  const desc = n => `RCF Practice Paper ${n} for G.C.E. O/L 2026 Appreciation of English Literary Texts: Paper I context questions, Section B novel extracts and Paper II essays, with full answers and marking guides.`;
+  for (const p of PRACTICE) {
+    const crumbs = [{ name: 'Home', url: '/' }, { name: 'Practice Papers 2026', url: ppUrl() }, { name: `Paper ${p.n}`, url: ppUrl(p.n) }];
+    const prev = PRACTICE.find(x => x.n === p.n - 1), next = PRACTICE.find(x => x.n === p.n + 1);
+    const pager = `<nav class="pager" aria-label="More practice papers">${prev ? `<a class="prev" href="${ppUrl(prev.n)}"><small>Previous</small>Practice Paper ${prev.n}</a>` : ''}${next ? `<a class="next" href="${ppUrl(next.n)}"><small>Next</small>Practice Paper ${next.n}</a>` : ''}</nav>`;
+    const body = `<div class="page-head guide-head"><div class="wrap"><div class="head-text">${crumbsHtml(crumbs)}<span class="kicker">RCF Practice Papers · G.C.E. O/L 2026</span><h1>Practice Paper ${p.n}</h1><p class="pp-focus">${esc(p.focus)} · Three hours · 100 marks</p></div></div></div>
+${adHtml('top')}
+<div class="wrap layout"><div><article class="prose guide pp">
+${paperBody(p)}
+</article>${pager}</div></div>`;
+    const file = path.join(OUT, 'practice-papers-2026', `paper-${p.n}`, 'index.html');
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    writeWithRetry(file, layout({ page: null, title: `RCF Practice Paper ${p.n} for O/L 2026 with Answers | ${SITE_NAME}`, description: desc(p.n), canonical: SITE_URL + ppUrl(p.n), body, breadcrumbs: crumbs }));
+  }
+
+  // Hub page
+  const crumbs = [{ name: 'Home', url: '/' }, { name: 'Practice Papers 2026', url: ppUrl() }];
+  const cards = PRACTICE.map(p => `<a class="card" href="${ppUrl(p.n)}"><span class="ico">${icon('file')}</span><h3>Practice Paper ${p.n}</h3><p>${esc(p.focus)}</p><span class="count">Open paper and answers →</span></a>`).join('');
+  const body = `<div class="page-head guide-head"><div class="wrap"><div class="head-text">${crumbsHtml(crumbs)}<span class="kicker">RCF Practice Papers · G.C.E. O/L 2026</span><h1>Practice Papers for 2026</h1><p class="pp-focus">Five full papers in the latest exam format, with answers</p></div></div></div>
+${adHtml('top')}
+<section class="section"><div class="wrap">
+  <div class="cards">${cards}</div>
+</div></section>
+<div class="wrap layout"><div><article class="prose guide pp">
+<h2>About these papers</h2>
+<p>Each RCF Practice Paper follows the format of the latest G.C.E. (O/L) Appreciation of English Literary Texts examination (46 E I, II), as set in 2023(2024) and 2024(2025) and in the Ministry of Education's 2025(2026) model papers. Every paper covers all the prescribed genres, and together the five papers cover every set text.</p>
+<div class="box exam"><span class="box-title">The examination at a glance · 3 hours + 10 minutes reading time</span>
+<p><strong>Paper I (40 marks)</strong><br>Section A: six short extracts (two poetry, two prose, two drama). Each carries 5 marks: (a) name the text and author, 1; (b) and (c) understanding of the extract, 1 + 1; (d) inference or response, 2.<br>Section B: choose one novel extract from three. (i) identification, 2; (ii) comprehension, 2; (iii) meanings of two phrases, 1 + 1; (iv) critical response, 4.</p>
+<p><strong>Paper II (60 marks)</strong><br>Four essays, one each from Poetry, Drama, Prose and Fiction. Each essay carries 15 marks: Content 7, Organisation 4, Language 4.</p></div>
+<h2>How to use them</h2>
+<ol>
+<li>Print the paper, or write your answers in a notebook. Keep the answers hidden.</li>
+<li>Time yourself: about 1 hour for Paper I and 2 hours for Paper II.</li>
+<li>Then open the answers and mark your work. In Paper II, check that you answered the question, used quotations and organised your essay clearly.</li>
+<li>Revise the texts you found difficult with the RCF Study Guides on this site.</li>
+</ol>
+<p class="archive-note">These are original LitHelp practice questions. They are not official past-paper questions. For copyrighted set texts, only short lines are quoted and the situation is described in our own words. Public-domain texts are quoted from standard editions. Official past papers are listed on the <a href="${urlOf('papers')}">Past Papers &amp; Resources</a> page.</p>
+</article></div></div>`;
+  const file = path.join(OUT, 'practice-papers-2026', 'index.html');
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  writeWithRetry(file, layout({ page: null, title: `RCF Practice Papers for O/L 2026 with Answers | ${SITE_NAME}`, description: 'Five RCF Practice Papers for the G.C.E. O/L 2026 Appreciation of English Literary Texts exam, in the latest Paper I and Paper II format, with full answers and essay marking guides.', canonical: SITE_URL + ppUrl(), body, breadcrumbs: crumbs }));
+}
+
 // ---------- Redirects for old addresses ----------
 fs.mkdirSync(path.join(OUT, 'index.php'), { recursive: true });
 writeWithRetry(path.join(OUT, 'index.php', 'index.html'), redirectPage('/', SITE_NAME));
@@ -611,6 +709,7 @@ writeWithRetry(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${sitemapUrls.map(s => `  <url><loc>${SITE_URL}${urlOf(s)}</loc><lastmod>${TODAY}</lastmod></url>`).join('\n')}
   <url><loc>${SITE_URL}/about/</loc><lastmod>${TODAY}</lastmod></url>
+${[0].concat(PRACTICE.map(p => p.n)).map(n => `  <url><loc>${SITE_URL}${ppUrl(n)}</loc><lastmod>${TODAY}</lastmod></url>`).join('\n')}
 </urlset>
 `);
 writeWithRetry(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);

@@ -539,3 +539,34 @@ html { scroll-behavior: smooth; }
   mask-image: radial-gradient(ellipse 50% 62% at 50% 64%, #000 62%, transparent 100%);
   animation: plantSway 5.5s ease-in-out infinite; }
 @keyframes plantSway { 0%, 100% { transform: rotate(0deg) skewX(0deg); } 30% { transform: rotate(1.6deg) skewX(-1deg); } 65% { transform: rotate(-1.2deg) skewX(.8deg); } }
+
+/* ---------- RCF Practice Papers 2026 ---------- */
+.pp-focus { margin: .5rem 0 0; font-family: var(--ui); font-size: 1rem; opacity: .9; }
+.pp-tools { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.2rem; }
+.pp-tools .btn { cursor: pointer; padding: .6rem .95rem; font-size: .9rem; border-color: var(--line); background: var(--card); color: var(--ink); }
+.pp-tools .btn.btn-brand { background: var(--brand); border-color: var(--brand); color: #fff; }
+.pp h3.pp-group { font-family: var(--ui); font-size: 1rem; letter-spacing: .06em; text-transform: uppercase; color: var(--brand-deep); margin: 1.6rem 0 .2rem; }
+.pp h3.pp-group small { text-transform: none; letter-spacing: 0; font-weight: 600; color: var(--muted); }
+.pp .pp-marks { font-family: var(--ui); font-size: .85rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.pp ul.pp-sub { list-style: none; padding-left: 0; }
+.pp ul.pp-sub li { margin: .35rem 0; }
+.pp .q ol li, .pp .q ul li { overflow: hidden; }
+@media print {
+  .pp-tools, .page-head .crumbs { display: none !important; }
+  .pp .q details:not([open]) { display: none; }
+  .pp .q { break-inside: avoid; }
+}
+
+/* ---------- Announcement pop-up ---------- */
+.announce { border: 0; border-radius: 18px; padding: 0; max-width: min(440px, calc(100vw - 32px)); box-shadow: 0 24px 60px rgba(5, 20, 50, .35); background: var(--card); color: var(--ink); }
+.announce::backdrop { background: rgba(5, 20, 50, .45); }
+.announce .an-top { background: linear-gradient(135deg, #0a2a5e, #1f5fa8); color: #fff; padding: 1.3rem 1.4rem 1.1rem; }
+.announce .an-top small { display: block; font: 800 .72rem var(--ui); letter-spacing: .1em; text-transform: uppercase; color: #d9f2bf; margin-bottom: .35rem; }
+.announce h2 { margin: 0; font-family: var(--read); font-size: 1.45rem; line-height: 1.2; }
+.announce .an-body { padding: 1rem 1.4rem 1.3rem; font-family: var(--ui); }
+.announce .an-body p { margin: 0 0 1rem; line-height: 1.55; }
+.announce .an-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+.announce .an-actions .btn { cursor: pointer; }
+.announce .an-later { background: transparent; border: 2px solid var(--line); color: var(--ink); }
+.announce .an-x { position: absolute; top: .5rem; right: .6rem; width: 2.2rem; height: 2.2rem; border: 0; border-radius: 50%; background: rgba(255,255,255,.15); color: #fff; font-size: 1.3rem; cursor: pointer; }
+.pp .q-tag .pp-ref { text-transform: none; }

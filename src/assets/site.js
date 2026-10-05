@@ -189,3 +189,41 @@
   window.addEventListener('appinstalled', hideAll);
   if (isIOS && /safari/i.test(ua) && !/crios|fxios|edgios/i.test(ua)) ready();
 })();
+
+// RCF Practice Papers: answer toolbar on the paper pages, and a one-time announcement pop-up elsewhere.
+(function () {
+  var paper = document.querySelector('article.pp');
+  if (paper) {
+    paper.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-pp]');
+      if (!b) return;
+      var act = b.getAttribute('data-pp');
+      if (act === 'print') { window.print(); return; }
+      paper.querySelectorAll('.q details').forEach(function (d) { d.open = act === 'open'; });
+    });
+  }
+  var HREF = '/practice-papers-2026/';
+  if (location.pathname.indexOf(HREF) === 0 || !window.HTMLDialogElement) return;
+  var KEY = 'lithelp-pp2026';
+  var state;
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { state = {}; }
+  if (state.opened || (state.later && Date.now() - state.later < 7 * 864e5)) return;
+  function save(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
+  setTimeout(function () {
+    if (document.querySelector('dialog[open]')) return;
+    var d = document.createElement('dialog');
+    d.className = 'announce';
+    d.setAttribute('aria-labelledby', 'an-title');
+    d.innerHTML = '<div class="an-top"><small>New on LitHelp</small><h2 id="an-title">RCF Practice Papers for 2026</h2><button type="button" class="an-x" aria-label="Close">&times;</button></div>' +
+      '<div class="an-body"><p>Five full practice papers in the latest O/L exam format (Paper I and Paper II), with answers and essay marking guides.</p>' +
+      '<div class="an-actions"><a class="btn btn-brand an-open" href="' + HREF + '">Open the papers</a><button type="button" class="btn an-later">Maybe later</button></div></div>';
+    document.body.appendChild(d);
+    function later() { save({ later: Date.now() }); d.close(); }
+    d.querySelector('.an-open').addEventListener('click', function () { save({ opened: Date.now() }); });
+    d.querySelector('.an-later').addEventListener('click', later);
+    d.querySelector('.an-x').addEventListener('click', later);
+    d.addEventListener('cancel', function () { save({ later: Date.now() }); });
+    d.addEventListener('click', function (e) { if (e.target === d) later(); });
+    d.showModal();
+  }, 2500);
+})();

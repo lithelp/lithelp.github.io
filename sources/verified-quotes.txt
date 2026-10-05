@@ -1,0 +1,39 @@
+# Short quotations from copyrighted set texts that are not on LitHelp, checked against these sources.
+# check-practice.js treats every non-comment line as source text.
+
+# Twilight of a Crane (Junji Kinoshita), lines as printed in official papers:
+#   G.C.E. O/L 2016, Section A (v)
+I wished I might have lived with you forever, setting up our world in the middle of this field, playing with children and working on the farm.
+#   G.C.E. O/L 2024(2025), Paper I, III (i)
+Well, now, it's very nice to have got two pieces of the cloth-God bless us!
+#   G.C.E. O/L 2023(2024), Paper I, III (i)
+After all I had asked you.....After all you had promised faithfully.....Why-why did you look in at me?
+#   Ministry of Education 2025(2026) Support Paper 01, Paper I, III (i)
+Yes, that's what the town-folk call it! They say cloth of that sort cannot be seen unless they go to the 'Tenjiku' (Heaven). It's as valuable as that.
+
+# Wave (Sonali Deraniyagala): quoted in reviews and the Ministry 2025(2026) answer guide
+The jeep rocked. It was floating, the wheels no longer gripping the ground. We kept steadying ourselves on the seats. No one spoke. No one uttered a sound.
+
+# Bringing Tony Home (Tissa Abeysekara), lines as printed in official papers:
+#   G.C.E. O/L 2023(2024), Paper I, Section B II
+the music was vaguely familiar and the smell of roast beef was still in the air coming from Kitchen No.1 and I thought of the lonely nights I spent at 'Greenlands' in Havelock Town
+#   G.C.E. O/L 2024(2025), Paper I, Section B II
+having broken through classroom order there is no wish to get back to it
+#   G.C.E. O/L 2016, Section B (b)
+And then came the bark; the sharp clipped aristocratic bark, and with it came Tony
+#   Ministry 2025(2026) Support Paper 01, Section B II
+he came walking with a swagger like the way toughs move and his manner changed immediately when he saw me standing by the car
+#   Ministry 2025(2026) Model Paper 02, Section B II
+But I had another very important task to perform, something I had secretly vowed to myself I would do.
+
+# The Vendor of Sweets (R. K. Narayan), lines as printed in official papers:
+#   G.C.E. O/L 2016, Section B (c)
+Jagan stuffed his jibba pocket with the letters and pulled them out for choice reading of passages to all and sundry, mostly to his cousin, who, as ever, remained an uncomplaining listener. Gradually his reading of the Bhagavad Gita was replaced by the blue airmail letters.
+#   G.C.E. O/L 2023(2024), Paper I, Section B III
+at some stage in one's life one must uproot oneself from the accustomed surroundings and disappear so that others may continue in peace.
+#   G.C.E. O/L 2024(2025), Paper I, Section B III
+Any indiscreet question might upset the gentlemen with the camera.
+#   Ministry 2025(2026) Support Paper 01, Section B III
+Gandhi has taught me peaceful methods, and that's how I'm going to meet their demand.
+#   Ministry 2025(2026) Model Paper 02, Section B III
+He should rather go to a village granny, he said, all his patriotic sentiment surging.
