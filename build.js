@@ -234,7 +234,17 @@ ${hasQuiz ? `<script src="/assets/quiz.js?v=${ASSET_V}" defer></script>\n` : ''}
 function writePage(slug, html) {
   const file = slug === 'index' ? path.join(OUT, 'index.html') : path.join(OUT, slug + '.php', 'index.html');
   fs.mkdirSync(path.dirname(file), { recursive: true });
-  fs.writeFileSync(file, html);
+  writeWithRetry(file, html);
+}
+
+// Windows can briefly lock a file the local preview server is reading; wait and try again.
+function writeWithRetry(file, data) {
+  for (let i = 0; ; i++) {
+    try { return fs.writeFileSync(file, data); } catch (e) {
+      if (i >= 20 || !['UNKNOWN', 'EBUSY', 'EPERM'].includes(e.code)) throw e;
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 100);
+    }
+  }
 }
 
 function redirectPage(to, title) {
@@ -381,7 +391,17 @@ function formatPoemLines(h, slug) {
     .map(e => (typeof e === 'string' ? { key: normLine(e).slice(0, 30), nth: 0 } : { key: normLine(e.text).slice(0, 30), nth: e.occurrence || 1 }));
   // A poem line is a short paragraph (trailing spaces from Yola don't count). Bold-only lines are
   // headings ("About the Poet:"), so they end a poem block instead of joining it.
-  const isLine = l => textOf(l).length <= 90 && !/^<p(?: lang="si")?>\s*<(b|strong)>/.test(l) && !/^by\s/i.test(textOf(l));
+  // {"notLines": [...]} lists title/byline paragraphs; {"poemEnd": "..."} is the poem's last line,
+  // after which nothing is set as verse.
+  const notLines = (cfg.find(e => e && e.notLines) || { notLines: [] }).notLines.map(normLine);
+  const poemEnd = (cfg.find(e => e && e.poemEnd) || {}).poemEnd;
+  let ended = false;
+  const isLine = l => {
+    if (ended) return false;
+    const t = textOf(l);
+    if (poemEnd && normLine(t).startsWith(normLine(poemEnd))) { ended = true; return true; }
+    return t.length <= 90 && !/^<p(?: lang="si")?>\s*<(b|strong)>/.test(l) && !/^by\s/i.test(t) && !notLines.includes(normLine(t));
+  };
   return h.replace(/(?:<p(?: lang="si")?>(?:(?!<\/p>)[^\n]){1,400}<\/p>\n?){3,}/g, run => {
     const lines = run.match(/<p(?: lang="si")?>[\s\S]*?<\/p>/g);
     if (lines.some(l => /<(table|img|div|h\d|ul|ol)/.test(l))) return run;
@@ -451,7 +471,7 @@ ${o.inner}
 </article></div></div>`;
       const file = path.join(OUT, page.slug + '.php', 'original', 'index.html');
       fs.mkdirSync(path.dirname(file), { recursive: true });
-      fs.writeFileSync(file, layout({
+      writeWithRetry(file, layout({
         page, title: page.title + ' (original notes)', description: o.description, canonical: SITE_URL + urlOf(page.slug) + 'original/',
         body: oBody, hasQuiz: o.hasQuiz, hasSinhala: o.hasSinhala, breadcrumbs: oCrumbs,
       }).replace('<head>', '<head>\n<meta name="robots" content="noindex, follow">'));
@@ -555,7 +575,7 @@ ${(() => {
   const body = fs.readFileSync(path.join(ROOT, 'content', 'about.html'), 'utf8').replace(/\[\[ICON:(\w+)\]\]/g, (m, n) => icon(n));
   const file = path.join(OUT, 'about', 'index.html');
   fs.mkdirSync(path.dirname(file), { recursive: true });
-  fs.writeFileSync(file, layout({
+  writeWithRetry(file, layout({
     page: 'about', title: 'About Rohana Fernando | ' + SITE_NAME,
     description: 'About Rohana Fernando, creator of O/L Literature Help: English graduate of the University of Peradeniya, MA in Linguistics (Kelaniya), TESOL, and several decades of teaching English and Literature.',
     canonical: SITE_URL + '/about/', body, breadcrumbs: [{ name: 'Home', url: '/' }, { name: 'About', url: '/about/' }],
@@ -564,16 +584,16 @@ ${(() => {
 
 // ---------- Redirects for old addresses ----------
 fs.mkdirSync(path.join(OUT, 'index.php'), { recursive: true });
-fs.writeFileSync(path.join(OUT, 'index.php', 'index.html'), redirectPage('/', SITE_NAME));
+writeWithRetry(path.join(OUT, 'index.php', 'index.html'), redirectPage('/', SITE_NAME));
 const gone = Object.entries(pagesData.goneFromYola).filter(([k]) => !k.startsWith('_'));
 for (const [from, to] of gone) {
   fs.mkdirSync(path.join(OUT, from + '.php'), { recursive: true });
-  fs.writeFileSync(path.join(OUT, from + '.php', 'index.html'), redirectPage(urlOf(to), labelOf(bySlug[to])));
+  writeWithRetry(path.join(OUT, from + '.php', 'index.html'), redirectPage(urlOf(to), labelOf(bySlug[to])));
 }
 
 // ---------- 404 (also catches odd spellings of old URLs) ----------
 const known = all.map(p => p.slug).concat(gone.map(g => g[0]));
-fs.writeFileSync(path.join(OUT, '404.html'), layout({
+writeWithRetry(path.join(OUT, '404.html'), layout({
   page: null, title: 'Page not found | ' + SITE_NAME, description: '', canonical: SITE_URL + '/404.html',
   body: `<div class="wrap notfound"><h1>Page not found</h1><p>Sorry, that page is not here. Try the menu above, or go to the <a href="/">home page</a>.</p></div>
 <script>(function(){var k=${JSON.stringify(known)};var p=decodeURIComponent(location.pathname).replace(/^\\/+|\\/+$/g,'').replace(/\\.(php|html?)$/i,'');var lc=p.toLowerCase();for(var i=0;i<k.length;i++){if(k[i].toLowerCase()===lc){location.replace('/'+k[i]+'.php/');return;}}})();</script>`,
@@ -581,15 +601,15 @@ fs.writeFileSync(path.join(OUT, '404.html'), layout({
 
 // ---------- sitemap.xml, robots.txt, .nojekyll, assets ----------
 const sitemapUrls = ['index'].concat(all.filter(p => p.slug !== 'index').map(p => p.slug));
-fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
+writeWithRetry(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${sitemapUrls.map(s => `  <url><loc>${SITE_URL}${urlOf(s)}</loc><lastmod>${TODAY}</lastmod></url>`).join('\n')}
   <url><loc>${SITE_URL}/about/</loc><lastmod>${TODAY}</lastmod></url>
 </urlset>
 `);
-fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
-fs.writeFileSync(path.join(OUT, '.nojekyll'), '');
-if (ADS.enabled) fs.writeFileSync(path.join(OUT, 'ads.txt'), 'google.com, ' + ADS.client.replace('ca-', '') + ', DIRECT, f08c47fec0942fa0\n');
+writeWithRetry(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
+writeWithRetry(path.join(OUT, '.nojekyll'), '');
+if (ADS.enabled) writeWithRetry(path.join(OUT, 'ads.txt'), 'google.com, ' + ADS.client.replace('ca-', '') + ', DIRECT, f08c47fec0942fa0\n');
 else if (fs.existsSync(path.join(OUT, 'ads.txt'))) fs.unlinkSync(path.join(OUT, 'ads.txt'));
 fs.mkdirSync(path.join(OUT, 'assets'), { recursive: true });
 for (const f of fs.readdirSync(path.join(ROOT, 'src', 'assets'))) fs.copyFileSync(path.join(ROOT, 'src', 'assets', f), path.join(OUT, 'assets', f));

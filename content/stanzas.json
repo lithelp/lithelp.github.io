@@ -70,5 +70,29 @@
         "'The potter has drawn out"
       ]
     }
+  ],
+  "poem-about-clowns-wife": [
+    "On stage, he’s a different person.",
+    "The moment he walks through that door",
+    "I do me best to cheer him up, poor soul.",
+    "But he doesn’t say exactly how he feels,",
+    {
+      "notLines": [
+        "The Clown’s Wife",
+        "Johnson Agard"
+      ],
+      "poemEnd": "what would I do without this clown of a wife"
+    }
+  ],
+  "Upside-Down": [
+    "If he went sailing in a boat",
+    "He read his letters backside-fore,",
+    "All his life he was afraid",
+    "He went into a restaurant;",
+    "The circus came to town one day;",
+    "Just yesterday the postman brought",
+    {
+      "poemEnd": "P’raps I will, p’raps I can’t."
+    }
   ]
 }
