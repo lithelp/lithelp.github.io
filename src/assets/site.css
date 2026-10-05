@@ -429,13 +429,12 @@ a:hover { color: var(--brand-deep); }
 .btn-primary { background: #1a5fd0; color: #fff; box-shadow: 0 8px 20px rgba(10,40,100,.35); }
 .btn-primary:hover { background: #1550b3; color: #fff; transform: translateY(-1px); }
 .btn svg { transition: transform .15s; } .btn:hover svg { transform: translateX(3px); }
-.hero-art { align-self: end; justify-self: end; width: 100%; max-width: 620px; }
+.hero-art { position: relative; align-self: end; justify-self: end; width: 100%; max-width: 620px; animation: floatArt 7s ease-in-out infinite alternate; }
 .hero-art img { display: block; width: 100%; height: auto;
   /* Soft oval fade on every side so the photo's own background dissolves into the banner gradient. */
   -webkit-mask-image: radial-gradient(closest-side at 52% 55%, #000 58%, rgba(0,0,0,.85) 70%, transparent 100%);
   mask-image: radial-gradient(closest-side at 52% 55%, #000 58%, rgba(0,0,0,.85) 70%, transparent 100%);
-  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
-  animation: floatArt 7s ease-in-out infinite alternate; }
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
 @keyframes floatArt { from { transform: translateY(0); } to { transform: translateY(-6px); } }
 .site-notice { font-family: var(--ui); font-size: .92rem; background: var(--brand-soft); color: var(--brand-deep); border-radius: 12px; padding: .7rem 1rem; margin: 0 0 1.8rem; }
 @media (max-width: 860px) {
@@ -444,7 +443,7 @@ a:hover { color: var(--brand-deep); }
   .hero-art { justify-self: center; max-width: 520px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-v2, .hero-bg .dot, .hero-bg .plane, .hero-art img, .hero-bg::before, .hero-bg::after { animation: none !important; }
+  .hero-v2, .hero-bg .dot, .hero-bg .plane, .hero-art, .hero-art img, .plant-sway, .hero-bg::before, .hero-bg::after { animation: none !important; }
   .hero-bg .plane { display: none; }
 }
 
@@ -526,3 +525,13 @@ html { scroll-behavior: smooth; }
 .nav .nav-install button { color: var(--brand); }
 @media (min-width: 1081px) { .nav .nav-install { display: none; } }
 .has-install-bar .to-top { bottom: 96px; }
+
+/* Home: the potted plant's leaves sway gently. A copy of the leaf area of the photo sits exactly
+   over the plant (positions are in % of the photo, which is 566 x 435) and rocks from the pot rim. */
+.plant-sway { position: absolute; left: 63.25%; top: 63.45%; width: 23.67%; height: 16.09%;
+  background: url(/assets/img/hero-student.jpg) no-repeat 82.87% 75.62% / 422.4% 621.4%;
+  transform-origin: 50% 100%; opacity: .96; pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 50% 62% at 50% 64%, #000 62%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 62% at 50% 64%, #000 62%, transparent 100%);
+  animation: plantSway 5.5s ease-in-out infinite; }
+@keyframes plantSway { 0%, 100% { transform: rotate(0deg) skewX(0deg); } 30% { transform: rotate(1.6deg) skewX(-1deg); } 65% { transform: rotate(-1.2deg) skewX(.8deg); } }

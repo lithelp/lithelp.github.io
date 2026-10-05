@@ -530,7 +530,7 @@ ${aside}
     <p class="hero-text">Your complete guide to G.C.E. O/L English Literature. Explore poetry, drama, prose, novels, past papers and resources — all in one place to help you learn, understand and succeed.</p>
     <div class="cta"><a class="btn btn-primary" href="${urlOf('OL-LITERATURE-HELP')}">Start with Poetry ${arrow}</a><a class="btn btn-ghost" href="${urlOf('papers')}">Past Papers &amp; Resources ${arrow}</a></div>
   </div>
-  <div class="hero-art"><img src="/assets/img/hero-student.jpg" alt="A student studying English Literature on a laptop" width="566" height="435" fetchpriority="high"></div>
+  <div class="hero-art"><img src="/assets/img/hero-student.jpg" alt="A student studying English Literature on a laptop" width="566" height="435" fetchpriority="high"><span class="plant-sway" aria-hidden="true"></span></div>
 </div>
 <a class="scroll-down" href="#explore"><span>Scroll down to explore</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
 </section>
