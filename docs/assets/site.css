@@ -550,7 +550,7 @@ html { scroll-behavior: smooth; }
 .pp .pp-marks { font-family: var(--ui); font-size: .85rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
 .pp ul.pp-sub { list-style: none; padding-left: 0; }
 .pp ul.pp-sub li { margin: .35rem 0; }
-.pp .q ol li, .pp .q ul li { overflow: hidden; }
+.pp .pp-l { color: var(--brand-deep); margin-right: .15rem; }
 @media print {
   .pp-tools, .page-head .crumbs { display: none !important; }
   .pp .q details:not([open]) { display: none; }
@@ -570,3 +570,39 @@ html { scroll-behavior: smooth; }
 .announce .an-later { background: transparent; border: 2px solid var(--line); color: var(--ink); }
 .announce .an-x { position: absolute; top: .5rem; right: .6rem; width: 2.2rem; height: 2.2rem; border: 0; border-radius: 50%; background: rgba(255,255,255,.15); color: #fff; font-size: 1.3rem; cursor: pointer; }
 .pp .q-tag .pp-ref { text-transform: none; }
+
+/* Downloads on the practice-paper pages, and the printed / PDF versions */
+.pp-downloads { margin: 0 0 1.3rem; padding: .8rem 1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--card); font-family: var(--ui); }
+.pp-downloads .box-title { display: block; font-weight: 800; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; color: var(--brand); margin-bottom: .3rem; }
+@media print {
+  @page { size: A4; margin: 16mm 15mm; }
+  html, body { background: #fff !important; color: #111 !important; }
+  .pp-downloads, .announce, .install-bar, .skip { display: none !important; }
+  .page-head.guide-head { background: none !important; color: #111 !important; border-bottom: 2px solid #1f5fa8; }
+  .page-head.guide-head h1, .page-head.guide-head .pp-focus { color: #111 !important; }
+  .page-head.guide-head .kicker { color: #1f5fa8 !important; }
+  .page-head .wrap { padding-top: 0; padding-bottom: .8rem; }
+  .pp .pp-note { display: block !important; }
+  .pp .q summary { display: none; }
+  .pp .q details[open] { border-top: 1px dashed #999; }
+  .pp .q { background: #fff; border-color: #bbb; }
+  .pp h2 { break-after: avoid; }
+  .pp-print-questions .pp .q details { display: none !important; }
+  .pp-print-questions #paper-2 { break-before: page; }
+}
+@media print {
+  .guide-head::after, .guide-head::before { display: none !important; }
+  /* Ruled writing space on the question paper (dotted rules, so every PDF reader shows them). */
+  .pp-print-questions .pp .pp-write { display: block; clear: both; margin: .2rem 0 .5rem; }
+  .pp-print-questions .pp .pp-write span { display: block; height: 1.75em; border-bottom: 1px dotted #777; }
+  .pp-print-questions .pp .q { break-inside: auto; }
+  .pp-print-questions .pp ul.pp-sub li { break-inside: avoid; }
+}
+
+.pp .pp-write { display: none; }
+@media print {
+  html.pp-print { font-size: 13.5px; }
+  .pp-print-answers .pp .q { break-inside: auto; }
+  .pp-print .pp .q li, .pp-print .pp .q blockquote, .pp-print .pp .q > p { break-inside: avoid; }
+  .pp-print .pp .q .q-tag, .pp-print .pp h3.pp-group { break-after: avoid; }
+}

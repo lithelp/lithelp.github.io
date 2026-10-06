@@ -597,7 +597,18 @@ const ppUrl = n => (n ? `${PP_BASE}paper-${n}/` : PP_BASE);
   const marks = m => `<span class="marks">${m} mark${m > 1 ? 's' : ''}</span>`;
   const GROUP_NO = { Poetry: 'I', Prose: 'II', Drama: 'III' };
   const roman = ['i', 'ii'];
+  // Ruled writing space, printed only on the question-paper PDF: 2 lines for 1 mark, 3 for 2, 6 for 4.
+  const writeLines = m => `<span class="pp-write" aria-hidden="true">${'<span></span>'.repeat({ 1: 2, 2: 3, 4: 6 }[m] || 2)}</span>`;
   const toolbar = `<div class="pp-tools" role="group" aria-label="Answers"><button type="button" class="btn btn-brand" data-pp="open">Show all answers</button><button type="button" class="btn" data-pp="close">Hide all answers</button><button type="button" class="btn" data-pp="print">Print the paper</button></div>`;
+  // Downloadable PDFs, made by make-practice-pdfs.js into src/root/practice-papers-2026/pdf/ (shown only once they exist).
+  const PDF_DIR = path.join(ROOT, 'src', 'root', 'practice-papers-2026', 'pdf');
+  const pdfName = (n, answers) => `RCF-Practice-Paper-${n}-OL-2026${answers ? '-Answers' : ''}.pdf`;
+  const pdfCard = (n, answers) => {
+    const f = path.join(PDF_DIR, pdfName(n, answers));
+    if (!fs.existsSync(f)) return '';
+    return fileCard(`${PP_BASE}pdf/${pdfName(n, answers)}`, answers ? `Practice Paper ${n}: answers and marking guide` : `Practice Paper ${n}: question paper`, fs.statSync(f).size / 1024, 'pdf');
+  };
+  const downloads = n => { const c = pdfCard(n, false) + pdfCard(n, true); return c ? `<div class="pp-downloads"><span class="box-title">Download this paper</span><div class="files">${c}</div></div>` : ''; };
   const markingBox = `<div class="box exam"><span class="box-title">How Paper II essays are marked (15 marks each)</span><p><strong>Content 7</strong> · <strong>Organisation 4</strong> · <strong>Language 4</strong>. Examiners reward relevant points from the text, apt quotations, a clear argument that answers the question, and your own sensible response. The points below are a guide, not a fixed list.</p></div>`;
 
   function paperBody(p) {
@@ -609,11 +620,11 @@ const ppUrl = n => (n ? `${PP_BASE}paper-${n}/` : PP_BASE);
       const ref = `${GROUP_NO[it.g]} (${roman[k - 1]})`;
       a.push(`<div class="q"><span class="q-tag"><span class="pp-ref">${ref}</span> · Practice question</span>
 <blockquote>"${lines(it.x)}"</blockquote>
-<ol type="a">${it.q.map(([t, m]) => `<li>${esc(t)} ${marks(m)}</li>`).join('')}</ol>
-<details><summary>Show answers</summary><div class="answer"><ol type="a">${it.q.map(q => `<li>${esc(q[2])}</li>`).join('')}</ol></div></details></div>`);
+<ul class="pp-sub">${it.q.map(([t, m], j) => `<li data-m="${m}"><b class="pp-l">(${'abcd'[j]})</b> ${esc(t)} ${marks(m)}${writeLines(m)}</li>`).join('')}</ul>
+<details><summary>Show answers</summary><div class="answer"><ul class="pp-sub">${it.q.map((q, j) => `<li><b class="pp-l">(${'abcd'[j]})</b> ${esc(q[2])}</li>`).join('')}</ul></div></details></div>`);
     }
     const b = p.b.map((it, i) => {
-      const qs = it.q.map(([t, m]) => `<li>${esc(t)} ${marks(m)}</li>`).join('');
+      const qs = it.q.map(([t, m]) => `<li data-m="${m}">${esc(t)} ${marks(m)}${writeLines(m)}</li>`).join('');
       return `<div class="q"><span class="q-tag">${['I', 'II', 'III'][i]} · ${esc(it.title)}</span>
 <p>${it.lead ? esc(it.lead) : `Read the following extract from <em>${esc(it.title)}</em> by ${esc(it.author)} and answer all the questions given below it.`}</p>
 <blockquote>"${lines(it.x)}"</blockquote>
@@ -628,6 +639,7 @@ const ppUrl = n => (n ? `${PP_BASE}paper-${n}/` : PP_BASE);
     }).join('\n')).join('\n');
 
     return `${toolbar}
+${downloads(p.n)}
 <div class="box exam"><span class="box-title">Paper I · 40 marks</span><p>Answer <strong>all</strong> the questions in Section A. Select <strong>either</strong> I, II <strong>or</strong> III from Section B and answer all the questions given below it.</p></div>
 <h2 id="section-a">Paper I · Section A: Poetry, Prose and Drama <small class="pp-marks">30 marks</small></h2>
 <p>Read the following extracts and answer all the questions given below them.</p>
@@ -640,7 +652,7 @@ ${b}
 <div class="box exam"><span class="box-title">Paper II · 60 marks</span><p>Answer <strong>four</strong> questions, selecting <strong>one</strong> each from the four sections: Poetry, Drama, Prose and Fiction.</p></div>
 ${markingBox}
 ${p2}
-<p class="archive-note">These are original LitHelp practice questions written to the format of the G.C.E. (O/L) 2023(2024) and 2024(2025) papers and the Ministry of Education's 2025(2026) model papers. They are not official past-paper questions. For copyrighted set texts, only short lines are quoted and the situation is described in our own words.</p>`;
+<p class="archive-note pp-note">These are original LitHelp practice questions written to the format of the G.C.E. (O/L) 2023(2024) and 2024(2025) papers and the Ministry of Education's 2025(2026) model papers. They are not official past-paper questions. For copyrighted set texts, only short lines are quoted and the situation is described in our own words.</p>`;
   }
 
   const desc = n => `RCF Practice Paper ${n} for G.C.E. O/L 2026 Appreciation of English Literary Texts: Paper I context questions, Section B novel extracts and Paper II essays, with full answers and marking guides.`;
@@ -667,6 +679,9 @@ ${adHtml('top')}
   <div class="cards">${cards}</div>
 </div></section>
 <div class="wrap layout"><div><article class="prose guide pp">
+${PRACTICE.some(p => pdfCard(p.n, false)) ? `<h2 id="downloads">Download the papers (PDF)</h2>
+<p>Each paper comes as two PDFs: the question paper to print and sit, and a separate answers and marking guide to check your work afterwards.</p>
+<div class="files">${PRACTICE.map(p => pdfCard(p.n, false) + pdfCard(p.n, true)).join('')}</div>` : ''}
 <h2>About these papers</h2>
 <p>Each RCF Practice Paper follows the format of the latest G.C.E. (O/L) Appreciation of English Literary Texts examination (46 E I, II), as set in 2023(2024) and 2024(2025) and in the Ministry of Education's 2025(2026) model papers. Every paper covers all the prescribed genres, and together the five papers cover every set text.</p>
 <div class="box exam"><span class="box-title">The examination at a glance · 3 hours + 10 minutes reading time</span>

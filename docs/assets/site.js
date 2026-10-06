@@ -193,6 +193,14 @@
 // RCF Practice Papers: answer toolbar on the paper pages, and a one-time announcement pop-up elsewhere.
 (function () {
   var paper = document.querySelector('article.pp');
+  // ?print=questions or ?print=answers prepares a paper page for the downloadable PDFs.
+  var printMode = (location.search.match(/[?&]print=(questions|answers)/) || [])[1];
+  if (paper && printMode) {
+    document.documentElement.classList.add('pp-print', 'pp-print-' + printMode);
+    var h1 = document.querySelector('.page-head h1');
+    if (h1 && printMode === 'answers') h1.textContent += ': Answers and Marking Guide';
+    paper.querySelectorAll('.q details').forEach(function (d) { d.open = printMode === 'answers'; });
+  }
   if (paper) {
     paper.addEventListener('click', function (e) {
       var b = e.target.closest('[data-pp]');
