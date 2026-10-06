@@ -606,3 +606,28 @@ html { scroll-behavior: smooth; }
   .pp-print .pp .q li, .pp-print .pp .q blockquote, .pp-print .pp .q > p { break-inside: avoid; }
   .pp-print .pp .q .q-tag, .pp-print .pp h3.pp-group { break-after: avoid; }
 }
+
+/* Practice papers in the Past Papers library, and the link box on other pages */
+.pp-library { margin: 0 0 2rem; padding: 1.1rem 1.2rem 1.2rem; border: 1px solid #c7dbf4; border-radius: 14px; background: var(--brand-soft); font-family: var(--ui); }
+.pp-library .box-title { display: block; font-weight: 800; font-size: .76rem; text-transform: uppercase; letter-spacing: .08em; color: var(--brand); margin-bottom: .2rem; }
+.pp-library h2 { margin: 0 0 .4rem; }
+.pp-library h2 small { font-size: .6em; font-weight: 600; color: var(--muted); }
+.pp-library > p { margin: 0 0 .9rem; line-height: 1.55; }
+.pp-lib-list { display: grid; gap: .7rem; }
+.pp-lib-item { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: .7rem .9rem; }
+.pp-lib-title { font-weight: 800; font-size: 1.05rem; text-decoration: none; }
+.pp-lib-focus { display: block; color: var(--muted); font-size: .9rem; margin: .1rem 0 .3rem; }
+.pp-link-box { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: .8rem; align-items: center; margin: 0 0 1rem; padding: .8rem 1rem; border: 1px solid #c7dbf4; border-radius: 12px; background: var(--brand-soft); color: var(--ink); text-decoration: none; font-family: var(--ui); }
+.pp-link-box:hover { border-color: var(--brand); }
+.pp-link-box b { display: block; line-height: 1.3; }
+.pp-link-box small { display: block; color: var(--muted); font-size: .88rem; margin-top: .1rem; }
+.pp-link-tag { font: 800 .7rem var(--ui); text-transform: uppercase; letter-spacing: .06em; padding: .3rem .5rem; border-radius: 6px; background: var(--brand); color: #fff; }
+.pp-link-go { font-size: 1.3rem; color: var(--brand); }
+@media (prefers-color-scheme: dark) { .pp-library, .pp-link-box { border-color: #22406a; } }
+.pp-lib-list { grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.pp-lib-pdfs { display: flex; flex-wrap: wrap; gap: .4rem; }
+.pp-pill { display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .6rem .35rem .4rem; border: 1px solid var(--line); border-radius: 9px; background: var(--paper); color: var(--ink); text-decoration: none; font-weight: 700; font-size: .88rem; }
+.pp-pill:hover { border-color: var(--brand); }
+.pp-pill small { font-weight: 500; color: var(--muted); font-size: .78rem; }
+.pp-pill .tag { font: 800 .62rem var(--ui); letter-spacing: .04em; padding: .22rem .35rem; border-radius: 5px; background: #c0392b; color: #fff; }
+.pp-pill-web { padding-left: .6rem; color: var(--brand); }

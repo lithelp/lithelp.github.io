@@ -447,6 +447,34 @@ function renderArticle(page, src, mode) {
   return { h1, inner, hasQuiz, hasSinhala, description: metaDesc || (para ? clip(para, 158) : '') };
 }
 
+// ---------- RCF Practice Papers for 2026 (content/practice-papers-2026.js) ----------
+const PRACTICE = require('./content/practice-papers-2026.js');
+const PP_BASE = '/practice-papers-2026/';
+const ppUrl = n => (n ? `${PP_BASE}paper-${n}/` : PP_BASE);
+// Downloadable PDFs, made by make-practice-pdfs.js into src/root/practice-papers-2026/pdf/ (shown only once they exist).
+const PDF_DIR = path.join(ROOT, 'src', 'root', 'practice-papers-2026', 'pdf');
+const pdfName = (n, answers) => `RCF-Practice-Paper-${n}-OL-2026${answers ? '-Answers' : ''}.pdf`;
+const pdfCard = (n, answers) => {
+  const f = path.join(PDF_DIR, pdfName(n, answers));
+  if (!fs.existsSync(f)) return '';
+  return fileCard(`${PP_BASE}pdf/${pdfName(n, answers)}`, answers ? `Practice Paper ${n}: answers and marking guide` : `Practice Paper ${n}: question paper`, fs.statSync(f).size / 1024, 'pdf');
+};
+// Where the practice papers are shown on existing pages. Their home is the Past Papers & Resources page ('papers');
+// other pages get only a short link to it. To show them in the library only, remove 'OL-LITERATURE-HELP' from PP_LINK_ON.
+const pdfPill = (n, answers) => {
+  const f = path.join(PDF_DIR, pdfName(n, answers));
+  if (!fs.existsSync(f)) return '';
+  return `<a class="pp-pill" href="${PP_BASE}pdf/${pdfName(n, answers)}" download><span class="tag pdf">PDF</span>${answers ? 'Answers' : 'Question paper'} <small>${Math.round(fs.statSync(f).size / 1024)} KB</small></a>`;
+};
+const PP_HOME = 'papers';
+const PP_LINK_ON = ['OL-LITERATURE-HELP'];
+const ppLibraryBlock = () => `<section class="pp-library" id="practice-papers-2026"><span class="box-title">New · RCF Practice Papers for O/L 2026</span>
+<h2>Practice Papers for 2026 <small>with answers</small></h2>
+<p>Five full papers in the latest exam format (Paper I and Paper II), with model answers and essay marking guides. Original LitHelp practice questions, not official past papers. <a href="${ppUrl()}">About these papers →</a></p>
+<div class="pp-lib-list">${PRACTICE.map(p => `<div class="pp-lib-item"><a class="pp-lib-title" href="${ppUrl(p.n)}">Practice Paper ${p.n}</a><span class="pp-lib-focus">${esc(p.focus)}</span><span class="pp-lib-pdfs">${pdfPill(p.n, false)}${pdfPill(p.n, true)}<a class="pp-pill pp-pill-web" href="${ppUrl(p.n)}">Open online</a></span></div>`).join('')}</div>
+</section>`;
+const ppLinkBox = () => `<a class="pp-link-box" href="${urlOf(PP_HOME)}#practice-papers-2026"><span class="pp-link-tag">New</span><span><b>RCF Practice Papers for 2026, with answers</b><small>Five full papers covering every set text, in the Past Papers library</small></span><span class="pp-link-go" aria-hidden="true">→</span></a>`;
+
 for (const page of all) {
   if (page.slug === 'index') continue;
   const isEmptySection = pagesData.emptyOnYola.includes(page.slug);
@@ -482,6 +510,11 @@ ${o.inner}
         body: oBody, hasQuiz: o.hasQuiz, hasSinhala: o.hasSinhala, breadcrumbs: oCrumbs,
       }).replace('<head>', '<head>\n<meta name="robots" content="noindex, follow">'));
     }
+  }
+
+  if (page.slug === PP_HOME) art.inner = ppLibraryBlock() + '\n' + art.inner;
+  if (PP_LINK_ON.includes(page.slug)) {
+    art.inner = art.inner.includes('<div class="list-cards">') ? art.inner.replace('<div class="list-cards">', ppLinkBox() + '<div class="list-cards">') : ppLinkBox() + art.inner;
   }
 
   const siblings = page.parent ? page.parent.children : null;
@@ -588,10 +621,7 @@ ${(() => {
   }));
 }
 
-// ---------- RCF Practice Papers for 2026 (content/practice-papers-2026.js) ----------
-const PRACTICE = require('./content/practice-papers-2026.js');
-const PP_BASE = '/practice-papers-2026/';
-const ppUrl = n => (n ? `${PP_BASE}paper-${n}/` : PP_BASE);
+// ---------- RCF Practice Papers for 2026: the paper pages and hub ----------
 {
   const lines = s => esc(s).replace(/\n/g, '<br>');
   const marks = m => `<span class="marks">${m} mark${m > 1 ? 's' : ''}</span>`;
@@ -600,14 +630,6 @@ const ppUrl = n => (n ? `${PP_BASE}paper-${n}/` : PP_BASE);
   // Ruled writing space, printed only on the question-paper PDF: 2 lines for 1 mark, 3 for 2, 6 for 4.
   const writeLines = m => `<span class="pp-write" aria-hidden="true">${'<span></span>'.repeat({ 1: 2, 2: 3, 4: 6 }[m] || 2)}</span>`;
   const toolbar = `<div class="pp-tools" role="group" aria-label="Answers"><button type="button" class="btn btn-brand" data-pp="open">Show all answers</button><button type="button" class="btn" data-pp="close">Hide all answers</button><button type="button" class="btn" data-pp="print">Print the paper</button></div>`;
-  // Downloadable PDFs, made by make-practice-pdfs.js into src/root/practice-papers-2026/pdf/ (shown only once they exist).
-  const PDF_DIR = path.join(ROOT, 'src', 'root', 'practice-papers-2026', 'pdf');
-  const pdfName = (n, answers) => `RCF-Practice-Paper-${n}-OL-2026${answers ? '-Answers' : ''}.pdf`;
-  const pdfCard = (n, answers) => {
-    const f = path.join(PDF_DIR, pdfName(n, answers));
-    if (!fs.existsSync(f)) return '';
-    return fileCard(`${PP_BASE}pdf/${pdfName(n, answers)}`, answers ? `Practice Paper ${n}: answers and marking guide` : `Practice Paper ${n}: question paper`, fs.statSync(f).size / 1024, 'pdf');
-  };
   const downloads = n => { const c = pdfCard(n, false) + pdfCard(n, true); return c ? `<div class="pp-downloads"><span class="box-title">Download this paper</span><div class="files">${c}</div></div>` : ''; };
   const markingBox = `<div class="box exam"><span class="box-title">How Paper II essays are marked (15 marks each)</span><p><strong>Content 7</strong> · <strong>Organisation 4</strong> · <strong>Language 4</strong>. Examiners reward relevant points from the text, apt quotations, a clear argument that answers the question, and your own sensible response. The points below are a guide, not a fixed list.</p></div>`;
 
