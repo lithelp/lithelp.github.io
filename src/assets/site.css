@@ -631,3 +631,9 @@ html { scroll-behavior: smooth; }
 .pp-pill small { font-weight: 500; color: var(--muted); font-size: .78rem; }
 .pp-pill .tag { font: 800 .62rem var(--ui); letter-spacing: .04em; padding: .22rem .35rem; border-radius: 5px; background: #c0392b; color: #fff; }
 .pp-pill-web { padding-left: .6rem; color: var(--brand); }
+/* The single "Practice Papers 2026" item in the Poetry menu */
+.nav .sub .nav-new a { font-weight: 700; color: var(--brand); display: flex; align-items: center; gap: .45rem; }
+.nav .new-badge { font: 800 .62rem var(--ui); letter-spacing: .06em; text-transform: uppercase; padding: .18rem .4rem; border-radius: 5px; background: #e0457b; color: #fff; }
+/* Section card with its own picture (e.g. Syllabus) */
+.card.has-photo .card-photo { display: block; width: 112px; box-shadow: 0 6px 14px rgba(10, 40, 100, .18); border-radius: 11px; }
+.card.has-photo .card-photo .illus.photo { border-radius: 11px; aspect-ratio: 3 / 2; object-position: 50% 50%; }

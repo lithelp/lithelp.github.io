@@ -21,7 +21,7 @@ const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const pagesData = JSON.parse(read('content/pages.json'));
 const quizzes = JSON.parse(read('content/quizzes.json'));
 const ADS = JSON.parse(read('content/site.json')).adsense;
-const { illustration } = require('./src/illustrations');
+const { illustration, hasIllustration } = require('./src/illustrations');
 const STANZAS = JSON.parse(read('content/stanzas.json'));
 
 // Ad space. Renders nothing until AdSense is enabled in content/site.json, so pages carry no empty boxes.
@@ -172,7 +172,9 @@ function navHtml(current) {
     }
     const mega = top.children.length > 8 ? ' mega' : '';
     const subs = [`<li class="overview"><a href="${urlOf(top.slug)}">All ${esc(labelOf(top).toLowerCase())} →</a></li>`]
-      .concat(top.children.map(c => `<li><a href="${urlOf(c.slug)}"${current && current.slug === c.slug ? ' aria-current="page"' : ''}>${esc(c.label)}</a></li>`));
+      .concat(top.children.map(c => `<li><a href="${urlOf(c.slug)}"${current && current.slug === c.slug ? ' aria-current="page"' : ''}>${esc(c.label)}</a></li>`))
+      // One menu item for the RCF Practice Papers (their home is the Past Papers library); see PP_LINK_ON.
+      .concat(PP_LINK_ON.includes(top.slug) ? [`<li class="nav-new"><a href="${urlOf(PP_HOME)}#practice-papers-2026"><span class="new-badge">New</span>Practice Papers 2026</a></li>`] : []);
     return `<li class="has-sub${mega}${active ? ' active' : ''}"><button type="button" aria-expanded="false">${esc(labelOf(top))}${caret}</button><ul class="sub">${subs.join('')}</ul></li>`;
   });
   items.push(`<li${isAbout ? ' class="active"' : ''}><a href="/about/"${isAbout ? ' aria-current="page"' : ''}>About</a></li>`);
@@ -275,6 +277,8 @@ function sectionCards(slugs) {
     const p = bySlug[s];
     const [name, blurb, ic] = SECTION_INFO[s];
     const n = p.children ? `<span class="count">${p.children.length} ${p.children.length === 1 ? 'text' : 'texts'} →</span>` : '<span class="count">Open →</span>';
+    // A section with its own picture (src/root/assets/img/texts/<slug>.jpg) shows it in place of the icon.
+    if (hasIllustration(s)) return `<a class="card has-photo" href="${urlOf(s)}"><span class="card-photo">${illustration(s, name)}</span><h3>${esc(name)}</h3><p>${esc(blurb)}</p>${n}</a>`;
     return `<a class="card" href="${urlOf(s)}"><span class="ico">${icon(ic)}</span><h3>${esc(name)}</h3><p>${esc(blurb)}</p>${n}</a>`;
   }).join('') + `</div>`;
 }
