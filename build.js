@@ -1,5 +1,5 @@
 // Builds the static LitHelp site into ./docs from ./content and ./src.
-//   node build.js                      -> uses https://lithelp.github.io
+//   node build.js                      -> uses https://rcflithelp.com (the custom domain; src/root/CNAME must stay)
 //   SITE_URL=https://example.org node build.js
 //
 // Every old Yola address /Name.php is kept: the page is written to /Name.php/index.html,
@@ -10,7 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const SITE_URL = (process.env.SITE_URL || 'https://lithelp.github.io').replace(/\/$/, '');
+const SITE_URL = (process.env.SITE_URL || 'https://rcflithelp.com').replace(/\/$/, '');
 const SITE_NAME = 'O/L Literature Help';
 const ROOT = __dirname;
 const OUT = path.join(ROOT, 'docs');

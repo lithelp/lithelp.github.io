@@ -25,7 +25,7 @@ for (const f of htmlFiles) {
   const html = fs.readFileSync(f, 'utf8');
   for (const m of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
     const u = m[1];
-    if (/^https?:/.test(u)) { if (!/fonts\.(googleapis|gstatic)|lithelp\.github\.io/.test(u)) external.add(u); continue; }
+    if (/^https?:/.test(u)) { if (!/fonts\.(googleapis|gstatic)|(www\.)?rcflithelp\.com|lithelp\.github\.io/.test(u)) external.add(u); continue; }
     if (/^(mailto:|tel:|#|data:)/.test(u)) continue;
     if (!u.startsWith('/')) { broken.push([path.relative(OUT, f), u, 'relative link']); continue; }
     checked++;
