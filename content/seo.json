@@ -1,0 +1,159 @@
+{
+  "_note": "Search-engine titles and descriptions. They replace the original Yola <title>s and descriptions; page addresses (URLs) and page content do not change. pages.json keeps the original titles as a record. Keep titles under about 65 characters and descriptions under about 155.",
+  "index": {
+    "title": "O/L English Literature Notes, Analyses & Past Papers | LitHelp",
+    "description": "Free G.C.E. O/L English Literature help: poem analyses, RCF Study Guides, Sinhala translations, quizzes, past papers and 2026 practice papers with answers."
+  },
+  "My-Poems": {
+    "title": "O/L English Literature Syllabus: Set Texts by Theme | LitHelp",
+    "description": "The full G.C.E. O/L English Literature syllabus: prescribed poems grouped by theme, plus the prose, drama and novels, with links to notes on every text."
+  },
+  "OL-LITERATURE-HELP": {
+    "title": "O/L English Literature Poetry: Notes on All 20 Poems | LitHelp",
+    "description": "Notes, line-by-line analyses, study guides, videos and quizzes for every prescribed G.C.E. O/L English Literature poem, from To the Nile to Two's Company."
+  },
+  "Elements-of-Poetry---You-must-read-this": {
+    "title": "Elements of Poetry: Literary Techniques for O/L | LitHelp",
+    "description": "The elements of poetry every O/L English Literature student must know: imagery, figures of speech, sound devices, rhyme, rhythm and form, with examples."
+  },
+  "To-the-Nile-by-Keats": {
+    "title": "To the Nile by John Keats: O/L Analysis & Sinhala Translation",
+    "description": "A line-by-line analysis of the sonnet To the Nile by John Keats for G.C.E. O/L English Literature, with a Sinhala translation, a video and a quiz."
+  },
+  "A-Bird-came-down-the-Walk": {
+    "title": "A Bird Came Down the Walk by Emily Dickinson: O/L Analysis",
+    "description": "Line-by-line analysis of A Bird Came Down the Walk by Emily Dickinson for O/L English Literature, with a Sinhala translation, a video and a quiz."
+  },
+  "Farewell-to-Barn-Stack-and-Tree": {
+    "title": "Farewell to Barn and Stack and Tree by A.E. Housman: O/L Guide",
+    "description": "RCF Study Guide to Farewell to Barn and Stack and Tree by A.E. Housman: background, stanza-by-stanza analysis, themes, techniques and O/L exam questions."
+  },
+  "To-the-Evening-Star": {
+    "title": "To the Evening Star by William Blake: O/L Notes & Quiz | LitHelp",
+    "description": "Notes on To the Evening Star by William Blake for G.C.E. O/L English Literature: the poem, about Blake, an overview, a glossary and a quiz."
+  },
+  "The-Eagle-by-Tennyson": {
+    "title": "The Eagle by Tennyson: O/L Study Guide & Sinhala Translation",
+    "description": "RCF Study Guide to The Eagle by Alfred, Lord Tennyson: line-by-line analysis, Sinhala translation, themes, techniques, past paper extract and essays."
+  },
+  "War-is-Kind": {
+    "title": "War is Kind by Stephen Crane: O/L Analysis & Notes | LitHelp",
+    "description": "A detailed analysis of War is Kind by Stephen Crane for G.C.E. O/L English Literature: its irony, imagery and themes, with a video and a quiz."
+  },
+  "I-know-why-the-Caged-Bird-Sings": {
+    "title": "I Know Why the Caged Bird Sings by Maya Angelou: O/L Notes",
+    "description": "Notes on I Know Why the Caged Bird Sings by Maya Angelou for O/L English Literature: the poem, its meaning, symbols and themes, with a quiz."
+  },
+  "poem-by-wislawa": {
+    "title": "The Terrorist, He's Watching by Szymborska: O/L Notes",
+    "description": "Notes on The Terrorist, He's Watching by Wislawa Szymborska for G.C.E. O/L English Literature, with a video, a quiz and downloadable notes."
+  },
+  "Breakfast-by-Jaques-Prevert": {
+    "title": "Breakfast by Jacques Prévert: O/L English Literature Notes",
+    "description": "Notes on Breakfast by Jacques Prévert (translated by Reggie Siriwardena) for O/L English Literature: the poet and the poem, with a video and a quiz."
+  },
+  "Once-upon-a-Time-by-Gabriel-Okara": {
+    "title": "Once Upon a Time by Gabriel Okara: O/L Study Guide | LitHelp",
+    "description": "RCF Study Guide to Once Upon a Time by Gabriel Okara: background, stanza-by-stanza analysis, themes, techniques and O/L context and essay questions."
+  },
+  "Richard-Cory": {
+    "title": "Richard Cory by E.A. Robinson: O/L Analysis & Notes | LitHelp",
+    "description": "Analysis of Richard Cory by Edwin Arlington Robinson for G.C.E. O/L English Literature: the poet, appearance and reality, and themes, with a video."
+  },
+  "Big-Match-1983": {
+    "title": "Big Match 1983 by Yasmine Gooneratne: O/L Analysis | LitHelp",
+    "description": "Analysis of Big Match 1983 by Yasmine Gooneratne for O/L English Literature: the 1983 background and the poem's newspaper headlines, with notes to download."
+  },
+  "The-Earthen-Goblet": {
+    "title": "The Earthen Goblet by Harindranath Chattopadhyaya: O/L Notes",
+    "description": "Notes on The Earthen Goblet by Harindranath Chattopadhyaya for O/L English Literature: background, structure, symbols, themes and techniques, with a video."
+  },
+  "poem-about-camel": {
+    "title": "The Camel's Hump by Rudyard Kipling: O/L Notes & Q&A | LitHelp",
+    "description": "Notes on The Camel's Hump by Rudyard Kipling for O/L English Literature: the story behind the poem, comments on it, and questions with answers."
+  },
+  "Father-and-Son-by-Cat-Stevens": {
+    "title": "Father and Son by Cat Stevens: O/L English Literature Notes",
+    "description": "Notes on Father and Son by Cat Stevens for G.C.E. O/L English Literature: the two voices, the generation gap and the themes, with a video."
+  },
+  "the-poem-fear": {
+    "title": "Fear by Gabriela Mistral: O/L Study Guide & Analysis | LitHelp",
+    "description": "RCF Study Guide to Fear by Gabriela Mistral (translated by Doris Dana): background, stanza-by-stanza analysis, symbols, themes and O/L exam questions."
+  },
+  "poem-about-clowns-wife": {
+    "title": "The Clown's Wife by John Agard: O/L Analysis & Notes | LitHelp",
+    "description": "Analysis of The Clown's Wife by John Agard for O/L English Literature: the speaker, public and private lives, the clown's sadness, themes and techniques."
+  },
+  "Upside-Down": {
+    "title": "Upside Down by Alexander Kushner: O/L Study Guide | LitHelp",
+    "description": "RCF Study Guide to Upside Down by Alexander Kushner: background, stanza-by-stanza analysis, humour, themes, techniques and O/L exam questions."
+  },
+  "The-Huntsman": {
+    "title": "The Huntsman by Edward Lowbury: O/L Study Guide | LitHelp",
+    "description": "RCF Study Guide to The Huntsman by Edward Lowbury: the folk tale, line-by-line analysis, irony, the twist ending, themes and O/L exam questions."
+  },
+  "They-said-the-House": {
+    "title": "Two's Company by Raymond Wilson: O/L Study Guide | LitHelp",
+    "description": "RCF Study Guide to Two's Company by Raymond Wilson: line-by-line analysis, suspense and humour, the twist ending, themes and O/L exam questions."
+  },
+  "drama": {
+    "title": "O/L English Literature Drama: The Bear & Twilight of a Crane",
+    "description": "Notes on the two prescribed O/L English Literature plays: The Bear by Anton Chekhov and Twilight of a Crane by Junji Kinoshita."
+  },
+  "The-Bear-by-Anton-Chekov": {
+    "title": "The Bear by Anton Chekhov: O/L Drama Notes & Analysis | LitHelp",
+    "description": "Notes on The Bear by Anton Chekhov for G.C.E. O/L English Literature: the plot, Popova, Smirnov and Luka, with a video and notes to download."
+  },
+  "The-Twilight-of-a-Crane": {
+    "title": "Twilight of a Crane by Junji Kinoshita: O/L Drama Notes",
+    "description": "Notes on Twilight of a Crane by Junji Kinoshita for O/L English Literature: the folk tale, Tsu, Yohyo, Sodo and Unzu, and the theme of greed."
+  },
+  "OL-Prose": {
+    "title": "O/L English Literature Prose: Notes on All Four Texts | LitHelp",
+    "description": "Notes on the prescribed O/L English Literature prose: The Lahore Attack, The Nightingale and the Rose, The Lumber Room and the extract from Wave."
+  },
+  "The-Lahor-Attack": {
+    "title": "The Lahore Attack by Kumar Sangakkara: O/L Study Guide",
+    "description": "RCF Study Guide to The Lahore Attack by Kumar Sangakkara: background, a section-by-section analysis, themes, techniques and O/L exam questions."
+  },
+  "The-Nightingale-and-The-Rose-by-Oscar-Wilde": {
+    "title": "The Nightingale and the Rose by Oscar Wilde: O/L Notes",
+    "description": "Notes on The Nightingale and the Rose by Oscar Wilde for O/L English Literature: the plot, symbols, sacrifice and irony, with a video."
+  },
+  "The-Lumber-Room-by-Saki": {
+    "title": "The Lumber Room by Saki: O/L Notes & Analysis | LitHelp",
+    "description": "Notes on The Lumber Room by Saki for G.C.E. O/L English Literature: Nicholas and the aunt, imagination, humour and irony, themes, with a video."
+  },
+  "The-Wave": {
+    "title": "Wave by Sonali Deraniyagala: O/L Extract Notes & Analysis",
+    "description": "Notes on the prescribed extract from Wave by Sonali Deraniyagala for O/L English Literature: the 2004 tsunami, memoir, techniques and themes."
+  },
+  "novels": {
+    "title": "O/L English Literature Novels: Notes on All Three | LitHelp",
+    "description": "Notes on the three prescribed O/L English Literature novels: The Prince and the Pauper, Bringing Tony Home and The Vendor of Sweets."
+  },
+  "Prince-and-the-Pauper": {
+    "title": "The Prince and the Pauper by Mark Twain: O/L Novel Notes",
+    "description": "Notes on The Prince and the Pauper by Mark Twain for G.C.E. O/L English Literature: Tom Canty, Prince Edward, Miles Hendon and themes, with a video."
+  },
+  "Vendor-of-Sweets": {
+    "title": "The Vendor of Sweets by R.K. Narayan: O/L Study Guide | LitHelp",
+    "description": "RCF Study Guide to The Vendor of Sweets by R.K. Narayan: author, Malgudi setting, plot, characters, themes and O/L context and essay questions."
+  },
+  "Bringing-Tony-Home": {
+    "title": "Bringing Tony Home by Tissa Abeysekara: O/L Study Guide",
+    "description": "RCF Study Guide to Bringing Tony Home by Tissa Abeysekara: author, setting, plot, characters, themes, techniques and O/L context and essay questions."
+  },
+  "papers": {
+    "title": "O/L English Literature Past Papers & Practice Papers | LitHelp",
+    "description": "G.C.E. O/L English Literature past papers, marking schemes, term tests, model papers and the RCF Practice Papers for 2026 with answers, to download."
+  },
+  "RCF-Publications": {
+    "title": "RCF Publications: O/L English & Literature Books | LitHelp",
+    "description": "Books by RCF Publications for O/L students and teachers, including O/L Poetry Made Easy and O/L Prose & Drama Made Easy."
+  },
+  "rcf-lit-class": {
+    "title": "RCF Lit Class: Online O/L English Literature Classes | LitHelp",
+    "description": "RCF online G.C.E. O/L English Literature classes. Contact RCF to enrol or to ask about the classes."
+  }
+}

@@ -637,3 +637,4 @@ html { scroll-behavior: smooth; }
 /* Section card with its own picture (e.g. Syllabus) */
 .card.has-photo .card-photo { display: block; width: 112px; box-shadow: 0 6px 14px rgba(10, 40, 100, .18); border-radius: 11px; }
 .card.has-photo .card-photo .illus.photo { border-radius: 11px; aspect-ratio: 3 / 2; object-position: 50% 50%; }
+.site-footer .fine-note { font-size: .78rem; opacity: .8; } .site-footer .fine-note a { color: inherit; }

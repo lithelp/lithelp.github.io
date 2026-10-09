@@ -21,7 +21,32 @@ const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const pagesData = JSON.parse(read('content/pages.json'));
 const quizzes = JSON.parse(read('content/quizzes.json'));
 const ADS = JSON.parse(read('content/site.json')).adsense;
+// Google Analytics 4. The tag only runs on the real domain, so local previews and the PDF maker are not counted.
+const GA_ID = (JSON.parse(read('content/site.json')).analytics || {}).id || '';
+const gaTag = GA_ID ? `<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  if (/(^|\\.)rcflithelp\\.com$/.test(location.hostname)) gtag('config', '${GA_ID}');
+</script>
+` : '';
 const { illustration, hasIllustration } = require('./src/illustrations');
+// Search-engine titles and descriptions (content/seo.json). Page URLs and content are unchanged.
+const SEO = JSON.parse(fs.readFileSync(path.join(__dirname, 'content', 'seo.json'), 'utf8'));
+const seoTitle = (slug, fallback) => (SEO[slug] && SEO[slug].title) || fallback;
+const seoDesc = (slug, fallback) => (SEO[slug] && SEO[slug].description) || fallback;
+const hasPhotoFile = slug => fs.existsSync(path.join(__dirname, 'src', 'root', 'assets', 'img', 'texts', slug.toLowerCase() + '.jpg'));
+// Old pages that are retired: not built or listed in the sitemap; the address forwards to the page given.
+const RETIRED = { 'home-backup': 'index' };
+// Structured data (schema.org) describing the site and its learning resources.
+const ORG = { '@type': 'EducationalOrganization', name: 'RCF Creations', url: 'https://rcfenglish.com' };
+const learningResource = ({ name, description, url, type }) => ({
+  '@context': 'https://schema.org', '@type': 'LearningResource', name, description, url,
+  learningResourceType: type, educationalLevel: 'G.C.E. Ordinary Level (Sri Lanka)', inLanguage: 'en', isAccessibleForFree: true,
+  about: 'English Literature', publisher: ORG,
+});
 const STANZAS = JSON.parse(read('content/stanzas.json'));
 
 // Ad space. Renders nothing until AdSense is enabled in content/site.json, so pages carry no empty boxes.
@@ -181,24 +206,29 @@ function navHtml(current) {
   return `<nav class="nav" id="site-nav" aria-label="Main"><ul>${items.join('')}</ul></nav>`;
 }
 
-function layout({ page, title, description, canonical, body, hasQuiz, hasSinhala, breadcrumbs }) {
+function layout({ page, title, description, canonical, body, hasQuiz, hasSinhala, breadcrumbs, image, schema }) {
   const fonts = 'family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400' + (hasSinhala ? '&family=Noto+Sans+Sinhala:wght@400;600' : '');
-  const ld = breadcrumbs && breadcrumbs.length > 1 ? `<script type="application/ld+json">${JSON.stringify({
+  const ld = (breadcrumbs && breadcrumbs.length > 1 ? `<script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org', '@type': 'BreadcrumbList',
     itemListElement: breadcrumbs.map((b, i) => ({ '@type': 'ListItem', position: i + 1, name: b.name, item: SITE_URL + b.url })),
-  })}</script>` : '';
+  })}</script>` : '') + (schema ? `\n<script type="application/ld+json">${JSON.stringify(schema).replace(/</g, '\\u003c')}</script>` : '');
+  // Picture shown when the page is shared (WhatsApp, Facebook): the text's own thumbnail when it has one.
+  const ogImage = image || (page && page.slug && hasPhotoFile(page.slug) ? `${SITE_URL}/assets/img/texts/${page.slug.toLowerCase()}.jpg` : `${SITE_URL}/resources/imageedit_1_8950105283.png`);
   return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(title)}</title>
+${gaTag}<title>${esc(title)}</title>
 ${description ? `<meta name="description" content="${esc(description)}">\n` : ''}<link rel="canonical" href="${canonical}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${SITE_NAME}">
 <meta property="og:title" content="${esc(title)}">
 ${description ? `<meta property="og:description" content="${esc(description)}">\n` : ''}<meta property="og:url" content="${canonical}">
-<meta property="og:image" content="${SITE_URL}/resources/imageedit_1_8950105283.png">
+<meta property="og:image" content="${ogImage}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="${esc(title)}">
+${description ? `<meta name="twitter:description" content="${esc(description)}">\n` : ''}<meta name="twitter:image" content="${ogImage}">
 <meta name="theme-color" content="#1f5fa8">
 <link rel="icon" href="/assets/icons/favicon-32.png" sizes="32x32">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -231,7 +261,7 @@ ${body}
     <div><h2>Study</h2><ul>${['My-Poems', 'OL-LITERATURE-HELP', 'drama', 'OL-Prose', 'novels'].map(s => `<li><a href="${urlOf(s)}">${esc(labelOf(bySlug[s]))}</a></li>`).join('')}</ul></div>
     <div><h2>More</h2><ul>${['papers', 'RCF-Publications', 'rcf-lit-class'].map(s => `<li><a href="${urlOf(s)}">${esc(labelOf(bySlug[s]))}</a></li>`).join('')}<li><a href="/practice-papers-2026/">RCF Practice Papers 2026</a></li><li><a href="/about/">About the author</a></li><li><a href="https://rcfenglish.com" target="_blank" rel="noopener">rcfenglish.com</a></li><li><a href="#install" class="install-link" hidden>Add a LitHelp shortcut to your home screen</a></li></ul></div>
   </div>
-  <div class="fine">Copyright O/L Literature Help · RCF Creations <span class="heart">♥</span></div>
+  <div class="fine">Copyright O/L Literature Help · RCF Creations <span class="heart">♥</span>${GA_ID ? `<br><span class="fine-note">This site uses Google Analytics to count visits. <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses this data</a></span>` : ''}</div>
 </footer>
 <script src="/assets/site.js?v=${ASSET_V}" defer></script>
 ${hasQuiz ? `<script src="/assets/quiz.js?v=${ASSET_V}" defer></script>\n` : ''}</body>
@@ -481,6 +511,12 @@ const ppLinkBox = () => `<a class="pp-link-box" href="${urlOf(PP_HOME)}#practice
 
 for (const page of all) {
   if (page.slug === 'index') continue;
+  if (RETIRED[page.slug]) {
+    const to = RETIRED[page.slug];
+    fs.mkdirSync(path.join(OUT, page.slug + '.php'), { recursive: true });
+    writeWithRetry(path.join(OUT, page.slug + '.php', 'index.html'), redirectPage(urlOf(to), labelOf(bySlug[to])));
+    continue;
+  }
   const isEmptySection = pagesData.emptyOnYola.includes(page.slug);
   const revised = !isEmptySection && hasRevised(page.slug);
   const crumbs = crumbsFor(page);
@@ -545,9 +581,12 @@ ${art.inner}
 ${aside}
 </div>`;
 
+  const pTitle = seoTitle(page.slug, page.title), pDesc = seoDesc(page.slug, art.description);
+  // Texts (pages inside a section) are learning resources: a study guide when revised, otherwise study notes.
+  const schema = page.parent ? learningResource({ name: labelOf(page), description: pDesc, url: SITE_URL + urlOf(page.slug), type: revised ? 'Study guide' : 'Study notes' }) : null;
   writePage(page.slug, layout({
-    page, title: page.title, description: art.description, canonical: SITE_URL + urlOf(page.slug), body,
-    hasQuiz: art.hasQuiz, hasSinhala: art.hasSinhala, breadcrumbs: crumbs,
+    page, title: pTitle, description: pDesc, canonical: SITE_URL + urlOf(page.slug), body,
+    hasQuiz: art.hasQuiz, hasSinhala: art.hasSinhala, breadcrumbs: crumbs, schema,
   }));
   built.push(page.slug);
 }
@@ -606,9 +645,14 @@ ${(() => {
   </div>
 </div></section>`;
   writePage('index', layout({
-    page, title: page.title,
-    description: 'Free G.C.E. O/L English Literature notes, poem analyses, Sinhala translations, quizzes, past papers and study resources for students and teachers.',
-    canonical: SITE_URL + '/', body, breadcrumbs: null,
+    page, title: seoTitle('index', page.title),
+    description: seoDesc('index', 'Free G.C.E. O/L English Literature notes, poem analyses, Sinhala translations, quizzes, past papers and study resources for students and teachers.'),
+    canonical: SITE_URL + '/', body, breadcrumbs: null, image: SITE_URL + '/assets/img/hero-student.jpg',
+    schema: [
+      { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE_NAME, alternateName: ['LitHelp', 'RCF LitHelp'], url: SITE_URL + '/', inLanguage: 'en', publisher: ORG },
+      { '@context': 'https://schema.org', ...ORG, logo: SITE_URL + '/resources/imageedit_1_8950105283.png',
+        founder: { '@type': 'Person', name: 'Rohana Fernando', url: SITE_URL + '/about/' }, sameAs: ['https://rcfenglish.com'] },
+    ],
   }));
   built.push('index');
 }
@@ -693,7 +737,8 @@ ${paperBody(p)}
 </article>${pager}</div></div>`;
     const file = path.join(OUT, 'practice-papers-2026', `paper-${p.n}`, 'index.html');
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    writeWithRetry(file, layout({ page: null, title: `RCF Practice Paper ${p.n} for O/L 2026 with Answers | ${SITE_NAME}`, description: desc(p.n), canonical: SITE_URL + ppUrl(p.n), body, breadcrumbs: crumbs }));
+    writeWithRetry(file, layout({ page: null, title: `RCF Practice Paper ${p.n}: O/L English Literature 2026 | LitHelp`, description: desc(p.n), canonical: SITE_URL + ppUrl(p.n), body, breadcrumbs: crumbs,
+      schema: learningResource({ name: `RCF Practice Paper ${p.n} for G.C.E. O/L 2026 Appreciation of English Literary Texts`, description: desc(p.n), url: SITE_URL + ppUrl(p.n), type: 'Practice exam' }) }));
   }
 
   // Hub page
@@ -724,7 +769,7 @@ ${PRACTICE.some(p => pdfCard(p.n, false)) ? `<h2 id="downloads">Download the pap
 </article></div></div>`;
   const file = path.join(OUT, 'practice-papers-2026', 'index.html');
   fs.mkdirSync(path.dirname(file), { recursive: true });
-  writeWithRetry(file, layout({ page: null, title: `RCF Practice Papers for O/L 2026 with Answers | ${SITE_NAME}`, description: 'Five RCF Practice Papers for the G.C.E. O/L 2026 Appreciation of English Literary Texts exam, in the latest Paper I and Paper II format, with full answers and essay marking guides.', canonical: SITE_URL + ppUrl(), body, breadcrumbs: crumbs }));
+  writeWithRetry(file, layout({ page: null, title: 'O/L English Literature Practice Papers 2026 with Answers | LitHelp', description: 'Five RCF Practice Papers for G.C.E. O/L 2026 English Literature in the latest Paper I and II format, with answers, marking guides and PDF downloads.', canonical: SITE_URL + ppUrl(), body, breadcrumbs: crumbs }));
 }
 
 // ---------- Redirects for old addresses ----------
@@ -745,7 +790,7 @@ writeWithRetry(path.join(OUT, '404.html'), layout({
 }).replace('<head>', '<head>\n<meta name="robots" content="noindex">'));
 
 // ---------- sitemap.xml, robots.txt, .nojekyll, assets ----------
-const sitemapUrls = ['index'].concat(all.filter(p => p.slug !== 'index').map(p => p.slug));
+const sitemapUrls = ['index'].concat(all.filter(p => p.slug !== 'index' && !RETIRED[p.slug]).map(p => p.slug));
 writeWithRetry(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${sitemapUrls.map(s => `  <url><loc>${SITE_URL}${urlOf(s)}</loc><lastmod>${TODAY}</lastmod></url>`).join('\n')}

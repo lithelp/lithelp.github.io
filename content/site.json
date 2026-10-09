@@ -1,8 +1,11 @@
 {
-  "_note": "AdSense: set enabled to true once AdSense has approved rcflithelp.com. 'client' is the publisher ID already used on the Yola site. Fill 'slot' with an ad-unit ID from AdSense for fixed-size units, or leave it empty to let Auto ads place ads in the reserved spaces.",
+  "_note": "AdSense: set enabled to true once AdSense has approved rcflithelp.com. 'client' is the publisher ID already used on the Yola site. Fill 'slot' with an ad-unit ID from AdSense for fixed-size units, or leave it empty to let Auto ads place ads in the reserved spaces. Analytics: the Google Analytics 4 Measurement ID (property 'LitHelp', account 'RCF', Google account R); leave it empty to switch Analytics off.",
   "adsense": {
     "enabled": false,
     "client": "ca-pub-5600707937611761",
     "slot": ""
+  },
+  "analytics": {
+    "id": "G-04NQMY5GVM"
   }
 }
