@@ -54,7 +54,8 @@ const STANZAS = JSON.parse(read('content/stanzas.json'));
 function adHtml(where) {
   const cls = 'ad-slot' + (where ? ' ad-' + where : '');
   if (!ADS.enabled) return `<div class="${cls} ad-off" data-ad="${where || 'content'}" aria-hidden="true"></div>`;
-  if (!ADS.slot) return `<div class="${cls}" data-ad="${where || 'content'}"></div>`;
+  // Auto ads (no fixed ad unit): Google places the ads itself, so the reserved spaces stay hidden instead of leaving blank gaps.
+  if (!ADS.slot) return `<div class="${cls} ad-off" data-ad="${where || 'content'}" aria-hidden="true"></div>`;
   return `<div class="${cls}" aria-label="Advertisement"><ins class="adsbygoogle" style="display:block" data-ad-client="${ADS.client}" data-ad-slot="${ADS.slot}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>`;
 }
 
@@ -261,7 +262,7 @@ ${body}
     <div><h2>Study</h2><ul>${['My-Poems', 'OL-LITERATURE-HELP', 'drama', 'OL-Prose', 'novels'].map(s => `<li><a href="${urlOf(s)}">${esc(labelOf(bySlug[s]))}</a></li>`).join('')}</ul></div>
     <div><h2>More</h2><ul>${['papers', 'RCF-Publications', 'rcf-lit-class'].map(s => `<li><a href="${urlOf(s)}">${esc(labelOf(bySlug[s]))}</a></li>`).join('')}<li><a href="/practice-papers-2026/">RCF Practice Papers 2026</a></li><li><a href="/about/">About the author</a></li><li><a href="https://rcfenglish.com" target="_blank" rel="noopener">rcfenglish.com</a></li><li><a href="#install" class="install-link" hidden>Add a LitHelp shortcut to your home screen</a></li></ul></div>
   </div>
-  <div class="fine">Copyright O/L Literature Help · RCF Creations <span class="heart">♥</span>${GA_ID ? `<br><span class="fine-note">This site uses Google Analytics to count visits. <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses this data</a></span>` : ''}</div>
+  <div class="fine">Copyright O/L Literature Help · RCF Creations <span class="heart">♥</span><br><span class="fine-note">${GA_ID || ADS.enabled ? `This site uses cookies for ${[GA_ID ? 'visitor statistics (Google Analytics)' : '', ADS.enabled ? 'advertising (Google AdSense)' : ''].filter(Boolean).join(' and ')}. ` : ''}<a href="/privacy/">Privacy policy</a></span></div>
 </footer>
 <script src="/assets/site.js?v=${ASSET_V}" defer></script>
 ${hasQuiz ? `<script src="/assets/quiz.js?v=${ASSET_V}" defer></script>\n` : ''}</body>
@@ -669,6 +670,18 @@ ${(() => {
   }));
 }
 
+// ---------- Privacy policy (required by AdSense; also covers Analytics) ----------
+{
+  const body = fs.readFileSync(path.join(ROOT, 'content', 'privacy.html'), 'utf8');
+  const file = path.join(OUT, 'privacy', 'index.html');
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  writeWithRetry(file, layout({
+    page: 'privacy', title: 'Privacy Policy | O/L Literature Help (rcflithelp.com)',
+    description: 'How O/L Literature Help (rcflithelp.com) uses cookies, Google Analytics and Google AdSense, and the choices you have.',
+    canonical: SITE_URL + '/privacy/', body, breadcrumbs: [{ name: 'Home', url: '/' }, { name: 'Privacy policy', url: '/privacy/' }],
+  }));
+}
+
 // ---------- RCF Practice Papers for 2026: the paper pages and hub ----------
 {
   const lines = s => esc(s).replace(/\n/g, '<br>');
@@ -795,6 +808,7 @@ writeWithRetry(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${sitemapUrls.map(s => `  <url><loc>${SITE_URL}${urlOf(s)}</loc><lastmod>${TODAY}</lastmod></url>`).join('\n')}
   <url><loc>${SITE_URL}/about/</loc><lastmod>${TODAY}</lastmod></url>
+  <url><loc>${SITE_URL}/privacy/</loc><lastmod>${TODAY}</lastmod></url>
 ${[0].concat(PRACTICE.map(p => p.n)).map(n => `  <url><loc>${SITE_URL}${ppUrl(n)}</loc><lastmod>${TODAY}</lastmod></url>`).join('\n')}
 </urlset>
 `);
