@@ -642,3 +642,12 @@ html { scroll-behavior: smooth; }
 .announce.daily .an-img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 12px; margin: 0 0 .8rem; background: var(--brand-soft); }
 .announce .an-pause { display: block; margin: .9rem 0 0; padding: 0; border: 0; background: none; font: 500 .82rem var(--ui); color: var(--muted); text-decoration: underline; cursor: pointer; }
 @media (max-height: 640px) { .announce.daily .an-img { aspect-ratio: 2 / 1; } }
+/* Shortcut / install pop-ups: on computers the bar is a small card at the bottom right */
+.install-bar.install-bar-wide { left: auto; right: 20px; bottom: 20px; width: min(420px, calc(100vw - 40px)); }
+.install-help .install-note { margin: -.3rem 0 1rem; font-size: .88rem; color: var(--muted); }
+.install-help .install-choice { display: grid; gap: .3rem; padding: .85rem .95rem; margin: 0 0 .7rem; border: 1px solid var(--line); border-radius: 12px; }
+.install-help .install-choice b { font-size: 1rem; }
+.install-help .install-choice span { font-size: .9rem; color: var(--muted); line-height: 1.45; }
+.install-help .install-choice .btn { justify-self: start; margin-top: .3rem; cursor: pointer; }
+.install-help .install-choice .btn:not(.btn-brand) { border-color: var(--line); background: var(--card); color: var(--ink); }
+.install-help .install-cancel { cursor: pointer; border-color: transparent; background: none; color: var(--muted); padding-left: 0; }

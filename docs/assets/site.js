@@ -101,93 +101,153 @@
   update();
 })();
 
-// Installable app: offline support, plus "Add shortcut" (home-screen) prompts.
+// Home-screen shortcut and app install. Two separate pop-ups, shortcut first:
+//   1. "Add LitHelp to your home screen / desktop": how to make a plain shortcut with the browser's own menu (no install).
+//   2. "Install the LitHelp app": the browser's install prompt, offered on a later visit (a day or more after pop-up 1).
+// Each pop-up can be closed and then stays away for 30 days. The menu item and footer link open a chooser with both.
 (function () {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); });
   }
   var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-  if (standalone) return;
+  if (standalone || /[?&]print=/.test(location.search)) return;
   var ua = navigator.userAgent;
   var isIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isAndroid = /android/i.test(ua);
+  var isMobile = isIOS || isAndroid || window.innerWidth <= 760;
+  var isSamsung = /samsungbrowser/i.test(ua);
+  var isEdge = /edg\//i.test(ua);
+  var isFirefox = /firefox|fxios/i.test(ua);
   var deferred = null;
-  var KEY = 'lithelp-install-dismissed';
-  function dismissedRecently() {
-    try { var t = +localStorage.getItem(KEY); return t && Date.now() - t < 30 * 864e5; } catch (e) { return false; }
-  }
-  function remember() { try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {} }
+  var DAY = 864e5;
 
-  var iosDialog;
-  function showIOSHelp() {
-    if (!iosDialog) {
-      iosDialog = document.createElement('dialog');
-      iosDialog.className = 'install-help';
-      iosDialog.innerHTML = '<h2>Add LitHelp to your Home Screen</h2><ol>' +
-        '<li>Tap the <b>Share</b> button <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Share icon"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v8h14v-8"/></svg> at the bottom (or top) of Safari.</li>' +
-        '<li>Scroll down and tap <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>. LitHelp now opens from your Home Screen like an app.</li></ol>' +
-        '<button type="button" class="btn btn-brand">Got it</button>';
-      document.body.appendChild(iosDialog);
-      iosDialog.querySelector('button').addEventListener('click', function () { iosDialog.close(); });
-      iosDialog.addEventListener('click', function (e) { if (e.target === iosDialog) iosDialog.close(); });
+  var KEY = 'lithelp-home';
+  var st = {};
+  try { st = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { st = null; } // no storage: no pop-ups
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
+  function track(name) { if (window.gtag) window.gtag('event', name); }
+
+  // How to make a plain shortcut in this browser (no install).
+  function shortcutSteps() {
+    var share = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Share"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v8h14v-8"/></svg>';
+    if (isIOS) return '<li>Tap the <b>Share</b> button ' + share + ' in Safari (at the bottom or top of the screen).</li><li>Scroll down and tap <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>. The LitHelp icon is now on your Home Screen.</li>';
+    if (isSamsung) return '<li>Tap the menu <b>≡</b> at the bottom right.</li><li>Tap <b>Add page to</b>, then <b>Home screen</b>.</li><li>Tap <b>Add</b>. The LitHelp icon is now on your home screen.</li>';
+    if (isAndroid) return '<li>Tap the menu <b>⋮</b> at the top right of Chrome.</li><li>Tap <b>Add to Home screen</b>.</li><li>If Chrome asks, choose <b>Create shortcut</b> (not Install), then tap <b>Add</b>.</li>';
+    if (isEdge) return '<li>Click the menu <b>…</b> at the top right of Edge.</li><li>Choose <b>More tools</b>, then <b>Pin to taskbar</b> or <b>Pin to Start</b>.</li><li>LitHelp now opens from your taskbar or Start menu.</li>';
+    if (isFirefox) return '<li>Make the window smaller so you can see your desktop.</li><li>Drag the padlock icon at the left of the address bar onto your desktop.</li><li>A LitHelp shortcut appears on your desktop.</li>';
+    return '<li>Click the menu <b>⋮</b> at the top right of Chrome.</li><li>Choose <b>Cast, save and share</b>, then <b>Create shortcut…</b></li><li>Click <b>Create</b>. A LitHelp shortcut is added to your desktop.</li>';
+  }
+
+  var dlg;
+  function openDialog(html) {
+    if (!dlg) {
+      dlg = document.createElement('dialog');
+      dlg.className = 'install-help';
+      document.body.appendChild(dlg);
+      dlg.addEventListener('click', function (e) {
+        if (e.target === dlg || e.target.closest('[data-close]')) dlg.close();
+        if (e.target.closest('[data-install]')) { dlg.close(); install(); }
+        if (e.target.closest('[data-shortcut]')) showShortcutHelp();
+      });
     }
-    if (iosDialog.showModal) iosDialog.showModal(); else alert('In Safari, tap Share, then "Add to Home Screen".');
+    dlg.innerHTML = html;
+    if (!dlg.open) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); }
+  }
+  function showShortcutHelp() {
+    track('home_shortcut_help');
+    openDialog('<h2>Add a LitHelp shortcut' + (isMobile ? ' to your home screen' : ' to your computer') + '</h2><ol>' + shortcutSteps() + '</ol>' +
+      '<p class="install-note">A shortcut opens LitHelp in your browser in one tap. Nothing is installed.</p>' +
+      '<button type="button" class="btn btn-brand" data-close>Got it</button>');
+  }
+  function showChooser() {
+    openDialog('<h2>Keep LitHelp one tap away</h2>' +
+      '<div class="install-choice"><b>Shortcut</b><span>An icon that opens LitHelp in your browser. Nothing is installed.</span><button type="button" class="btn btn-brand" data-shortcut>Add a shortcut</button></div>' +
+      (deferred ? '<div class="install-choice"><b>App</b><span>Opens full screen like an app and keeps the pages you have read for offline use.</span><button type="button" class="btn" data-install>Install the app</button></div>' : '') +
+      '<button type="button" class="btn install-cancel" data-close>Not now</button>');
   }
   function install() {
-    if (deferred) {
-      deferred.prompt();
-      deferred.userChoice.then(function (c) { if (c.outcome === 'accepted') hideAll(); deferred = null; });
-    } else if (isIOS) {
-      showIOSHelp();
-    }
+    if (!deferred) { showShortcutHelp(); return; }
+    track('home_install_prompt');
+    deferred.prompt();
+    deferred.userChoice.then(function (c) { if (c.outcome === 'accepted') { st.installed = Date.now(); save(); hideAll(); } deferred = null; });
   }
 
+  // The two pop-ups (bars at the bottom of the screen).
   var bar;
-  function showBar() {
-    if (bar || dismissedRecently() || window.innerWidth > 760) return;
+  function removeBar() { if (bar) { bar.remove(); bar = null; } document.body.classList.remove('has-install-bar'); }
+  function showBar(kind) {
+    if (bar) return;
     bar = document.createElement('div');
-    bar.className = 'install-bar';
+    bar.className = 'install-bar' + (isMobile ? '' : ' install-bar-wide');
     bar.setAttribute('role', 'region');
-    bar.setAttribute('aria-label', 'Add a home-screen shortcut');
-    bar.innerHTML = '<img src="/assets/icons/icon-192.png" alt="" width="40" height="40"><span><b>LitHelp in one tap</b><small>Put it on your home screen. Works offline.</small></span>' +
-      '<button type="button" class="install-go">Add shortcut</button><button type="button" class="install-x" aria-label="Not now">&times;</button>';
+    bar.setAttribute('aria-label', kind === 'install' ? 'Install the LitHelp app' : 'Add a LitHelp shortcut');
+    var where = isMobile ? 'home screen' : 'computer';
+    bar.innerHTML = '<img src="/assets/icons/icon-192.png" alt="" width="40" height="40">' + (kind === 'install'
+      ? '<span><b>Install the LitHelp app</b><small>Opens full screen and works offline.</small></span><button type="button" class="install-go">Install</button>'
+      : '<span><b>Add LitHelp to your ' + where + '</b><small>A shortcut opens LitHelp in one tap.</small></span><button type="button" class="install-go">Add shortcut</button>') +
+      '<button type="button" class="install-x" aria-label="Not now">&times;</button>';
     document.body.appendChild(bar);
     document.body.classList.add('has-install-bar');
-    bar.querySelector('.install-go').addEventListener('click', install);
-    bar.querySelector('.install-x').addEventListener('click', function () { remember(); bar.remove(); bar = null; document.body.classList.remove('has-install-bar'); });
+    var stamp = kind === 'install' ? 'installSeen' : 'shortcutSeen';
+    bar.querySelector('.install-go').addEventListener('click', function () {
+      st[stamp] = Date.now(); save(); removeBar();
+      if (kind === 'install') install(); else showShortcutHelp();
+    });
+    bar.querySelector('.install-x').addEventListener('click', function () { st[stamp] = Date.now(); save(); removeBar(); });
+    track(kind === 'install' ? 'home_install_bar' : 'home_shortcut_bar');
   }
+  function nextBar() {
+    if (!st || st.installed) return null;
+    var now = Date.now();
+    var shortcutDue = !st.shortcutSeen || now - st.shortcutSeen > 30 * DAY;
+    if (shortcutDue) return 'shortcut';
+    // The install pop-up comes on a later visit: at least a day after the shortcut pop-up, and only where the browser can install.
+    var installDue = deferred && now - st.shortcutSeen > DAY && (!st.installSeen || now - st.installSeen > 30 * DAY);
+    return installDue ? 'install' : null;
+  }
+  function scheduleBar() {
+    var shown = false;
+    function go() {
+      if (shown) return;
+      if (document.querySelector('dialog[open]')) { setTimeout(go, 4000); return; } // wait until the daily tip is closed
+      var kind = nextBar();
+      shown = true;
+      window.removeEventListener('scroll', onScroll);
+      if (kind) showBar(kind);
+    }
+    function onScroll() { if (window.scrollY > 400) go(); }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    setTimeout(go, 12000);
+  }
+
+  // The menu item and the footer link open the chooser (shortcut first, install second).
   var linksReady = false;
   function showLinks() {
     if (linksReady) return;
     linksReady = true;
     document.querySelectorAll('.install-link').forEach(function (a) {
       a.hidden = false;
-      a.addEventListener('click', function (e) { e.preventDefault(); install(); });
+      a.addEventListener('click', function (e) { e.preventDefault(); showChooser(); });
     });
     var nav = document.querySelector('#site-nav > ul');
     if (nav) {
       var li = document.createElement('li');
       li.className = 'nav-install';
       li.innerHTML = '<button type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg>Add shortcut</button>';
-      li.querySelector('button').addEventListener('click', install);
+      li.querySelector('button').addEventListener('click', showChooser);
       nav.appendChild(li);
     }
   }
   function hideAll() {
     document.querySelectorAll('.install-link').forEach(function (a) { a.hidden = true; });
     var li = document.querySelector('.nav-install'); if (li) li.remove();
-    if (bar) { bar.remove(); bar = null; }
-    document.body.classList.remove('has-install-bar');
+    removeBar();
   }
-  function ready() {
-    showLinks();
-    var shown = false;
-    function later() { if (!shown && window.scrollY > 400) { shown = true; showBar(); window.removeEventListener('scroll', later); } }
-    window.addEventListener('scroll', later, { passive: true });
-    setTimeout(function () { if (!shown) { shown = true; showBar(); } }, 12000);
-  }
-  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; ready(); });
-  window.addEventListener('appinstalled', hideAll);
-  if (isIOS && /safari/i.test(ua) && !/crios|fxios|edgios/i.test(ua)) ready();
+
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; });
+  window.addEventListener('appinstalled', function () { if (st) { st.installed = Date.now(); save(); } hideAll(); });
+  showLinks();
+  if (st) scheduleBar();
 })();
 
 // RCF Practice Papers: answer toolbar on the paper pages, and a one-time announcement pop-up elsewhere.
