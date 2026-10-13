@@ -1,4 +1,5 @@
 # Step H: send Yola visitors to rcflithelp.com
+n> **Status, 13 October 2026: not possible any more.** Yola disabled lithelp.yolasite.com ("Site disabled") and does not allow publishing on the free plan, so this redirect was never applied. This guide is kept only as a record.
 
 This guide adds a small script to the old Yola site (lithelp.yolasite.com). When anyone opens a Yola page, they go straight to the same page on https://rcflithelp.com.
 
