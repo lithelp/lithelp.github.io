@@ -638,3 +638,7 @@ html { scroll-behavior: smooth; }
 .card.has-photo .card-photo { display: block; width: 112px; box-shadow: 0 6px 14px rgba(10, 40, 100, .18); border-radius: 11px; }
 .card.has-photo .card-photo .illus.photo { border-radius: 11px; aspect-ratio: 3 / 2; object-position: 50% 50%; }
 .site-footer .fine-note { font-size: .78rem; opacity: .8; } .site-footer .fine-note a { color: inherit; }
+/* Daily "Today on LitHelp" pop-up */
+.announce.daily .an-img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 12px; margin: 0 0 .8rem; background: var(--brand-soft); }
+.announce .an-pause { display: block; margin: .9rem 0 0; padding: 0; border: 0; background: none; font: 500 .82rem var(--ui); color: var(--muted); text-decoration: underline; cursor: pointer; }
+@media (max-height: 640px) { .announce.daily .an-img { aspect-ratio: 2 / 1; } }

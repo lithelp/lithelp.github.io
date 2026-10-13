@@ -819,6 +819,19 @@ else if (fs.existsSync(path.join(OUT, 'ads.txt'))) fs.unlinkSync(path.join(OUT, 
 fs.mkdirSync(path.join(OUT, 'assets'), { recursive: true });
 for (const f of fs.readdirSync(path.join(ROOT, 'src', 'assets'))) fs.copyFileSync(path.join(ROOT, 'src', 'assets', f), path.join(OUT, 'assets', f));
 
+// Daily pop-up highlights (content/daily.json -> /assets/daily.json). Every link and picture must exist.
+{
+  const daily = JSON.parse(read('content/daily.json'));
+  const pages = new Set(['/', '/about/', '/privacy/', ppUrl()].concat(sitemapUrls.map(urlOf), PRACTICE.map(p => ppUrl(p.n))));
+  const bad = daily.items.flatMap((it, i) => [
+    !it.kind || !it.title || !it.text || !it.link ? `item ${i + 1}: kind, title, text and link are required` : '',
+    it.link && !pages.has(it.link.split('#')[0]) ? `item ${i + 1} (${it.title}): no page at ${it.link}` : '',
+    it.img && !hasPhotoFile(it.img) ? `item ${i + 1} (${it.title}): no picture for ${it.img}` : '',
+  ]).filter(Boolean);
+  if (bad.length) { console.error('content/daily.json problems:\n  ' + bad.join('\n  ')); process.exit(1); }
+  writeWithRetry(path.join(OUT, 'assets', 'daily.json'), JSON.stringify({ items: daily.items }));
+}
+
 console.log(`Built ${built.length} pages, ${gone.length + 1} redirects, sitemap with ${sitemapUrls.length} URLs -> ${SITE_URL}`);
 
 // Files that must sit at the site root unchanged (e.g. Google Search Console verification).

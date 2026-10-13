@@ -210,28 +210,50 @@
       paper.querySelectorAll('.q details').forEach(function (d) { d.open = act === 'open'; });
     });
   }
-  var HREF = '/practice-papers-2026/';
-  if (location.pathname.indexOf(HREF) === 0 || !window.HTMLDialogElement) return;
-  var KEY = 'lithelp-pp2026';
-  var state;
-  try { state = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { state = {}; }
-  if (state.opened || (state.later && Date.now() - state.later < 7 * 864e5)) return;
-  function save(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
+})();
+
+// "Today on LitHelp": a daily highlight from /assets/daily.json (made from content/daily.json).
+// Shown at most once a day per visitor; everyone sees the same item on the same Sri Lanka date.
+(function () {
+  if (!window.HTMLDialogElement || /[?&]print=/.test(location.search)) return;
+  var KEY = 'lithelp-daily';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return; } // no storage: never nag
+  var slDate = new Date(Date.now() + 5.5 * 36e5).toISOString().slice(0, 10); // today's date in Sri Lanka
+  if (state.shown === slDate) return;
+  if (state.pauseUntil && slDate < state.pauseUntil) return;
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function track(name) { if (window.gtag) window.gtag('event', name, { daily_item: state.item }); }
   setTimeout(function () {
     if (document.querySelector('dialog[open]')) return;
-    var d = document.createElement('dialog');
-    d.className = 'announce';
-    d.setAttribute('aria-labelledby', 'an-title');
-    d.innerHTML = '<div class="an-top"><small>New on LitHelp</small><h2 id="an-title">RCF Practice Papers for 2026</h2><button type="button" class="an-x" aria-label="Close">&times;</button></div>' +
-      '<div class="an-body"><p>Five full practice papers in the latest O/L exam format (Paper I and Paper II), with answers and essay marking guides.</p>' +
-      '<div class="an-actions"><a class="btn btn-brand an-open" href="' + HREF + '">Open the papers</a><button type="button" class="btn an-later">Maybe later</button></div></div>';
-    document.body.appendChild(d);
-    function later() { save({ later: Date.now() }); d.close(); }
-    d.querySelector('.an-open').addEventListener('click', function () { save({ opened: Date.now() }); });
-    d.querySelector('.an-later').addEventListener('click', later);
-    d.querySelector('.an-x').addEventListener('click', later);
-    d.addEventListener('cancel', function () { save({ later: Date.now() }); });
-    d.addEventListener('click', function (e) { if (e.target === d) later(); });
-    d.showModal();
-  }, 2500);
+    fetch('/assets/daily.json').then(function (r) { return r.ok ? r.json() : null; }).then(function (data) {
+      var items = data && data.items;
+      if (!items || !items.length || document.querySelector('dialog[open]')) return;
+      var day = Math.floor((Date.parse(slDate) - Date.parse('2026-10-01')) / 864e5);
+      var i = ((day % items.length) + items.length) % items.length;
+      if (items[i].link === location.pathname) i = (i + 1) % items.length; // don't advertise the page being read
+      var it = items[i];
+      state.shown = slDate; state.item = it.title; save();
+      var d = document.createElement('dialog');
+      d.className = 'announce daily';
+      d.setAttribute('aria-labelledby', 'an-title');
+      d.innerHTML = '<div class="an-top"><small>Today on LitHelp · ' + esc(it.kind) + '</small><h2 id="an-title">' + esc(it.title) + '</h2><button type="button" class="an-x" aria-label="Close">&times;</button></div>' +
+        '<div class="an-body">' + (it.img ? '<img class="an-img" src="/assets/img/texts/' + esc(it.img.toLowerCase()) + '.jpg" alt="" width="240" height="160">' : '') +
+        '<p>' + esc(it.text) + '</p>' +
+        '<div class="an-actions"><a class="btn btn-brand an-open" href="' + esc(it.link) + '">' + esc(it.cta || 'Open') + '</a><button type="button" class="btn an-later">Close</button></div>' +
+        '<button type="button" class="an-pause">Don\'t show daily tips for a week</button></div>';
+      document.body.appendChild(d);
+      function close() { d.close(); }
+      d.querySelector('.an-open').addEventListener('click', function () { track('daily_tip_open'); });
+      d.querySelector('.an-later').addEventListener('click', close);
+      d.querySelector('.an-x').addEventListener('click', close);
+      d.querySelector('.an-pause').addEventListener('click', function () {
+        state.pauseUntil = new Date(Date.parse(slDate) + 7 * 864e5).toISOString().slice(0, 10); save(); track('daily_tip_pause'); close();
+      });
+      d.addEventListener('click', function (e) { if (e.target === d) close(); });
+      d.showModal();
+      track('daily_tip_shown');
+    }).catch(function () {});
+  }, 3000);
 })();
