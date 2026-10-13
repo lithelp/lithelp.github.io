@@ -830,6 +830,16 @@ for (const f of fs.readdirSync(path.join(ROOT, 'src', 'assets'))) fs.copyFileSyn
   ]).filter(Boolean);
   if (bad.length) { console.error('content/daily.json problems:\n  ' + bad.join('\n  ')); process.exit(1); }
   writeWithRetry(path.join(OUT, 'assets', 'daily.json'), JSON.stringify({ items: daily.items }));
+
+  // Quote of the day (content/quotes.json -> /assets/quotes.json). Quotes are checked word for word by check-practice.js.
+  const quotes = JSON.parse(read('content/quotes.json'));
+  const badQ = quotes.items.flatMap((it, i) => [
+    !it.quote || !it.text || !it.author || !it.link || !it.question ? `quote ${i + 1}: quote, text, author, link and question are required` : '',
+    it.link && !pages.has(it.link.split('#')[0]) ? `quote ${i + 1} (${it.text}): no page at ${it.link}` : '',
+    /father and son/i.test(it.text || '') ? `quote ${i + 1}: song lyrics must not be quoted` : '',
+  ]).filter(Boolean);
+  if (badQ.length) { console.error('content/quotes.json problems:\n  ' + badQ.join('\n  ')); process.exit(1); }
+  writeWithRetry(path.join(OUT, 'assets', 'quotes.json'), JSON.stringify({ items: quotes.items }));
 }
 
 console.log(`Built ${built.length} pages, ${gone.length + 1} redirects, sitemap with ${sitemapUrls.length} URLs -> ${SITE_URL}`);

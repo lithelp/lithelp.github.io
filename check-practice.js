@@ -64,6 +64,13 @@ for (const p of papers) {
     qs.forEach(([, pts], i) => pts.forEach(pt => checkQuoted(`Paper ${p.n} II ${sec} ${i + 1}`, pt)));
   }
 }
+// Quote of the day (content/quotes.json): every quote must be found word for word.
+const quotes = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'quotes.json'), 'utf8')).items;
+quotes.forEach((q, i) => {
+  if (/father and son/i.test(q.text)) problems.push(`Quote ${i + 1}: song lyrics must not be quoted`);
+  check(`Quote ${i + 1} (${q.text})`, q.quote, 2);
+});
+
 console.log(`Quotations checked: ${checked}, not found: ${problems.length}`);
 for (const pr of problems) console.log('  ' + pr);
 process.exitCode = problems.length ? 1 : 0;

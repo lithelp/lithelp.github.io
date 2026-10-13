@@ -312,3 +312,46 @@
     }).catch(function () {});
   }, 3000);
 })();
+
+// Quote of the day: a small card with a quotation from a set text and a question to think about.
+// It appears once a day, after about 5 minutes on the site in one visit (the visit continues across pages).
+(function () {
+  if (/[?&]print=/.test(location.search)) return;
+  var KEY = 'lithelp-qotd', WAIT = 5 * 60 * 1000;
+  var st = {};
+  try { st = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return; }
+  var slDate = new Date(Date.now() + 5.5 * 36e5).toISOString().slice(0, 10);
+  if (st.shown === slDate) return;
+  var start;
+  try {
+    start = +sessionStorage.getItem('lithelp-visit-start');
+    if (!start) { start = Date.now(); sessionStorage.setItem('lithelp-visit-start', String(start)); }
+  } catch (e) { start = Date.now(); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function track(name, it) { if (window.gtag) window.gtag('event', name, { quote_text: it && it.text }); }
+  function show() {
+    if (document.hidden || document.querySelector('dialog[open]')) { setTimeout(show, 20000); return; } // wait for the reader
+    fetch('/assets/quotes.json').then(function (r) { return r.ok ? r.json() : null; }).then(function (data) {
+      var items = data && data.items;
+      if (!items || !items.length) return;
+      var day = Math.floor((Date.parse(slDate) - Date.parse('2026-10-01')) / 864e5);
+      var it = items[((day % items.length) + items.length) % items.length];
+      st.shown = slDate; try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {}
+      var card = document.createElement('aside');
+      card.className = 'qotd';
+      card.setAttribute('aria-label', 'Quote of the day');
+      var lines = esc(it.quote).split(' / ').join('<br>');
+      card.innerHTML = '<button type="button" class="qotd-x" aria-label="Close">&times;</button>' +
+        '<small>Quote of the day</small><blockquote>"' + lines + '"</blockquote>' +
+        '<p class="qotd-src">' + esc(it.text) + ' · ' + esc(it.author) + '</p>' +
+        '<p class="qotd-q"><b>Think about it:</b> ' + esc(it.question) + '</p>' +
+        (it.link === location.pathname ? '' : '<a class="qotd-go" href="' + esc(it.link) + '">Read about ' + esc(it.text) + ' →</a>');
+      document.body.appendChild(card);
+      requestAnimationFrame(function () { card.classList.add('in'); });
+      card.querySelector('.qotd-x').addEventListener('click', function () { card.remove(); track('quote_close', it); });
+      var go = card.querySelector('.qotd-go'); if (go) go.addEventListener('click', function () { track('quote_open', it); });
+      track('quote_shown', it);
+    }).catch(function () {});
+  }
+  setTimeout(show, Math.max(1000, WAIT - (Date.now() - start)));
+})();
