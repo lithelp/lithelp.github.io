@@ -663,3 +663,15 @@ html { scroll-behavior: smooth; }
 @media (max-width: 760px) { .qotd { left: 16px; right: 16px; bottom: 16px; width: auto; } .has-install-bar .qotd { bottom: 104px; } }
 @media (prefers-reduced-motion: reduce) { .qotd { transition: none; } }
 @media print { .qotd { display: none !important; } }
+/* Study-break reminder card */
+.study-break { position: fixed; left: 20px; bottom: 20px; z-index: 61; width: min(380px, calc(100vw - 32px)); display: flex; gap: .8rem; align-items: flex-start; padding: 1rem 1.1rem; border-radius: 16px; background: var(--card); color: var(--ink); border: 1px solid var(--line); border-left: 5px solid #f2a33a; box-shadow: 0 18px 44px rgba(5, 20, 50, .25); font-family: var(--ui); transform: translateY(20px); opacity: 0; transition: transform .35s ease, opacity .35s ease; }
+.study-break.in { transform: none; opacity: 1; }
+.study-break .sb-icon { font-size: 2.2rem; line-height: 1; }
+.study-break b { display: block; font-size: 1.05rem; margin-bottom: .25rem; }
+.study-break p { margin: 0 0 .75rem; font-size: .92rem; line-height: 1.5; color: var(--ink); }
+.study-break .sb-actions { display: flex; flex-wrap: wrap; gap: .45rem; }
+.study-break .btn { cursor: pointer; padding: .5rem .85rem; font-size: .88rem; }
+.study-break .sb-later { border-color: var(--line); background: var(--card); color: var(--ink); }
+@media (max-width: 760px) { .study-break { left: 16px; right: 16px; bottom: 16px; width: auto; } .has-install-bar .study-break { bottom: 104px; } }
+@media (prefers-reduced-motion: reduce) { .study-break { transition: none; } }
+@media print { .study-break { display: none !important; } }

@@ -355,3 +355,51 @@
   }
   setTimeout(show, Math.max(1000, WAIT - (Date.now() - start)));
 })();
+
+// Study-break reminder: a friendly card after about 30 minutes on the site in one visit.
+// "Remind me in 30 min" brings it back later in the same visit; "Thanks!" closes it for this visit.
+(function () {
+  if (/[?&]print=/.test(location.search)) return;
+  var MIN = 60 * 1000, FIRST = 30 * MIN;
+  var start, due, off;
+  try {
+    start = +sessionStorage.getItem('lithelp-visit-start');
+    if (!start) { start = Date.now(); sessionStorage.setItem('lithelp-visit-start', String(start)); }
+    due = +sessionStorage.getItem('lithelp-break-due') || start + FIRST;
+    off = sessionStorage.getItem('lithelp-break-off') === '1';
+  } catch (e) { return; }
+  if (off) return;
+  var MESSAGES = [
+    ['☕', 'Feeling tired? 😊', 'You have been studying for a while. Time for a cup of tea or coffee! Stretch, drink some water and rest your eyes. LitHelp will be right here when you are back.'],
+    ['🥤', 'Time for a little break 😊', 'Your brain remembers more when you rest. Get a glass of water, look out of the window for a minute, then come back fresh.'],
+    ['👀', 'Rest your eyes 😊', 'Try the 20-20-20 rule: every 20 minutes, look at something about 20 feet (6 metres) away for 20 seconds. Then carry on.'],
+    ['🚶', 'Stretch your legs 😊', 'A short walk around the room wakes up your mind. Five minutes of rest now means better study later.'],
+    ['🍵', 'Tea time? 😊', 'Great work so far! Take a short break, have something to drink, and come back to finish strong.'],
+  ];
+  function stopped() { try { return sessionStorage.getItem('lithelp-break-off') === '1'; } catch (e) { return true; } }
+  function show() {
+    if (stopped()) return;
+    if (document.hidden || document.querySelector('dialog[open], .qotd, .study-break')) { setTimeout(show, 20000); return; }
+    var n = 0; try { n = +sessionStorage.getItem('lithelp-break-count') || 0; sessionStorage.setItem('lithelp-break-count', String(n + 1)); } catch (e) {}
+    var m = MESSAGES[(Math.floor(Date.now() / 864e5) + n) % MESSAGES.length];
+    var card = document.createElement('aside');
+    card.className = 'study-break';
+    card.setAttribute('aria-label', 'Study break reminder');
+    card.innerHTML = '<span class="sb-icon" aria-hidden="true">' + m[0] + '</span><div><b>' + m[1] + '</b><p>' + m[2] + '</p>' +
+      '<div class="sb-actions"><button type="button" class="btn btn-brand sb-ok">Thanks! 😊</button><button type="button" class="btn sb-later">Remind me in 30 min</button></div></div>';
+    document.body.appendChild(card);
+    requestAnimationFrame(function () { card.classList.add('in'); });
+    if (window.gtag) window.gtag('event', 'study_break_shown');
+    card.querySelector('.sb-ok').addEventListener('click', function () {
+      try { sessionStorage.setItem('lithelp-break-off', '1'); } catch (e) {}
+      card.remove();
+    });
+    card.querySelector('.sb-later').addEventListener('click', function () {
+      var next = Date.now() + FIRST;
+      try { sessionStorage.setItem('lithelp-break-due', String(next)); } catch (e) {}
+      card.remove();
+      setTimeout(show, FIRST);
+    });
+  }
+  setTimeout(show, Math.max(1000, due - Date.now()));
+})();
