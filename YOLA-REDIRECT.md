@@ -15,17 +15,22 @@ Checked on 13 October 2026: all 46 old Yola page addresses have a working page o
 <script>
 /* LitHelp has moved to https://rcflithelp.com. Remove this script to stop forwarding. */
 (function () {
-  if (!/(^|\.)lithelp\.yolasite\.com$/i.test(location.hostname)) return;
-  var m = location.pathname.match(/^\/([^\/]+?)(?:\.php)?\/?$/);
+  var top = window, href = location.href;
+  try { if (window.top !== window) { top = window.top; href = top.location.href; } }
+  catch (e) { href = document.referrer || ''; } /* the widget runs inside a frame */
+  var u; try { u = new URL(href); } catch (e) { return; }
+  if (!/(^|\.)lithelp\.yolasite\.com$/i.test(u.hostname)) return;
+  var m = u.pathname.match(/^\/([^\/]+?)(?:\.php)?\/?$/);
   var page = m && !/^index$/i.test(m[1]) ? m[1] + '.php/' : '';
-  var link = document.createElement('link');
-  link.rel = 'canonical';
-  link.href = 'https://rcflithelp.com/' + page;
-  document.head.appendChild(link);
-  location.replace('https://rcflithelp.com/' + page + location.hash);
+  var to = 'https://rcflithelp.com/' + page + u.hash;
+  try { var l = document.createElement('link'); l.rel = 'canonical'; l.href = 'https://rcflithelp.com/' + page; (top.document || document).head.appendChild(l); } catch (e) {}
+  try { top.location.replace(to); } catch (e) { location.replace(to); }
 })();
 </script>
+<p style="font:16px sans-serif">LitHelp has moved to <a href="https://rcflithelp.com/" target="_top">rcflithelp.com</a>.</p>
 ```
+
+The last line is a visible link, for anyone whose browser blocks the automatic forwarding.
 
 How it behaves:
 
