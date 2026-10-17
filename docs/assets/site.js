@@ -105,7 +105,7 @@
 // The button opens the device's own confirmation box (the browser's install prompt), which puts the LitHelp icon on the
 // home screen or desktop in one tap. A line explains that the box may say "Install" but only adds the icon.
 // Where a browser has no such box (iPhone Safari, Firefox and some others), the button shows the short steps instead.
-// Closing the pop-up keeps it away for 30 days. The menu item and footer link do the same as the button.
+// Closing the pop-up only closes it; it can come back on a later day's visit. The menu item and footer link do the same as the button.
 (function () {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); });
@@ -180,7 +180,7 @@
   var bar;
   function removeBar() { if (bar) { bar.remove(); bar = null; } document.body.classList.remove('has-install-bar'); }
   function showBar() {
-    if (bar || !st || st.added || (st.closed && Date.now() - st.closed < 30 * 864e5)) return;
+    if (bar || !st || st.added || (st.closed && Date.now() - st.closed < 20 * 36e5)) return; // closed earlier today: wait until the next day
     if (!deferred && !isIOS) return; // only offer the pop-up where adding takes one or two taps
     bar = document.createElement('div');
     bar.className = 'install-bar' + (isMobile ? '' : ' install-bar-wide');
@@ -276,7 +276,6 @@
   try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return; } // no storage: never nag
   var slDate = new Date(Date.now() + 5.5 * 36e5).toISOString().slice(0, 10); // today's date in Sri Lanka
   if (state.shown === slDate) return;
-  if (state.pauseUntil && slDate < state.pauseUntil) return;
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function track(name) { if (window.gtag) window.gtag('event', name, { daily_item: state.item }); }
@@ -289,7 +288,7 @@
       var i = ((day % items.length) + items.length) % items.length;
       if (items[i].link === location.pathname) i = (i + 1) % items.length; // don't advertise the page being read
       var it = items[i];
-      state.shown = slDate; state.item = it.title; save();
+      state.shown = slDate; state.item = it.title; delete state.pauseUntil; save(); // an old "pause" choice no longer applies
       var d = document.createElement('dialog');
       d.className = 'announce daily';
       d.setAttribute('aria-labelledby', 'an-title');
@@ -297,15 +296,12 @@
         '<div class="an-body">' + (it.img ? '<img class="an-img" src="/assets/img/texts/' + esc(it.img.toLowerCase()) + '.jpg" alt="" width="240" height="160">' : '') +
         '<p>' + esc(it.text) + '</p>' +
         '<div class="an-actions"><a class="btn btn-brand an-open" href="' + esc(it.link) + '">' + esc(it.cta || 'Open') + '</a><button type="button" class="btn an-later">Close</button></div>' +
-        '<button type="button" class="an-pause">Don\'t show daily tips for a week</button></div>';
+        '</div>';
       document.body.appendChild(d);
       function close() { d.close(); }
       d.querySelector('.an-open').addEventListener('click', function () { track('daily_tip_open'); });
       d.querySelector('.an-later').addEventListener('click', close);
       d.querySelector('.an-x').addEventListener('click', close);
-      d.querySelector('.an-pause').addEventListener('click', function () {
-        state.pauseUntil = new Date(Date.parse(slDate) + 7 * 864e5).toISOString().slice(0, 10); save(); track('daily_tip_pause'); close();
-      });
       d.addEventListener('click', function (e) { if (e.target === d) close(); });
       d.showModal();
       track('daily_tip_shown');
