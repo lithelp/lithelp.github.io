@@ -749,6 +749,7 @@ ${paperBody(p)}
   const body = `<div class="page-head guide-head"><div class="wrap"><div class="head-text">${crumbsHtml(crumbs)}<span class="kicker">RCF Practice Papers · G.C.E. O/L 2026</span><h1>Practice Papers for 2026</h1><p class="pp-focus">Five full papers in the latest exam format, with answers</p></div></div></div>
 ${adHtml('top')}
 <section class="section"><div class="wrap">
+  <div class="box warn" role="note"><p><strong>Important Notice:</strong> These practice papers and model answers were prepared with AI assistance. Although care has been taken, they may contain errors or inaccuracies. Students and teachers should verify doubtful information against the prescribed syllabus and literary texts.</p></div>
   <div class="cards">${cards}</div>
 </div></section>
 <div class="wrap layout"><div><article class="prose guide pp">
