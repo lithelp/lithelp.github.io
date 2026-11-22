@@ -494,15 +494,13 @@ const pdfCard = (n, answers) => {
   if (!fs.existsSync(f)) return '';
   return fileCard(`${PP_BASE}pdf/${pdfName(n, answers)}`, answers ? `Practice Paper ${n}: answers and marking guide` : `Practice Paper ${n}: question paper`, fs.statSync(f).size / 1024, 'pdf');
 };
-// Where the practice papers are shown on existing pages. Their home is the Past Papers & Resources page ('papers');
-// other pages get only a short link to it. To show them in the library only, remove 'OL-LITERATURE-HELP' from PP_LINK_ON.
+
 const pdfPill = (n, answers) => {
   const f = path.join(PDF_DIR, pdfName(n, answers));
   if (!fs.existsSync(f)) return '';
   return `<a class="pp-pill" href="${PP_BASE}pdf/${pdfName(n, answers)}" download><span class="tag pdf">PDF</span>${answers ? 'Answers' : 'Question paper'} <small>${Math.round(fs.statSync(f).size / 1024)} KB</small></a>`;
 };
-const PP_HOME = 'papers';
-const PP_LINK_ON = ['OL-LITERATURE-HELP'];
+
 
 
 
@@ -549,10 +547,7 @@ ${o.inner}
     }
   }
 
-  if (page.slug === PP_HOME) art.inner = ppLibraryBlock() + '\n' + art.inner;
-  if (PP_LINK_ON.includes(page.slug)) {
-    art.inner = art.inner.includes('<div class="list-cards">') ? art.inner.replace('<div class="list-cards">', ppLinkBox() + '<div class="list-cards">') : ppLinkBox() + art.inner;
-  }
+
 
   const siblings = page.parent ? page.parent.children : null;
   let pager = '', aside = '';
