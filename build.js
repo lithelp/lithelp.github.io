@@ -199,7 +199,6 @@ function navHtml(current) {
     const mega = top.children.length > 8 ? ' mega' : '';
     const subs = [`<li class="overview"><a href="${urlOf(top.slug)}">All ${esc(labelOf(top).toLowerCase())} →</a></li>`]
       .concat(top.children.map(c => `<li><a href="${urlOf(c.slug)}"${current && current.slug === c.slug ? ' aria-current="page"' : ''}>${esc(c.label)}</a></li>`))
-      // One menu item for the RCF Practice Papers (their home is the Past Papers library); see PP_LINK_ON.
     return `<li class="has-sub${mega}${active ? ' active' : ''}"><button type="button" aria-expanded="false">${esc(labelOf(top))}${caret}</button><ul class="sub">${subs.join('')}</ul></li>`;
   });
   items.push(`<li${isAbout ? ' class="active"' : ''}><a href="/about/"${isAbout ? ' aria-current="page"' : ''}>About</a></li>`);
