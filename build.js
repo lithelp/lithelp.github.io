@@ -503,12 +503,8 @@ const pdfPill = (n, answers) => {
 };
 const PP_HOME = 'papers';
 const PP_LINK_ON = ['OL-LITERATURE-HELP'];
-const ppLibraryBlock = () => `<section class="pp-library" id="practice-papers-2026"><span class="box-title">New · RCF Practice Papers for O/L 2026</span>
-<h2>Practice Papers for 2026 <small>with answers</small></h2>
-<p>Five full papers in the latest exam format (Paper I and Paper II), with model answers and essay marking guides. Original LitHelp practice questions, not official past papers. <a href="${ppUrl()}">About these papers →</a></p>
-<div class="pp-lib-list">${PRACTICE.map(p => `<div class="pp-lib-item"><a class="pp-lib-title" href="${ppUrl(p.n)}">Practice Paper ${p.n}</a><span class="pp-lib-focus">${esc(p.focus)}</span><span class="pp-lib-pdfs">${pdfPill(p.n, false)}${pdfPill(p.n, true)}<a class="pp-pill pp-pill-web" href="${ppUrl(p.n)}">Open online</a></span></div>`).join('')}</div>
-</section>`;
-const ppLinkBox = () => `<a class="pp-link-box" href="${urlOf(PP_HOME)}#practice-papers-2026"><span class="pp-link-tag">New</span><span><b>RCF Practice Papers for 2026, with answers</b><small>Five full papers covering every set text, in the Past Papers library</small></span><span class="pp-link-go" aria-hidden="true">→</span></a>`;
+
+
 
 for (const page of all) {
   if (page.slug === 'index') continue;
