@@ -613,6 +613,9 @@ html { scroll-behavior: smooth; }
 .pp-library h2 { margin: 0 0 .4rem; }
 .pp-library h2 small { font-size: .6em; font-weight: 600; color: var(--muted); }
 .pp-library > p { margin: 0 0 .9rem; line-height: 1.55; }
+.pp-ai-notice { margin: .9rem 0 1.1rem; background: #fffbeb; border-color: #ecd98a; color: #574500; }
+.pp-ai-notice strong { color: #8a6400; }
+@media (prefers-color-scheme: dark) { .pp-ai-notice { background: #2c2610; border-color: #5a4a19; color: #f1e2a8; } .pp-ai-notice strong { color: #f5cf6a; } }
 .pp-lib-list { display: grid; gap: .7rem; }
 .pp-lib-item { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: .7rem .9rem; }
 .pp-lib-title { font-weight: 800; font-size: 1.05rem; text-decoration: none; }

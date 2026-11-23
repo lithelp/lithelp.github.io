@@ -198,7 +198,8 @@ function navHtml(current) {
     }
     const mega = top.children.length > 8 ? ' mega' : '';
     const subs = [`<li class="overview"><a href="${urlOf(top.slug)}">All ${esc(labelOf(top).toLowerCase())} →</a></li>`]
-      .concat(top.children.map(c => `<li><a href="${urlOf(c.slug)}"${current && current.slug === c.slug ? ' aria-current="page"' : ''}>${esc(c.label)}</a></li>`))
+      .concat(top.children.map(c => `<li><a href="${urlOf(c.slug)}"${current && current.slug === c.slug ? ' aria-current="page"' : ''}>${esc(c.label)}</a></li>`));
+    if (top.slug === 'OL-LITERATURE-HELP') subs.push(`<li class="nav-new"><a href="${urlOf('papers')}#practice-papers-2026"><span class="new-badge">New</span>Practice Papers 2026</a></li>`);
     return `<li class="has-sub${mega}${active ? ' active' : ''}"><button type="button" aria-expanded="false">${esc(labelOf(top))}${caret}</button><ul class="sub">${subs.join('')}</ul></li>`;
   });
   items.push(`<li${isAbout ? ' class="active"' : ''}><a href="/about/"${isAbout ? ' aria-current="page"' : ''}>About</a></li>`);
@@ -499,6 +500,19 @@ const pdfPill = (n, answers) => {
   return `<a class="pp-pill" href="${PP_BASE}pdf/${pdfName(n, answers)}" download><span class="tag pdf">PDF</span>${answers ? 'Answers' : 'Question paper'} <small>${Math.round(fs.statSync(f).size / 1024)} KB</small></a>`;
 };
 
+const AI_NOTICE = '<div class="box warn pp-ai-notice" role="note"><p><strong>Important Notice:</strong> These practice papers and model answers were prepared with AI assistance. Although efforts have been made to ensure accuracy, some errors or inaccuracies may remain. Students and teachers are advised to use them with discretion.</p></div>';
+
+// The five 2026 papers as a library at the top of the Past Papers & Resources page.
+const ppLibrary = () => `<section class="pp-library" id="practice-papers-2026"><span class="box-title">New · RCF Practice Papers for O/L 2026</span>
+<h2>Practice Papers for 2026 <small>with answers</small></h2>
+<p>Five full papers in the latest exam format (Paper I and Paper II), with model answers and essay marking guides. Original LitHelp practice questions, not official past papers. <a href="${ppUrl()}">About these papers →</a></p>
+${AI_NOTICE}
+<div class="pp-lib-list">${PRACTICE.map(p => `<div class="pp-lib-item"><a class="pp-lib-title" href="${ppUrl(p.n)}">Practice Paper ${p.n}</a><span class="pp-lib-focus">${esc(p.focus)}</span><span class="pp-lib-pdfs">${pdfPill(p.n, false)}${pdfPill(p.n, true)}<a class="pp-pill pp-pill-web" href="${ppUrl(p.n)}">Open online</a></span></div>`).join('')}</div>
+</section>`;
+
+// A single link to the 2026 papers, shown at the top of the Poetry section.
+const ppLinkBox = `<a class="pp-link-box" href="${urlOf('papers')}#practice-papers-2026"><span class="pp-link-tag">New</span><span><b>RCF Practice Papers for 2026, with answers</b><small>Five full papers covering every set text, in the Past Papers library</small></span><span class="pp-link-go" aria-hidden="true">→</span></a>`;
+
 
 
 
@@ -520,7 +534,7 @@ for (const page of all) {
     const description = SECTION_INFO[page.slug][1];
     art = {
       h1: labelOf(page), description, hasQuiz: false, hasSinhala: false,
-      inner: `<p style="font-family:var(--ui);color:var(--muted);margin-top:0">${esc(description)}</p><div class="list-cards">` +
+      inner: `<p style="font-family:var(--ui);color:var(--muted);margin-top:0">${esc(description)}</p>${page.slug === 'OL-LITERATURE-HELP' ? ppLinkBox : ''}<div class="list-cards">` +
         page.children.map((c, i) => { const il = illustration(c.slug, c.label); return `<a href="${urlOf(c.slug)}"${il ? ' class="with-art"' : ''}>${il ? `<span class="thumb">${il}</span>` : `<span class="num">${i + 1}</span>`}<span class="lc-label">${esc(c.label)}</span>${hasRevised(c.slug) ? '<span class="badge">RCF Study Guide</span>' : ''}</a>`; }).join('') + `</div>${adHtml()}`,
     };
   } else {
@@ -545,7 +559,7 @@ ${o.inner}
     }
   }
 
-
+  if (page.slug === 'papers') art.inner = ppLibrary() + '\n' + art.inner;
 
   const siblings = page.parent ? page.parent.children : null;
   let pager = '', aside = '';
@@ -749,7 +763,7 @@ ${paperBody(p)}
   const body = `<div class="page-head guide-head"><div class="wrap"><div class="head-text">${crumbsHtml(crumbs)}<span class="kicker">RCF Practice Papers · G.C.E. O/L 2026</span><h1>Practice Papers for 2026</h1><p class="pp-focus">Five full papers in the latest exam format, with answers</p></div></div></div>
 ${adHtml('top')}
 <section class="section"><div class="wrap">
-  <div class="box warn" role="note"><p><strong>Important Notice:</strong> These practice papers and model answers were prepared with AI assistance. Although care has been taken, they may contain errors or inaccuracies. Students and teachers should verify doubtful information against the prescribed syllabus and literary texts.</p></div>
+  ${AI_NOTICE}
   <div class="cards">${cards}</div>
 </div></section>
 <div class="wrap layout"><div><article class="prose guide pp">
